@@ -1,3 +1,3 @@
-P:\GitRepo\debug\SubEarth\Source\SubEarth\SubEarth.Build.cs
-P:\GitRepo\debug\SubEarth\Source\SubEarth.Target.cs
-P:\GitRepo\debug\SubEarth\Source\SubEarthEditor.Target.cs
+C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Source\SubEarth\SubEarth.Build.cs
+C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Source\SubEarth.Target.cs
+C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Source\SubEarthEditor.Target.cs
