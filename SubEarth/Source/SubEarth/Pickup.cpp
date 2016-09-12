@@ -55,10 +55,19 @@ void APickup::OnPlayerHandOverlap(UPrimitiveComponent * overlappedComponent, AAc
 		// "pickup the object"
 		ASubEarthCharacter* c = (ASubEarthCharacter*)otherActor;
 
-		if (c->IsHandEmpty(ASubEarthCharacter::LEFT_HAND))
+		if (c->IsHandEmpty((int)ASubEarthCharacter::LEFT_HAND))
 		{
 			Destroy(); // TODO Place object in hand
+			UE_LOG(LogTemp, Log, TEXT("Object destroyed"));
 		}
+		else
+		{
+			UE_LOG(LogTemp, Log, TEXT("Left hand not empty"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("Not a ASubEarthCharacter object"));
 	}
 }
 

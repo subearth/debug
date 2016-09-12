@@ -71,8 +71,8 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ASubEarthCharacter::OnResetVR);
 
-	PlayerInputComponent->BindAction("Left_Hand_Grab_Drop", IE_Pressed, this, &ASubEarthCharacter::GrabDropObject);
-	PlayerInputComponent->BindAction("Right_Hand_Grab_Drop", IE_Pressed, this, &ASubEarthCharacter::GrabDropObject);
+	PlayerInputComponent->BindAction("Left_Hand_Grab_Drop", IE_Pressed, this, &ASubEarthCharacter::LeftHandGrabDropObj);
+	PlayerInputComponent->BindAction("Right_Hand_Grab_Drop", IE_Pressed, this, &ASubEarthCharacter::RightHandGrabDropObj);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASubEarthCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASubEarthCharacter::MoveRight);
@@ -90,11 +90,11 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 }
 
 /******************************************************************************/
-bool ASubEarthCharacter::IsHandEmpty(Hand_e hand)
+bool ASubEarthCharacter::IsHandEmpty(int hand)
 {
 	bool is_empty = false;
 
-	switch (hand)
+	switch ((Hand_e)hand)
 	{
 		case LEFT_HAND: is_empty = isLeftHandEmpty; break;
 		case RIGHT_HAND: is_empty = isRightHandEmpty; break;
@@ -154,9 +154,21 @@ void ASubEarthCharacter::LookUpAtRate(float Rate)
 }
 
 /******************************************************************************/
-void ASubEarthCharacter::GrabDropObject(Hand_e hand)
+void ASubEarthCharacter::LeftHandGrabDropObj()
 {
-	switch (hand)
+	GrabDropObject(LEFT_HAND);
+}
+
+/******************************************************************************/
+void ASubEarthCharacter::RightHandGrabDropObj()
+{
+	GrabDropObject(RIGHT_HAND);
+}
+
+/******************************************************************************/
+void ASubEarthCharacter::GrabDropObject(int hand)
+{
+	switch ((Hand_e)hand)
 	{
 		case LEFT_HAND:
 		{

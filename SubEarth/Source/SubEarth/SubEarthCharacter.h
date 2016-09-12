@@ -37,7 +37,7 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
-	bool IsHandEmpty(Hand_e hand);
+	bool IsHandEmpty(int hand);
 
 protected:
 
@@ -64,9 +64,10 @@ protected:
 	 */
 	void LookUpAtRate(float Rate);
 
-
-	void GrabDropObject(Hand_e hand);
+	void GrabDropObject(int hand);
 	
+	void LeftHandGrabDropObj();
+	void RightHandGrabDropObj();
 
 private:
 
