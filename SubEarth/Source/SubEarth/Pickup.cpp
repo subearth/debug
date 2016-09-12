@@ -15,20 +15,20 @@ APickup::APickup()
 	RootComponent = pickupRoot;
 
 	pickupMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PickupMesh"));
-	pickupMesh->AttachToComponent(pickupRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	pickupMesh->SetupAttachment(pickupRoot);
 
 	pickupBox = CreateDefaultSubobject<UBoxComponent>(TEXT("PickupBox"));
 	pickupBox->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
 	pickupBox->bGenerateOverlapEvents = true;
 	pickupBox->OnComponentBeginOverlap.AddDynamic(this, &APickup::OnPlayerHandOverlap);
-	pickupBox->AttachToComponent(pickupRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-
+	pickupBox->SetupAttachment(pickupRoot);
 }
 
 // Called when the game starts or when spawned
 void APickup::BeginPlay()
 {
 	Super::BeginPlay();
+	UE_LOG(LogTemp, Log, TEXT("APickup started"));
 	
 }
 
@@ -49,7 +49,6 @@ void APickup::OnPlayerHandOverlap(UPrimitiveComponent * overlappedComponent, AAc
 	// TODO need to change to something like if (sub earth character hand).  
 	if (otherActor->IsA(ASubEarthCharacter::StaticClass()))
 	{
-		
 		// TODO, then update this to be casted as the correct hand (left or right)
 		// For right now, if our character mesh collides with the pick object AND our left hand is free,
 		// "pickup the object"

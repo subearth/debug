@@ -1,3 +1,10 @@
-﻿  Creating makefile for hot reloading SubEarthEditor (modules to compile have changed)
+﻿  Creating makefile for hot reloading SubEarthEditor (working set of source files changed)
   Compiling game modules for hot reload
-  Target is up to date
+  Parsing headers for SubEarthEditor
+    Running UnrealHeaderTool "C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\SubEarth.uproject" "C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Intermediate\Build\Win64\SubEarthEditor\Development\SubEarthEditor.uhtmanifest" -LogCmds="loginit warning, logexit warning, logdatabase error" -Unattended -WarningsAsErrors -installed
+  Reflection code generated for SubEarthEditor in 17.9893713 seconds
+  Performing 2 actions (2 in parallel)
+  Pickup.cpp
+  [2/2] Link UE4Editor-SubEarth-9804.dll
+     Creating library C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-SubEarth-9804.lib and object C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-SubEarth-9804.exp
+  Total build time: 59.88 seconds
