@@ -2,9 +2,23 @@
   Compiling game modules for hot reload
   Parsing headers for SubEarthEditor
     Running UnrealHeaderTool "C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\SubEarth.uproject" "C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Intermediate\Build\Win64\SubEarthEditor\Development\SubEarthEditor.uhtmanifest" -LogCmds="loginit warning, logexit warning, logdatabase error" -Unattended -WarningsAsErrors -installed
-  Reflection code generated for SubEarthEditor in 8.9549414 seconds
-  Performing 2 actions (2 in parallel)
+  Reflection code generated for SubEarthEditor in 7.400665 seconds
+  Performing 3 actions (2 in parallel)
+  Pickup.cpp
   SubEarthCharacter.cpp
-  [2/2] Link UE4Editor-SubEarth-79.dll
-     Creating library C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-SubEarth-79.lib and object C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-SubEarth-79.exp
-  Total build time: 36.42 seconds
+C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Source\SubEarth\Pickup.cpp(48): error C2065: 'LEFT_HAND': undeclared identifier
+C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Source\SubEarth\SubEarthCharacter.cpp(74): error C2664: 'FInputActionBinding &UInputComponent::BindAction<ASubEarthCharacter>(const FName,const EInputEvent,UserClass *,void (__cdecl ASubEarthCharacter::* )(FKey))': cannot convert argument 4 from 'void (__cdecl ASubEarthCharacter::* )(ASubEarthCharacter::Hand_e)' to 'void (__cdecl ASubEarthCharacter::* )(void)'
+          with
+          [
+              UserClass=ASubEarthCharacter
+          ]
+  C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Source\SubEarth\SubEarthCharacter.cpp(74): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Source\SubEarth\SubEarthCharacter.cpp(75): error C2664: 'FInputActionBinding &UInputComponent::BindAction<ASubEarthCharacter>(const FName,const EInputEvent,UserClass *,void (__cdecl ASubEarthCharacter::* )(FKey))': cannot convert argument 4 from 'void (__cdecl ASubEarthCharacter::* )(ASubEarthCharacter::Hand_e)' to 'void (__cdecl ASubEarthCharacter::* )(void)'
+          with
+          [
+              UserClass=ASubEarthCharacter
+          ]
+  C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Source\SubEarth\SubEarthCharacter.cpp(75): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+ERROR : UBT error : Failed to produce item: C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Binaries\Win64\UE4Editor-SubEarth-4771.dll
+  Total build time: 27.89 seconds
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.MakeFile.Targets(41,5): error MSB3075: The command ""C:\Program Files (x86)\Epic Games\4.13\Engine\Build\BatchFiles\Build.bat" SubEarthEditor Win64 Development "C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\SubEarth.uproject" -waitmutex" exited with code 5. Please verify that you have sufficient rights to run this command.

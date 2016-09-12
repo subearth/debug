@@ -5,6 +5,9 @@
 	DO NOT modify this manually! Edit the corresponding .h files instead!
 ===========================================================================*/
 
+#ifndef SUBEARTH_Pickup_generated_h
+	#include "Pickup.h"
+#endif
 #ifndef SUBEARTH_SubEarthCharacter_generated_h
 	#include "SubEarthCharacter.h"
 #endif

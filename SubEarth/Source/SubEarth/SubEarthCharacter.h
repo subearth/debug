@@ -11,6 +11,14 @@ class ASubEarthCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+	
+	enum Hand_e
+	{
+		LEFT_HAND,
+		RIGHT_HAND,
+		BOTH_HANDS
+	};
+
 	ASubEarthCharacter();
 
 	virtual void BeginPlay();
@@ -29,7 +37,11 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+	bool IsHandEmpty(Hand_e hand);
+
 protected:
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
@@ -53,11 +65,8 @@ protected:
 	void LookUpAtRate(float Rate);
 
 
-	void LeftHandGrabDropObject();
-
-	void RightHandGrabDropObject();
+	void GrabDropObject(Hand_e hand);
 	
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
 
@@ -76,5 +85,10 @@ private:
 	/** Motion controller (left hand) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UMotionControllerComponent* L_MotionController;
+
+
+	bool isLeftHandEmpty;
+	bool isRightHandEmpty;
+
 };
 

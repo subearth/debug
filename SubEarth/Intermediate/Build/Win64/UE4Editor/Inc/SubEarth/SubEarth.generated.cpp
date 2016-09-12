@@ -9,6 +9,11 @@
 #include "SubEarth.generated.dep.h"
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCode1SubEarth() {}
+	void APickup::StaticRegisterNativesAPickup()
+	{
+		FNativeFunctionRegistrar::RegisterFunction(APickup::StaticClass(), "OnPlayerHandOverlap",(Native)&APickup::execOnPlayerHandOverlap);
+	}
+	IMPLEMENT_CLASS(APickup, 1586089392);
 	void ASubEarthCharacter::StaticRegisterNativesASubEarthCharacter()
 	{
 	}
@@ -28,20 +33,26 @@ void EmptyLinkFunctionForGeneratedCode1SubEarth() {}
 	IMPLEMENT_CLASS(ASubEarthProjectile, 1543833722);
 #if USE_COMPILED_IN_NATIVES
 // Cross Module References
+	ENGINE_API class UScriptStruct* Z_Construct_UScriptStruct_FHitResult();
+	ENGINE_API class UClass* Z_Construct_UClass_UPrimitiveComponent_NoRegister();
+	ENGINE_API class UClass* Z_Construct_UClass_AActor_NoRegister();
+	ENGINE_API class UClass* Z_Construct_UClass_AActor();
+	ENGINE_API class UClass* Z_Construct_UClass_UBoxComponent_NoRegister();
+	ENGINE_API class UClass* Z_Construct_UClass_UStaticMeshComponent_NoRegister();
+	ENGINE_API class UClass* Z_Construct_UClass_USceneComponent_NoRegister();
 	ENGINE_API class UClass* Z_Construct_UClass_ACharacter();
 	HEADMOUNTEDDISPLAY_API class UClass* Z_Construct_UClass_UMotionControllerComponent_NoRegister();
 	ENGINE_API class UClass* Z_Construct_UClass_UCameraComponent_NoRegister();
 	ENGINE_API class UClass* Z_Construct_UClass_USkeletalMeshComponent_NoRegister();
 	ENGINE_API class UClass* Z_Construct_UClass_AGameMode();
 	ENGINE_API class UClass* Z_Construct_UClass_AHUD();
-	ENGINE_API class UScriptStruct* Z_Construct_UScriptStruct_FHitResult();
 	COREUOBJECT_API class UScriptStruct* Z_Construct_UScriptStruct_FVector();
-	ENGINE_API class UClass* Z_Construct_UClass_UPrimitiveComponent_NoRegister();
-	ENGINE_API class UClass* Z_Construct_UClass_AActor_NoRegister();
-	ENGINE_API class UClass* Z_Construct_UClass_AActor();
 	ENGINE_API class UClass* Z_Construct_UClass_UProjectileMovementComponent_NoRegister();
 	ENGINE_API class UClass* Z_Construct_UClass_USphereComponent_NoRegister();
 
+	SUBEARTH_API class UFunction* Z_Construct_UFunction_APickup_OnPlayerHandOverlap();
+	SUBEARTH_API class UClass* Z_Construct_UClass_APickup_NoRegister();
+	SUBEARTH_API class UClass* Z_Construct_UClass_APickup();
 	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthCharacter_NoRegister();
 	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthCharacter();
 	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthGameMode_NoRegister();
@@ -52,6 +63,89 @@ void EmptyLinkFunctionForGeneratedCode1SubEarth() {}
 	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthProjectile_NoRegister();
 	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthProjectile();
 	SUBEARTH_API class UPackage* Z_Construct_UPackage__Script_SubEarth();
+	UFunction* Z_Construct_UFunction_APickup_OnPlayerHandOverlap()
+	{
+		struct Pickup_eventOnPlayerHandOverlap_Parms
+		{
+			UPrimitiveComponent* overlappedComponent;
+			AActor* otherActor;
+			UPrimitiveComponent* otherComponent;
+			int32 otherBodyIndex;
+			bool bFromSweep;
+			FHitResult SweepResult;
+		};
+		UObject* Outer=Z_Construct_UClass_APickup();
+		static UFunction* ReturnFunction = NULL;
+		if (!ReturnFunction)
+		{
+			ReturnFunction = new(EC_InternalUseOnlyConstructor, Outer, TEXT("OnPlayerHandOverlap"), RF_Public|RF_Transient|RF_MarkAsNative) UFunction(FObjectInitializer(), NULL, 0x00420401, 65535, sizeof(Pickup_eventOnPlayerHandOverlap_Parms));
+			UProperty* NewProp_SweepResult = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("SweepResult"), RF_Public|RF_Transient|RF_MarkAsNative) UStructProperty(CPP_PROPERTY_BASE(SweepResult, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010008008000182, Z_Construct_UScriptStruct_FHitResult());
+			CPP_BOOL_PROPERTY_BITMASK_STRUCT(bFromSweep, Pickup_eventOnPlayerHandOverlap_Parms, bool);
+			UProperty* NewProp_bFromSweep = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("bFromSweep"), RF_Public|RF_Transient|RF_MarkAsNative) UBoolProperty(FObjectInitializer(), EC_CppProperty, CPP_BOOL_PROPERTY_OFFSET(bFromSweep, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010000000000080, CPP_BOOL_PROPERTY_BITMASK(bFromSweep, Pickup_eventOnPlayerHandOverlap_Parms), sizeof(bool), true);
+			UProperty* NewProp_otherBodyIndex = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("otherBodyIndex"), RF_Public|RF_Transient|RF_MarkAsNative) UIntProperty(CPP_PROPERTY_BASE(otherBodyIndex, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010000000000080);
+			UProperty* NewProp_otherComponent = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("otherComponent"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(otherComponent, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010000000080080, Z_Construct_UClass_UPrimitiveComponent_NoRegister());
+			UProperty* NewProp_otherActor = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("otherActor"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(otherActor, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010000000000080, Z_Construct_UClass_AActor_NoRegister());
+			UProperty* NewProp_overlappedComponent = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("overlappedComponent"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(overlappedComponent, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010000000080080, Z_Construct_UClass_UPrimitiveComponent_NoRegister());
+			ReturnFunction->Bind();
+			ReturnFunction->StaticLink();
+#if WITH_METADATA
+			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
+			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("Pickup.h"));
+			MetaData->SetValue(NewProp_SweepResult, TEXT("NativeConst"), TEXT(""));
+			MetaData->SetValue(NewProp_otherComponent, TEXT("EditInline"), TEXT("true"));
+			MetaData->SetValue(NewProp_overlappedComponent, TEXT("EditInline"), TEXT("true"));
+#endif
+		}
+		return ReturnFunction;
+	}
+	UClass* Z_Construct_UClass_APickup_NoRegister()
+	{
+		return APickup::StaticClass();
+	}
+	UClass* Z_Construct_UClass_APickup()
+	{
+		static UClass* OuterClass = NULL;
+		if (!OuterClass)
+		{
+			Z_Construct_UClass_AActor();
+			Z_Construct_UPackage__Script_SubEarth();
+			OuterClass = APickup::StaticClass();
+			if (!(OuterClass->ClassFlags & CLASS_Constructed))
+			{
+				UObjectForceRegistration(OuterClass);
+				OuterClass->ClassFlags |= 0x20900080;
+
+				OuterClass->LinkChild(Z_Construct_UFunction_APickup_OnPlayerHandOverlap());
+
+PRAGMA_DISABLE_DEPRECATION_WARNINGS
+				UProperty* NewProp_pickupBox = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("pickupBox"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(pickupBox, APickup), 0x0010000000080009, Z_Construct_UClass_UBoxComponent_NoRegister());
+				UProperty* NewProp_pickupMesh = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("pickupMesh"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(pickupMesh, APickup), 0x0010000000080009, Z_Construct_UClass_UStaticMeshComponent_NoRegister());
+				UProperty* NewProp_pickupRoot = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("pickupRoot"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(pickupRoot, APickup), 0x0010000000080009, Z_Construct_UClass_USceneComponent_NoRegister());
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+				OuterClass->AddFunctionToFunctionMapWithOverriddenName(Z_Construct_UFunction_APickup_OnPlayerHandOverlap(), "OnPlayerHandOverlap"); // 3333403679
+				OuterClass->StaticLink();
+#if WITH_METADATA
+				UMetaData* MetaData = OuterClass->GetOutermost()->GetMetaData();
+				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("Pickup.h"));
+				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("Pickup.h"));
+				MetaData->SetValue(NewProp_pickupBox, TEXT("Category"), TEXT("Pickup"));
+				MetaData->SetValue(NewProp_pickupBox, TEXT("EditInline"), TEXT("true"));
+				MetaData->SetValue(NewProp_pickupBox, TEXT("ModuleRelativePath"), TEXT("Pickup.h"));
+				MetaData->SetValue(NewProp_pickupMesh, TEXT("Category"), TEXT("Pickup"));
+				MetaData->SetValue(NewProp_pickupMesh, TEXT("EditInline"), TEXT("true"));
+				MetaData->SetValue(NewProp_pickupMesh, TEXT("ModuleRelativePath"), TEXT("Pickup.h"));
+				MetaData->SetValue(NewProp_pickupMesh, TEXT("ToolTip"), TEXT("Static mesh for the object being picked up"));
+				MetaData->SetValue(NewProp_pickupRoot, TEXT("Category"), TEXT("Pickup"));
+				MetaData->SetValue(NewProp_pickupRoot, TEXT("EditInline"), TEXT("true"));
+				MetaData->SetValue(NewProp_pickupRoot, TEXT("ModuleRelativePath"), TEXT("Pickup.h"));
+#endif
+			}
+		}
+		check(OuterClass->GetClass());
+		return OuterClass;
+	}
+	static FCompiledInDefer Z_CompiledInDefer_UClass_APickup(Z_Construct_UClass_APickup, &APickup::StaticClass, TEXT("APickup"), false, nullptr, nullptr, nullptr);
+	DEFINE_VTABLE_PTR_HELPER_CTOR(APickup);
 	UClass* Z_Construct_UClass_ASubEarthCharacter_NoRegister()
 	{
 		return ASubEarthCharacter::StaticClass();
@@ -274,8 +368,8 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 			ReturnPackage = CastChecked<UPackage>(StaticFindObjectFast(UPackage::StaticClass(), NULL, FName(TEXT("/Script/SubEarth")), false, false));
 			ReturnPackage->SetPackageFlags(PKG_CompiledIn | 0x00000000);
 			FGuid Guid;
-			Guid.A = 0xE140D75D;
-			Guid.B = 0x37DB6D3B;
+			Guid.A = 0x7D6949BB;
+			Guid.B = 0xE3B58F45;
 			Guid.C = 0x00000000;
 			Guid.D = 0x00000000;
 			ReturnPackage->SetGuid(Guid);

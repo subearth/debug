@@ -45,6 +45,10 @@ ASubEarthCharacter::ASubEarthCharacter()
 	R_MotionController->SetupAttachment(RootComponent);
 	L_MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("L_MotionController"));
 	L_MotionController->SetupAttachment(RootComponent);
+
+	// Initialize member variables
+	isLeftHandEmpty = true;
+	isRightHandEmpty = true;
 }
 
 /******************************************************************************/
@@ -67,8 +71,8 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ASubEarthCharacter::OnResetVR);
 
-	PlayerInputComponent->BindAction("Left_Hand_Grab_Drop", IE_Pressed, this, &ASubEarthCharacter::LeftHandGrabDropObject);
-	PlayerInputComponent->BindAction("Right_Hand_Grab_Drop", IE_Pressed, this, &ASubEarthCharacter::RightHandGrabDropObject);
+	PlayerInputComponent->BindAction("Left_Hand_Grab_Drop", IE_Pressed, this, &ASubEarthCharacter::GrabDropObject);
+	PlayerInputComponent->BindAction("Right_Hand_Grab_Drop", IE_Pressed, this, &ASubEarthCharacter::GrabDropObject);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASubEarthCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASubEarthCharacter::MoveRight);
@@ -83,6 +87,29 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ASubEarthCharacter::LookUpAtRate);
 	UE_LOG(LogTemp, Log, TEXT("Binding Complete"));
+}
+
+/******************************************************************************/
+bool ASubEarthCharacter::IsHandEmpty(Hand_e hand)
+{
+	bool is_empty = false;
+
+	switch (hand)
+	{
+		case LEFT_HAND: is_empty = isLeftHandEmpty; break;
+		case RIGHT_HAND: is_empty = isRightHandEmpty; break;
+		case BOTH_HANDS: 
+			if (isLeftHandEmpty && isRightHandEmpty)
+			{
+				is_empty = true;
+			}
+			break;
+		default:
+			UE_LOG(LogTemp, Warning, TEXT("Unrecognized hand enum %d"), hand);
+			break;
+	}
+
+	return is_empty;
 }
 
 /******************************************************************************/
@@ -127,33 +154,49 @@ void ASubEarthCharacter::LookUpAtRate(float Rate)
 }
 
 /******************************************************************************/
-void ASubEarthCharacter::LeftHandGrabDropObject()
+void ASubEarthCharacter::GrabDropObject(Hand_e hand)
 {
-	static bool left_test = true;
-	if (left_test) // if object is in hand
+	switch (hand)
 	{
-		left_test = false;
-		UE_LOG(LogTemp, Log, TEXT("Left hand grab object"));
-	}
-	else
-	{
-		left_test = true;
-		UE_LOG(LogTemp, Log, TEXT("Left hand drop object"));
+		case LEFT_HAND:
+		{
+			if (isLeftHandEmpty)
+			{
+				isLeftHandEmpty = false;
+				UE_LOG(LogTemp, Log, TEXT("Left hand grab object"));
+			}
+			else
+			{
+				isLeftHandEmpty = true;
+				UE_LOG(LogTemp, Log, TEXT("Left hand drop object"));
+			}
+			break;
+		}
+		
+		case RIGHT_HAND: 
+		{
+			if (isRightHandEmpty)
+			{
+				isRightHandEmpty = false;
+				UE_LOG(LogTemp, Log, TEXT("Right hand grab object"));
+			}
+			else
+			{
+				isRightHandEmpty = true;
+				UE_LOG(LogTemp, Log, TEXT("Right hand drop object"));
+			}
+			break;
+		}
+		case BOTH_HANDS:
+		{
+			GrabDropObject(LEFT_HAND);
+			GrabDropObject(RIGHT_HAND);
+			break;
+		}
+
+		default:
+			UE_LOG(LogTemp, Warning, TEXT("Unrecognized hand enum %d"), hand);
+			break;
 	}
 }
 
-/******************************************************************************/
-void ASubEarthCharacter::RightHandGrabDropObject()
-{
-	static bool right_test = true;
-	if (right_test) // if object is in hand
-	{
-		right_test = false;
-		UE_LOG(LogTemp, Log, TEXT("Right hand grab object"));
-	}
-	else
-	{
-		right_test = true;
-		UE_LOG(LogTemp, Log, TEXT("Right hand drop object"));
-	}
-}
