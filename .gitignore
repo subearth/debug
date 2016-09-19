@@ -60,3 +60,5 @@ Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+SubEarth/Saved/Logs/SubEarth.log
+SubEarth/SubEarth.VC.db
