@@ -1,7 +1,9 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 #pragma once
 #include "GameFramework/Character.h"
-#include "SubEarthCharacter.generated.h"
+#include "Hand.h"
+
+#include "SubEarthCharacter.generated.h" // Must be last
 
 class UInputComponent;
 
@@ -14,6 +16,7 @@ public:
 	
 	enum Hand_e
 	{
+		NO_HAND_SELECTED,
 		LEFT_HAND,
 		RIGHT_HAND,
 		BOTH_HANDS
@@ -37,11 +40,26 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
-	bool IsHandEmpty(int hand);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=leftHand, meta = (AllowPrivateAccess = "true"))
+		class UHand* leftHand;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=rightHand, meta = (AllowPrivateAccess = "true"))
+		class UHand* rightHand;
 
 protected:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void LeftHandButton1();
+	void LeftHandButton2();
+	void LeftHandButton3();
+	void LeftHandButton4();
+	void RightHandButton1();
+	void RightHandButton2();
+	void RightHandButton3();
+	void RightHandButton4();
+
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
@@ -64,10 +82,6 @@ protected:
 	 */
 	void LookUpAtRate(float Rate);
 
-	void GrabDropObject(int hand);
-	
-	void LeftHandGrabDropObj();
-	void RightHandGrabDropObj();
 
 private:
 
@@ -76,7 +90,7 @@ private:
 		class USkeletalMeshComponent* Mesh1P;
 
 	/** First person camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FirstPersonCameraComponent;
 
 	/** Motion controller (right hand) */
@@ -87,9 +101,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UMotionControllerComponent* L_MotionController;
 
-
-	bool isLeftHandEmpty;
-	bool isRightHandEmpty;
-
+	void LeftHandToggleGrab(void);
+	void RightHandToggleGrab(void);
 };
 

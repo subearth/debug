@@ -1,79 +1,94 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <None Include="..\..\SubEarth.uproject" />
-    <Filter Include="Source">
-      <UniqueIdentifier>{2E1F7C80-64A5-4F31-B639-ECF9ED00FBF0}</UniqueIdentifier>
-    </Filter>
-    <None Include="..\..\Source\SubEarth.Target.cs">
-      <Filter>Source</Filter>
-    </None>
-    <None Include="..\..\Source\SubEarthEditor.Target.cs">
-      <Filter>Source</Filter>
-    </None>
-    <Filter Include="Config">
-      <UniqueIdentifier>{DD32556B-826A-42F1-B30E-04EA04CFA53E}</UniqueIdentifier>
-    </Filter>
-    <None Include="..\..\Config\DefaultEditor.ini">
-      <Filter>Config</Filter>
-    </None>
-    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
-      <Filter>Config</Filter>
-    </None>
-    <None Include="..\..\Config\DefaultEngine.ini">
-      <Filter>Config</Filter>
-    </None>
-    <None Include="..\..\Config\DefaultGame.ini">
-      <Filter>Config</Filter>
-    </None>
-    <None Include="..\..\Config\DefaultInput.ini">
-      <Filter>Config</Filter>
-    </None>
-    <Filter Include="Source\SubEarth">
-      <UniqueIdentifier>{B70BB967-A253-45E7-8532-D828F7A5ECBD}</UniqueIdentifier>
-    </Filter>
-    <None Include="..\..\Source\SubEarth\SubEarth.Build.cs">
-      <Filter>Source\SubEarth</Filter>
-    </None>
-    <ClCompile Include="..\..\Source\SubEarth\SubEarth.cpp">
-      <Filter>Source\SubEarth</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\SubEarth\SubEarth.h">
-      <Filter>Source\SubEarth</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\Source\SubEarth\SubEarthCharacter.cpp">
-      <Filter>Source\SubEarth</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\SubEarth\SubEarthCharacter.h">
-      <Filter>Source\SubEarth</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\Source\SubEarth\SubEarthGameMode.cpp">
-      <Filter>Source\SubEarth</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\SubEarth\SubEarthGameMode.h">
-      <Filter>Source\SubEarth</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\Source\SubEarth\SubEarthHUD.cpp">
-      <Filter>Source\SubEarth</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\SubEarth\SubEarthHUD.h">
-      <Filter>Source\SubEarth</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\Source\SubEarth\SubEarthProjectile.cpp">
-      <Filter>Source\SubEarth</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\SubEarth\SubEarthProjectile.h">
-      <Filter>Source\SubEarth</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Source\SubEarth\Pickup.h">
-      <Filter>Source\SubEarth</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\SubEarth\Pickup.cpp">
-      <Filter>Source\SubEarth</Filter>
-    </ClCompile>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\SubEarth.uproject" />
+		<Filter Include="Source">
+			<UniqueIdentifier>{7478F31E-981E-4CAE-8587-A32B6ED4529F}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\SubEarth.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<None Include="..\..\Source\SubEarthEditor.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<Filter Include="Config">
+			<UniqueIdentifier>{488D3594-33C8-4C10-AD69-B2A59A898492}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Config\DefaultEditor.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultEngine.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultGame.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultInput.ini">
+			<Filter>Config</Filter>
+		</None >
+		<Filter Include="Source\SubEarth">
+			<UniqueIdentifier>{79880E82-4F74-4460-84F8-E0BC39CE51E4}</UniqueIdentifier>
+		</Filter>
+		<ClCompile Include="..\..\Source\SubEarth\ColorChangingOrb.cpp">
+			<Filter>Source\SubEarth</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\SubEarth\ColorChangingOrb.h">
+			<Filter>Source\SubEarth</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\SubEarth\Hand.cpp">
+			<Filter>Source\SubEarth</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\SubEarth\Hand.h">
+			<Filter>Source\SubEarth</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\SubEarth\Interactable.cpp">
+			<Filter>Source\SubEarth</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\SubEarth\Interactable.h">
+			<Filter>Source\SubEarth</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\SubEarth\Pickup.cpp">
+			<Filter>Source\SubEarth</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\SubEarth\Pickup.h">
+			<Filter>Source\SubEarth</Filter>
+		</ClInclude >
+		<None Include="..\..\Source\SubEarth\SubEarth.Build.cs">
+			<Filter>Source\SubEarth</Filter>
+		</None >
+		<ClCompile Include="..\..\Source\SubEarth\SubEarth.cpp">
+			<Filter>Source\SubEarth</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\SubEarth\SubEarth.h">
+			<Filter>Source\SubEarth</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\SubEarth\SubEarthCharacter.cpp">
+			<Filter>Source\SubEarth</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\SubEarth\SubEarthCharacter.h">
+			<Filter>Source\SubEarth</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\SubEarth\SubEarthGameMode.cpp">
+			<Filter>Source\SubEarth</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\SubEarth\SubEarthGameMode.h">
+			<Filter>Source\SubEarth</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\SubEarth\SubEarthHUD.cpp">
+			<Filter>Source\SubEarth</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\SubEarth\SubEarthHUD.h">
+			<Filter>Source\SubEarth</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\SubEarth\SubEarthProjectile.cpp">
+			<Filter>Source\SubEarth</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\SubEarth\SubEarthProjectile.h">
+			<Filter>Source\SubEarth</Filter>
+		</ClInclude >
+	</ItemGroup>
 </Project>

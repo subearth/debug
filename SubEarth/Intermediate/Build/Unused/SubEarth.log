@@ -2,9 +2,13 @@
   Compiling game modules for hot reload
   Parsing headers for SubEarthEditor
     Running UnrealHeaderTool "C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\SubEarth.uproject" "C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Intermediate\Build\Win64\SubEarthEditor\Development\SubEarthEditor.uhtmanifest" -LogCmds="loginit warning, logexit warning, logdatabase error" -Unattended -WarningsAsErrors -installed
-  Reflection code generated for SubEarthEditor in 17.9893713 seconds
-  Performing 2 actions (2 in parallel)
+  Reflection code generated for SubEarthEditor in 5.4775165 seconds
+  Performing 6 actions (2 in parallel)
+  Interactable.cpp
   Pickup.cpp
-  [2/2] Link UE4Editor-SubEarth-9804.dll
-     Creating library C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-SubEarth-9804.lib and object C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-SubEarth-9804.exp
-  Total build time: 59.88 seconds
+  SubEarthCharacter.cpp
+  SubEarthGameMode.cpp
+  SubEarth.generated.cpp
+  [6/6] Link UE4Editor-SubEarth-4301.dll
+     Creating library C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-SubEarth-4301.lib and object C:\Users\SeanBootCamp\Documents\SubEarth\debug\SubEarth\Intermediate\Build\Win64\UE4Editor\Development\UE4Editor-SubEarth-4301.exp
+  Total build time: 29.15 seconds

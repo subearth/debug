@@ -5,8 +5,17 @@
 	DO NOT modify this manually! Edit the corresponding .h files instead!
 ===========================================================================*/
 
+#ifndef SUBEARTH_Interactable_generated_h
+	#include "Interactable.h"
+#endif
 #ifndef SUBEARTH_Pickup_generated_h
 	#include "Pickup.h"
+#endif
+#ifndef SUBEARTH_Hand_generated_h
+	#include "Hand.h"
+#endif
+#ifndef SUBEARTH_ColorChangingOrb_generated_h
+	#include "ColorChangingOrb.h"
 #endif
 #ifndef SUBEARTH_SubEarthCharacter_generated_h
 	#include "SubEarthCharacter.h"
