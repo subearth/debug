@@ -13,36 +13,36 @@ void EmptyLinkFunctionForGeneratedCode1SubEarth() {}
 	{
 		FNativeFunctionRegistrar::RegisterFunction(AInteractable::StaticClass(), "OnPlayerHandOverlap",(Native)&AInteractable::execOnPlayerHandOverlap);
 	}
-	IMPLEMENT_CLASS(AInteractable, 2122081446);
+	IMPLEMENT_CLASS(AInteractable, 3020226529);
 	void APickup::StaticRegisterNativesAPickup()
 	{
+		FNativeFunctionRegistrar::RegisterFunction(APickup::StaticClass(), "OnPlayerHandOverlap",(Native)&APickup::execOnPlayerHandOverlap);
+		FNativeFunctionRegistrar::RegisterFunction(APickup::StaticClass(), "OnPlayerOverlapExit",(Native)&APickup::execOnPlayerOverlapExit);
 	}
-	IMPLEMENT_CLASS(APickup, 325429469);
+	IMPLEMENT_CLASS(APickup, 1319414710);
 	void UHand::StaticRegisterNativesUHand()
 	{
 	}
-	IMPLEMENT_CLASS(UHand, 1250220714);
+	IMPLEMENT_CLASS(UHand, 2275967627);
 	void AColorChangingOrb::StaticRegisterNativesAColorChangingOrb()
 	{
 	}
-	IMPLEMENT_CLASS(AColorChangingOrb, 2692036096);
+	IMPLEMENT_CLASS(AColorChangingOrb, 595885075);
 	void ASubEarthCharacter::StaticRegisterNativesASubEarthCharacter()
 	{
+		FNativeFunctionRegistrar::RegisterFunction(ASubEarthCharacter::StaticClass(), "GetCurrentOxygen",(Native)&ASubEarthCharacter::execGetCurrentOxygen);
+		FNativeFunctionRegistrar::RegisterFunction(ASubEarthCharacter::StaticClass(), "GetInitialOxygen",(Native)&ASubEarthCharacter::execGetInitialOxygen);
+		FNativeFunctionRegistrar::RegisterFunction(ASubEarthCharacter::StaticClass(), "UpdateCurrentOxygen",(Native)&ASubEarthCharacter::execUpdateCurrentOxygen);
 	}
-	IMPLEMENT_CLASS(ASubEarthCharacter, 2217200594);
+	IMPLEMENT_CLASS(ASubEarthCharacter, 2189587878);
 	void ASubEarthGameMode::StaticRegisterNativesASubEarthGameMode()
 	{
 	}
-	IMPLEMENT_CLASS(ASubEarthGameMode, 1247865613);
+	IMPLEMENT_CLASS(ASubEarthGameMode, 378705716);
 	void ASubEarthHUD::StaticRegisterNativesASubEarthHUD()
 	{
 	}
-	IMPLEMENT_CLASS(ASubEarthHUD, 3713241919);
-	void ASubEarthProjectile::StaticRegisterNativesASubEarthProjectile()
-	{
-		FNativeFunctionRegistrar::RegisterFunction(ASubEarthProjectile::StaticClass(), "OnHit",(Native)&ASubEarthProjectile::execOnHit);
-	}
-	IMPLEMENT_CLASS(ASubEarthProjectile, 1543833722);
+	IMPLEMENT_CLASS(ASubEarthHUD, 148426794);
 #if USE_COMPILED_IN_NATIVES
 // Cross Module References
 	ENGINE_API class UScriptStruct* Z_Construct_UScriptStruct_FHitResult();
@@ -56,31 +56,30 @@ void EmptyLinkFunctionForGeneratedCode1SubEarth() {}
 	ENGINE_API class UClass* Z_Construct_UClass_ACharacter();
 	HEADMOUNTEDDISPLAY_API class UClass* Z_Construct_UClass_UMotionControllerComponent_NoRegister();
 	ENGINE_API class UClass* Z_Construct_UClass_UCameraComponent_NoRegister();
-	ENGINE_API class UClass* Z_Construct_UClass_USkeletalMeshComponent_NoRegister();
 	ENGINE_API class UClass* Z_Construct_UClass_AGameMode();
+	UMG_API class UClass* Z_Construct_UClass_UUserWidget_NoRegister();
 	ENGINE_API class UClass* Z_Construct_UClass_AHUD();
-	COREUOBJECT_API class UScriptStruct* Z_Construct_UScriptStruct_FVector();
-	ENGINE_API class UClass* Z_Construct_UClass_UProjectileMovementComponent_NoRegister();
-	ENGINE_API class UClass* Z_Construct_UClass_USphereComponent_NoRegister();
 
 	SUBEARTH_API class UFunction* Z_Construct_UFunction_AInteractable_OnPlayerHandOverlap();
 	SUBEARTH_API class UClass* Z_Construct_UClass_AInteractable_NoRegister();
 	SUBEARTH_API class UClass* Z_Construct_UClass_AInteractable();
+	SUBEARTH_API class UFunction* Z_Construct_UFunction_APickup_OnPlayerHandOverlap();
+	SUBEARTH_API class UFunction* Z_Construct_UFunction_APickup_OnPlayerOverlapExit();
 	SUBEARTH_API class UClass* Z_Construct_UClass_APickup_NoRegister();
 	SUBEARTH_API class UClass* Z_Construct_UClass_APickup();
 	SUBEARTH_API class UClass* Z_Construct_UClass_UHand_NoRegister();
 	SUBEARTH_API class UClass* Z_Construct_UClass_UHand();
 	SUBEARTH_API class UClass* Z_Construct_UClass_AColorChangingOrb_NoRegister();
 	SUBEARTH_API class UClass* Z_Construct_UClass_AColorChangingOrb();
+	SUBEARTH_API class UFunction* Z_Construct_UFunction_ASubEarthCharacter_GetCurrentOxygen();
+	SUBEARTH_API class UFunction* Z_Construct_UFunction_ASubEarthCharacter_GetInitialOxygen();
+	SUBEARTH_API class UFunction* Z_Construct_UFunction_ASubEarthCharacter_UpdateCurrentOxygen();
 	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthCharacter_NoRegister();
 	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthCharacter();
 	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthGameMode_NoRegister();
 	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthGameMode();
 	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthHUD_NoRegister();
 	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthHUD();
-	SUBEARTH_API class UFunction* Z_Construct_UFunction_ASubEarthProjectile_OnHit();
-	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthProjectile_NoRegister();
-	SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthProjectile();
 	SUBEARTH_API class UPackage* Z_Construct_UPackage__Script_SubEarth();
 	UFunction* Z_Construct_UFunction_AInteractable_OnPlayerHandOverlap()
 	{
@@ -109,7 +108,7 @@ void EmptyLinkFunctionForGeneratedCode1SubEarth() {}
 			ReturnFunction->StaticLink();
 #if WITH_METADATA
 			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
-			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("Interactable.h"));
+			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("Objects/Interactable.h"));
 			MetaData->SetValue(NewProp_SweepResult, TEXT("NativeConst"), TEXT(""));
 			MetaData->SetValue(NewProp_otherComponent, TEXT("EditInline"), TEXT("true"));
 			MetaData->SetValue(NewProp_overlappedComponent, TEXT("EditInline"), TEXT("true"));
@@ -141,22 +140,22 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 				UProperty* NewProp_objectMesh = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("objectMesh"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(objectMesh, AInteractable), 0x0020080000080009, Z_Construct_UClass_UStaticMeshComponent_NoRegister());
 				UProperty* NewProp_objectRoot = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("objectRoot"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(objectRoot, AInteractable), 0x0020080000080009, Z_Construct_UClass_USceneComponent_NoRegister());
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
-				OuterClass->AddFunctionToFunctionMapWithOverriddenName(Z_Construct_UFunction_AInteractable_OnPlayerHandOverlap(), "OnPlayerHandOverlap"); // 728062582
+				OuterClass->AddFunctionToFunctionMapWithOverriddenName(Z_Construct_UFunction_AInteractable_OnPlayerHandOverlap(), "OnPlayerHandOverlap"); // 659974159
 				OuterClass->StaticLink();
 #if WITH_METADATA
 				UMetaData* MetaData = OuterClass->GetOutermost()->GetMetaData();
-				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("Interactable.h"));
-				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("Interactable.h"));
+				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("Objects/Interactable.h"));
+				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("Objects/Interactable.h"));
 				MetaData->SetValue(NewProp_objectCollider, TEXT("Category"), TEXT("Interactable"));
 				MetaData->SetValue(NewProp_objectCollider, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_objectCollider, TEXT("ModuleRelativePath"), TEXT("Interactable.h"));
+				MetaData->SetValue(NewProp_objectCollider, TEXT("ModuleRelativePath"), TEXT("Objects/Interactable.h"));
 				MetaData->SetValue(NewProp_objectMesh, TEXT("Category"), TEXT("Interactable"));
 				MetaData->SetValue(NewProp_objectMesh, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_objectMesh, TEXT("ModuleRelativePath"), TEXT("Interactable.h"));
+				MetaData->SetValue(NewProp_objectMesh, TEXT("ModuleRelativePath"), TEXT("Objects/Interactable.h"));
 				MetaData->SetValue(NewProp_objectMesh, TEXT("ToolTip"), TEXT("Static mesh for the object being picked up"));
 				MetaData->SetValue(NewProp_objectRoot, TEXT("Category"), TEXT("Interactable"));
 				MetaData->SetValue(NewProp_objectRoot, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_objectRoot, TEXT("ModuleRelativePath"), TEXT("Interactable.h"));
+				MetaData->SetValue(NewProp_objectRoot, TEXT("ModuleRelativePath"), TEXT("Objects/Interactable.h"));
 #endif
 			}
 		}
@@ -165,6 +164,70 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 	}
 	static FCompiledInDefer Z_CompiledInDefer_UClass_AInteractable(Z_Construct_UClass_AInteractable, &AInteractable::StaticClass, TEXT("AInteractable"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(AInteractable);
+	UFunction* Z_Construct_UFunction_APickup_OnPlayerHandOverlap()
+	{
+		struct Pickup_eventOnPlayerHandOverlap_Parms
+		{
+			UPrimitiveComponent* overlappedComponent;
+			AActor* otherActor;
+			UPrimitiveComponent* otherComponent;
+			int32 otherBodyIndex;
+			bool bFromSweep;
+			FHitResult SweepResult;
+		};
+		UObject* Outer=Z_Construct_UClass_APickup();
+		static UFunction* ReturnFunction = NULL;
+		if (!ReturnFunction)
+		{
+			ReturnFunction = new(EC_InternalUseOnlyConstructor, Outer, TEXT("OnPlayerHandOverlap"), RF_Public|RF_Transient|RF_MarkAsNative) UFunction(FObjectInitializer(), NULL, 0x00420401, 65535, sizeof(Pickup_eventOnPlayerHandOverlap_Parms));
+			UProperty* NewProp_SweepResult = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("SweepResult"), RF_Public|RF_Transient|RF_MarkAsNative) UStructProperty(CPP_PROPERTY_BASE(SweepResult, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010008008000182, Z_Construct_UScriptStruct_FHitResult());
+			CPP_BOOL_PROPERTY_BITMASK_STRUCT(bFromSweep, Pickup_eventOnPlayerHandOverlap_Parms, bool);
+			UProperty* NewProp_bFromSweep = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("bFromSweep"), RF_Public|RF_Transient|RF_MarkAsNative) UBoolProperty(FObjectInitializer(), EC_CppProperty, CPP_BOOL_PROPERTY_OFFSET(bFromSweep, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010000000000080, CPP_BOOL_PROPERTY_BITMASK(bFromSweep, Pickup_eventOnPlayerHandOverlap_Parms), sizeof(bool), true);
+			UProperty* NewProp_otherBodyIndex = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("otherBodyIndex"), RF_Public|RF_Transient|RF_MarkAsNative) UIntProperty(CPP_PROPERTY_BASE(otherBodyIndex, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010000000000080);
+			UProperty* NewProp_otherComponent = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("otherComponent"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(otherComponent, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010000000080080, Z_Construct_UClass_UPrimitiveComponent_NoRegister());
+			UProperty* NewProp_otherActor = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("otherActor"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(otherActor, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010000000000080, Z_Construct_UClass_AActor_NoRegister());
+			UProperty* NewProp_overlappedComponent = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("overlappedComponent"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(overlappedComponent, Pickup_eventOnPlayerHandOverlap_Parms), 0x0010000000080080, Z_Construct_UClass_UPrimitiveComponent_NoRegister());
+			ReturnFunction->Bind();
+			ReturnFunction->StaticLink();
+#if WITH_METADATA
+			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
+			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("Objects/Pickup.h"));
+			MetaData->SetValue(NewProp_SweepResult, TEXT("NativeConst"), TEXT(""));
+			MetaData->SetValue(NewProp_otherComponent, TEXT("EditInline"), TEXT("true"));
+			MetaData->SetValue(NewProp_overlappedComponent, TEXT("EditInline"), TEXT("true"));
+#endif
+		}
+		return ReturnFunction;
+	}
+	UFunction* Z_Construct_UFunction_APickup_OnPlayerOverlapExit()
+	{
+		struct Pickup_eventOnPlayerOverlapExit_Parms
+		{
+			UPrimitiveComponent* overlappedComponent;
+			AActor* otherActor;
+			UPrimitiveComponent* otherComponent;
+			int32 otherBodyIndex;
+		};
+		UObject* Outer=Z_Construct_UClass_APickup();
+		static UFunction* ReturnFunction = NULL;
+		if (!ReturnFunction)
+		{
+			ReturnFunction = new(EC_InternalUseOnlyConstructor, Outer, TEXT("OnPlayerOverlapExit"), RF_Public|RF_Transient|RF_MarkAsNative) UFunction(FObjectInitializer(), NULL, 0x00020401, 65535, sizeof(Pickup_eventOnPlayerOverlapExit_Parms));
+			UProperty* NewProp_otherBodyIndex = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("otherBodyIndex"), RF_Public|RF_Transient|RF_MarkAsNative) UIntProperty(CPP_PROPERTY_BASE(otherBodyIndex, Pickup_eventOnPlayerOverlapExit_Parms), 0x0010000000000080);
+			UProperty* NewProp_otherComponent = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("otherComponent"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(otherComponent, Pickup_eventOnPlayerOverlapExit_Parms), 0x0010000000080080, Z_Construct_UClass_UPrimitiveComponent_NoRegister());
+			UProperty* NewProp_otherActor = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("otherActor"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(otherActor, Pickup_eventOnPlayerOverlapExit_Parms), 0x0010000000000080, Z_Construct_UClass_AActor_NoRegister());
+			UProperty* NewProp_overlappedComponent = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("overlappedComponent"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(overlappedComponent, Pickup_eventOnPlayerOverlapExit_Parms), 0x0010000000080080, Z_Construct_UClass_UPrimitiveComponent_NoRegister());
+			ReturnFunction->Bind();
+			ReturnFunction->StaticLink();
+#if WITH_METADATA
+			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
+			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("Objects/Pickup.h"));
+			MetaData->SetValue(NewProp_otherComponent, TEXT("EditInline"), TEXT("true"));
+			MetaData->SetValue(NewProp_overlappedComponent, TEXT("EditInline"), TEXT("true"));
+#endif
+		}
+		return ReturnFunction;
+	}
 	UClass* Z_Construct_UClass_APickup_NoRegister()
 	{
 		return APickup::StaticClass();
@@ -182,12 +245,35 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 				UObjectForceRegistration(OuterClass);
 				OuterClass->ClassFlags |= 0x20900081;
 
+				OuterClass->LinkChild(Z_Construct_UFunction_APickup_OnPlayerHandOverlap());
+				OuterClass->LinkChild(Z_Construct_UFunction_APickup_OnPlayerOverlapExit());
 
+PRAGMA_DISABLE_DEPRECATION_WARNINGS
+				UProperty* NewProp_pickupName = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("pickupName"), RF_Public|RF_Transient|RF_MarkAsNative) UStrProperty(CPP_PROPERTY_BASE(pickupName, APickup), 0x0010000000000001);
+				UProperty* NewProp_pickupBox = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("pickupBox"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(pickupBox, APickup), 0x0010000000080009, Z_Construct_UClass_UBoxComponent_NoRegister());
+				UProperty* NewProp_pickupMesh = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("pickupMesh"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(pickupMesh, APickup), 0x0010000000080009, Z_Construct_UClass_UStaticMeshComponent_NoRegister());
+				UProperty* NewProp_pickupRoot = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("pickupRoot"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(pickupRoot, APickup), 0x0010000000080009, Z_Construct_UClass_USceneComponent_NoRegister());
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+				OuterClass->AddFunctionToFunctionMapWithOverriddenName(Z_Construct_UFunction_APickup_OnPlayerHandOverlap(), "OnPlayerHandOverlap"); // 2611339055
+				OuterClass->AddFunctionToFunctionMapWithOverriddenName(Z_Construct_UFunction_APickup_OnPlayerOverlapExit(), "OnPlayerOverlapExit"); // 827085915
 				OuterClass->StaticLink();
 #if WITH_METADATA
 				UMetaData* MetaData = OuterClass->GetOutermost()->GetMetaData();
-				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("Pickup.h"));
-				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("Pickup.h"));
+				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("Objects/Pickup.h"));
+				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("Objects/Pickup.h"));
+				MetaData->SetValue(NewProp_pickupName, TEXT("Category"), TEXT("Pickup"));
+				MetaData->SetValue(NewProp_pickupName, TEXT("ModuleRelativePath"), TEXT("Objects/Pickup.h"));
+				MetaData->SetValue(NewProp_pickupName, TEXT("ToolTip"), TEXT("Can be initialised inside Sean's if-else ladder"));
+				MetaData->SetValue(NewProp_pickupBox, TEXT("Category"), TEXT("Pickup"));
+				MetaData->SetValue(NewProp_pickupBox, TEXT("EditInline"), TEXT("true"));
+				MetaData->SetValue(NewProp_pickupBox, TEXT("ModuleRelativePath"), TEXT("Objects/Pickup.h"));
+				MetaData->SetValue(NewProp_pickupMesh, TEXT("Category"), TEXT("Pickup"));
+				MetaData->SetValue(NewProp_pickupMesh, TEXT("EditInline"), TEXT("true"));
+				MetaData->SetValue(NewProp_pickupMesh, TEXT("ModuleRelativePath"), TEXT("Objects/Pickup.h"));
+				MetaData->SetValue(NewProp_pickupMesh, TEXT("ToolTip"), TEXT("Static mesh for the object being picked up"));
+				MetaData->SetValue(NewProp_pickupRoot, TEXT("Category"), TEXT("Pickup"));
+				MetaData->SetValue(NewProp_pickupRoot, TEXT("EditInline"), TEXT("true"));
+				MetaData->SetValue(NewProp_pickupRoot, TEXT("ModuleRelativePath"), TEXT("Objects/Pickup.h"));
 #endif
 			}
 		}
@@ -225,20 +311,20 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 				MetaData->SetValue(OuterClass, TEXT("BlueprintSpawnableComponent"), TEXT(""));
 				MetaData->SetValue(OuterClass, TEXT("ClassGroupNames"), TEXT("Custom"));
 				MetaData->SetValue(OuterClass, TEXT("HideCategories"), TEXT("ComponentReplication"));
-				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("Hand.h"));
-				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("Hand.h"));
+				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("CharacterControl/Hand.h"));
+				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("CharacterControl/Hand.h"));
 				MetaData->SetValue(NewProp_handCollider, TEXT("AllowPrivateAccess"), TEXT("true"));
 				MetaData->SetValue(NewProp_handCollider, TEXT("Category"), TEXT("Hand"));
 				MetaData->SetValue(NewProp_handCollider, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_handCollider, TEXT("ModuleRelativePath"), TEXT("Hand.h"));
+				MetaData->SetValue(NewProp_handCollider, TEXT("ModuleRelativePath"), TEXT("CharacterControl/Hand.h"));
 				MetaData->SetValue(NewProp_handMesh, TEXT("AllowPrivateAccess"), TEXT("true"));
 				MetaData->SetValue(NewProp_handMesh, TEXT("Category"), TEXT("Hand"));
 				MetaData->SetValue(NewProp_handMesh, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_handMesh, TEXT("ModuleRelativePath"), TEXT("Hand.h"));
+				MetaData->SetValue(NewProp_handMesh, TEXT("ModuleRelativePath"), TEXT("CharacterControl/Hand.h"));
 				MetaData->SetValue(NewProp_handSceneComponent, TEXT("AllowPrivateAccess"), TEXT("true"));
 				MetaData->SetValue(NewProp_handSceneComponent, TEXT("Category"), TEXT("Hand"));
 				MetaData->SetValue(NewProp_handSceneComponent, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_handSceneComponent, TEXT("ModuleRelativePath"), TEXT("Hand.h"));
+				MetaData->SetValue(NewProp_handSceneComponent, TEXT("ModuleRelativePath"), TEXT("CharacterControl/Hand.h"));
 #endif
 			}
 		}
@@ -268,8 +354,8 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 				OuterClass->StaticLink();
 #if WITH_METADATA
 				UMetaData* MetaData = OuterClass->GetOutermost()->GetMetaData();
-				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("ColorChangingOrb.h"));
-				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("ColorChangingOrb.h"));
+				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("Objects/ColorChangingOrb.h"));
+				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("Objects/ColorChangingOrb.h"));
 #endif
 			}
 		}
@@ -278,6 +364,75 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 	}
 	static FCompiledInDefer Z_CompiledInDefer_UClass_AColorChangingOrb(Z_Construct_UClass_AColorChangingOrb, &AColorChangingOrb::StaticClass, TEXT("AColorChangingOrb"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(AColorChangingOrb);
+	UFunction* Z_Construct_UFunction_ASubEarthCharacter_GetCurrentOxygen()
+	{
+		struct SubEarthCharacter_eventGetCurrentOxygen_Parms
+		{
+			float ReturnValue;
+		};
+		UObject* Outer=Z_Construct_UClass_ASubEarthCharacter();
+		static UFunction* ReturnFunction = NULL;
+		if (!ReturnFunction)
+		{
+			ReturnFunction = new(EC_InternalUseOnlyConstructor, Outer, TEXT("GetCurrentOxygen"), RF_Public|RF_Transient|RF_MarkAsNative) UFunction(FObjectInitializer(), NULL, 0x14020401, 65535, sizeof(SubEarthCharacter_eventGetCurrentOxygen_Parms));
+			UProperty* NewProp_ReturnValue = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("ReturnValue"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(ReturnValue, SubEarthCharacter_eventGetCurrentOxygen_Parms), 0x0010000000000580);
+			ReturnFunction->Bind();
+			ReturnFunction->StaticLink();
+#if WITH_METADATA
+			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
+			MetaData->SetValue(ReturnFunction, TEXT("Category"), TEXT("OxygenTank"));
+			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("Accessor functon for Current Oxygen"));
+#endif
+		}
+		return ReturnFunction;
+	}
+	UFunction* Z_Construct_UFunction_ASubEarthCharacter_GetInitialOxygen()
+	{
+		struct SubEarthCharacter_eventGetInitialOxygen_Parms
+		{
+			float ReturnValue;
+		};
+		UObject* Outer=Z_Construct_UClass_ASubEarthCharacter();
+		static UFunction* ReturnFunction = NULL;
+		if (!ReturnFunction)
+		{
+			ReturnFunction = new(EC_InternalUseOnlyConstructor, Outer, TEXT("GetInitialOxygen"), RF_Public|RF_Transient|RF_MarkAsNative) UFunction(FObjectInitializer(), NULL, 0x14020401, 65535, sizeof(SubEarthCharacter_eventGetInitialOxygen_Parms));
+			UProperty* NewProp_ReturnValue = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("ReturnValue"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(ReturnValue, SubEarthCharacter_eventGetInitialOxygen_Parms), 0x0010000000000580);
+			ReturnFunction->Bind();
+			ReturnFunction->StaticLink();
+#if WITH_METADATA
+			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
+			MetaData->SetValue(ReturnFunction, TEXT("Category"), TEXT("OxygenTank"));
+			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("************************************//Accessor functon for Initial Oxygen"));
+#endif
+		}
+		return ReturnFunction;
+	}
+	UFunction* Z_Construct_UFunction_ASubEarthCharacter_UpdateCurrentOxygen()
+	{
+		struct SubEarthCharacter_eventUpdateCurrentOxygen_Parms
+		{
+			float Oxygen;
+		};
+		UObject* Outer=Z_Construct_UClass_ASubEarthCharacter();
+		static UFunction* ReturnFunction = NULL;
+		if (!ReturnFunction)
+		{
+			ReturnFunction = new(EC_InternalUseOnlyConstructor, Outer, TEXT("UpdateCurrentOxygen"), RF_Public|RF_Transient|RF_MarkAsNative) UFunction(FObjectInitializer(), NULL, 0x04020401, 65535, sizeof(SubEarthCharacter_eventUpdateCurrentOxygen_Parms));
+			UProperty* NewProp_Oxygen = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("Oxygen"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(Oxygen, SubEarthCharacter_eventUpdateCurrentOxygen_Parms), 0x0010000000000080);
+			ReturnFunction->Bind();
+			ReturnFunction->StaticLink();
+#if WITH_METADATA
+			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
+			MetaData->SetValue(ReturnFunction, TEXT("Category"), TEXT("OxygenTank"));
+			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("Updates the players current oxygen\n/@param Oxygen This is the amount by which the player's Oxygen level will change  . It can be positive or negative."));
+#endif
+		}
+		return ReturnFunction;
+	}
 	UClass* Z_Construct_UClass_ASubEarthCharacter_NoRegister()
 	{
 		return ASubEarthCharacter::StaticClass();
@@ -293,59 +448,95 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 			if (!(OuterClass->ClassFlags & CLASS_Constructed))
 			{
 				UObjectForceRegistration(OuterClass);
-				OuterClass->ClassFlags |= 0x20800080;
+				OuterClass->ClassFlags |= 0x20900080;
 
+				OuterClass->LinkChild(Z_Construct_UFunction_ASubEarthCharacter_GetCurrentOxygen());
+				OuterClass->LinkChild(Z_Construct_UFunction_ASubEarthCharacter_GetInitialOxygen());
+				OuterClass->LinkChild(Z_Construct_UFunction_ASubEarthCharacter_UpdateCurrentOxygen());
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
-				UProperty* NewProp_L_MotionController = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("L_MotionController"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(L_MotionController, ASubEarthCharacter), 0x00400000000a001d, Z_Construct_UClass_UMotionControllerComponent_NoRegister());
 				UProperty* NewProp_R_MotionController = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("R_MotionController"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(R_MotionController, ASubEarthCharacter), 0x00400000000a001d, Z_Construct_UClass_UMotionControllerComponent_NoRegister());
-				UProperty* NewProp_FirstPersonCameraComponent = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("FirstPersonCameraComponent"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(FirstPersonCameraComponent, ASubEarthCharacter), 0x004000000008000d, Z_Construct_UClass_UCameraComponent_NoRegister());
-				UProperty* NewProp_Mesh1P = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("Mesh1P"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(Mesh1P, ASubEarthCharacter), 0x00400000000b0009, Z_Construct_UClass_USkeletalMeshComponent_NoRegister());
+				UProperty* NewProp_L_MotionController = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("L_MotionController"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(L_MotionController, ASubEarthCharacter), 0x00400000000a001d, Z_Construct_UClass_UMotionControllerComponent_NoRegister());
+				UProperty* NewProp_PlayerCameraComponent = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("PlayerCameraComponent"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(PlayerCameraComponent, ASubEarthCharacter), 0x004000000008000d, Z_Construct_UClass_UCameraComponent_NoRegister());
+				UProperty* NewProp_PlayerCameraSceneComponent = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("PlayerCameraSceneComponent"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(PlayerCameraSceneComponent, ASubEarthCharacter), 0x004000000008000d, Z_Construct_UClass_USceneComponent_NoRegister());
 				UProperty* NewProp_rightHand = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("rightHand"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(rightHand, ASubEarthCharacter), 0x001000000008000d, Z_Construct_UClass_UHand_NoRegister());
 				UProperty* NewProp_leftHand = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("leftHand"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(leftHand, ASubEarthCharacter), 0x001000000008000d, Z_Construct_UClass_UHand_NoRegister());
-				UProperty* NewProp_BaseLookUpRate = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("BaseLookUpRate"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(BaseLookUpRate, ASubEarthCharacter), 0x0010000000020015);
-				UProperty* NewProp_BaseTurnRate = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("BaseTurnRate"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(BaseTurnRate, ASubEarthCharacter), 0x0010000000020015);
+				UProperty* NewProp_OxygenUseRate = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("OxygenUseRate"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(OxygenUseRate, ASubEarthCharacter), 0x0010000000000005);
+				UProperty* NewProp_CurrentOxygen = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("CurrentOxygen"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(CurrentOxygen, ASubEarthCharacter), 0x0010000000000005);
+				UProperty* NewProp_InitialOxygen = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("InitialOxygen"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(InitialOxygen, ASubEarthCharacter), 0x0010000000000005);
+				UProperty* NewProp_m_RotateSpeedVehicle = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("m_RotateSpeedVehicle"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(m_RotateSpeedVehicle, ASubEarthCharacter), 0x0010000000000005);
+				UProperty* NewProp_m_SpeedVehicle = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("m_SpeedVehicle"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(m_SpeedVehicle, ASubEarthCharacter), 0x0010000000000005);
+				UProperty* NewProp_m_RotateSpeedPropel = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("m_RotateSpeedPropel"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(m_RotateSpeedPropel, ASubEarthCharacter), 0x0010000000000005);
+				UProperty* NewProp_m_SpeedPropel = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("m_SpeedPropel"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(m_SpeedPropel, ASubEarthCharacter), 0x0010000000000005);
+				UProperty* NewProp_m_RotateSpeedSwim = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("m_RotateSpeedSwim"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(m_RotateSpeedSwim, ASubEarthCharacter), 0x0010000000000005);
+				UProperty* NewProp_m_SpeedSwim = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("m_SpeedSwim"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(m_SpeedSwim, ASubEarthCharacter), 0x0010000000000005);
+				UProperty* NewProp_m_RotateSpeedPC = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("m_RotateSpeedPC"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(m_RotateSpeedPC, ASubEarthCharacter), 0x0010000000000005);
+				UProperty* NewProp_m_SpeedPC = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("m_SpeedPC"), RF_Public|RF_Transient|RF_MarkAsNative) UFloatProperty(CPP_PROPERTY_BASE(m_SpeedPC, ASubEarthCharacter), 0x0010000000000005);
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
-				OuterClass->ClassConfigName = FName(TEXT("Game"));
+				OuterClass->AddFunctionToFunctionMapWithOverriddenName(Z_Construct_UFunction_ASubEarthCharacter_GetCurrentOxygen(), "GetCurrentOxygen"); // 2517673669
+				OuterClass->AddFunctionToFunctionMapWithOverriddenName(Z_Construct_UFunction_ASubEarthCharacter_GetInitialOxygen(), "GetInitialOxygen"); // 3257449700
+				OuterClass->AddFunctionToFunctionMapWithOverriddenName(Z_Construct_UFunction_ASubEarthCharacter_UpdateCurrentOxygen(), "UpdateCurrentOxygen"); // 1913166358
 				OuterClass->StaticLink();
 #if WITH_METADATA
 				UMetaData* MetaData = OuterClass->GetOutermost()->GetMetaData();
 				MetaData->SetValue(OuterClass, TEXT("HideCategories"), TEXT("Navigation"));
-				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("SubEarthCharacter.h"));
-				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("SubEarthCharacter.h"));
-				MetaData->SetValue(NewProp_L_MotionController, TEXT("AllowPrivateAccess"), TEXT("true"));
-				MetaData->SetValue(NewProp_L_MotionController, TEXT("Category"), TEXT("SubEarthCharacter"));
-				MetaData->SetValue(NewProp_L_MotionController, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_L_MotionController, TEXT("ModuleRelativePath"), TEXT("SubEarthCharacter.h"));
-				MetaData->SetValue(NewProp_L_MotionController, TEXT("ToolTip"), TEXT("Motion controller (left hand)"));
+				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
 				MetaData->SetValue(NewProp_R_MotionController, TEXT("AllowPrivateAccess"), TEXT("true"));
 				MetaData->SetValue(NewProp_R_MotionController, TEXT("Category"), TEXT("SubEarthCharacter"));
 				MetaData->SetValue(NewProp_R_MotionController, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_R_MotionController, TEXT("ModuleRelativePath"), TEXT("SubEarthCharacter.h"));
-				MetaData->SetValue(NewProp_R_MotionController, TEXT("ToolTip"), TEXT("Motion controller (right hand)"));
-				MetaData->SetValue(NewProp_FirstPersonCameraComponent, TEXT("AllowPrivateAccess"), TEXT("true"));
-				MetaData->SetValue(NewProp_FirstPersonCameraComponent, TEXT("Category"), TEXT("Camera"));
-				MetaData->SetValue(NewProp_FirstPersonCameraComponent, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_FirstPersonCameraComponent, TEXT("ModuleRelativePath"), TEXT("SubEarthCharacter.h"));
-				MetaData->SetValue(NewProp_FirstPersonCameraComponent, TEXT("ToolTip"), TEXT("First person camera"));
-				MetaData->SetValue(NewProp_Mesh1P, TEXT("Category"), TEXT("Mesh"));
-				MetaData->SetValue(NewProp_Mesh1P, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_Mesh1P, TEXT("ModuleRelativePath"), TEXT("SubEarthCharacter.h"));
-				MetaData->SetValue(NewProp_Mesh1P, TEXT("ToolTip"), TEXT("Pawn mesh: 1st person view (arms; seen only by self)"));
+				MetaData->SetValue(NewProp_R_MotionController, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_R_MotionController, TEXT("ToolTip"), TEXT("Right Motion controller"));
+				MetaData->SetValue(NewProp_L_MotionController, TEXT("AllowPrivateAccess"), TEXT("true"));
+				MetaData->SetValue(NewProp_L_MotionController, TEXT("Category"), TEXT("SubEarthCharacter"));
+				MetaData->SetValue(NewProp_L_MotionController, TEXT("EditInline"), TEXT("true"));
+				MetaData->SetValue(NewProp_L_MotionController, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_L_MotionController, TEXT("ToolTip"), TEXT("Left Motion controller"));
+				MetaData->SetValue(NewProp_PlayerCameraComponent, TEXT("AllowPrivateAccess"), TEXT("true"));
+				MetaData->SetValue(NewProp_PlayerCameraComponent, TEXT("Category"), TEXT("Camera"));
+				MetaData->SetValue(NewProp_PlayerCameraComponent, TEXT("EditInline"), TEXT("true"));
+				MetaData->SetValue(NewProp_PlayerCameraComponent, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_PlayerCameraComponent, TEXT("ToolTip"), TEXT("Player camera:"));
+				MetaData->SetValue(NewProp_PlayerCameraSceneComponent, TEXT("AllowPrivateAccess"), TEXT("true"));
+				MetaData->SetValue(NewProp_PlayerCameraSceneComponent, TEXT("Category"), TEXT("CameraControl"));
+				MetaData->SetValue(NewProp_PlayerCameraSceneComponent, TEXT("EditInline"), TEXT("true"));
+				MetaData->SetValue(NewProp_PlayerCameraSceneComponent, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_PlayerCameraSceneComponent, TEXT("ToolTip"), TEXT("Player camera scene component"));
 				MetaData->SetValue(NewProp_rightHand, TEXT("AllowPrivateAccess"), TEXT("true"));
 				MetaData->SetValue(NewProp_rightHand, TEXT("Category"), TEXT("rightHand"));
 				MetaData->SetValue(NewProp_rightHand, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_rightHand, TEXT("ModuleRelativePath"), TEXT("SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_rightHand, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_rightHand, TEXT("ToolTip"), TEXT("Right Hand"));
 				MetaData->SetValue(NewProp_leftHand, TEXT("AllowPrivateAccess"), TEXT("true"));
 				MetaData->SetValue(NewProp_leftHand, TEXT("Category"), TEXT("leftHand"));
 				MetaData->SetValue(NewProp_leftHand, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_leftHand, TEXT("ModuleRelativePath"), TEXT("SubEarthCharacter.h"));
-				MetaData->SetValue(NewProp_BaseLookUpRate, TEXT("Category"), TEXT("Camera"));
-				MetaData->SetValue(NewProp_BaseLookUpRate, TEXT("ModuleRelativePath"), TEXT("SubEarthCharacter.h"));
-				MetaData->SetValue(NewProp_BaseLookUpRate, TEXT("ToolTip"), TEXT("Base look up/down rate, in deg/sec. Other scaling may affect final rate."));
-				MetaData->SetValue(NewProp_BaseTurnRate, TEXT("Category"), TEXT("Camera"));
-				MetaData->SetValue(NewProp_BaseTurnRate, TEXT("ModuleRelativePath"), TEXT("SubEarthCharacter.h"));
-				MetaData->SetValue(NewProp_BaseTurnRate, TEXT("ToolTip"), TEXT("Base turn rate, in deg/sec. Other scaling may affect final turn rate."));
+				MetaData->SetValue(NewProp_leftHand, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_leftHand, TEXT("ToolTip"), TEXT("Left Hand"));
+				MetaData->SetValue(NewProp_OxygenUseRate, TEXT("Category"), TEXT("OxygenTank"));
+				MetaData->SetValue(NewProp_OxygenUseRate, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_OxygenUseRate, TEXT("ToolTip"), TEXT("The player's oxygen use rate"));
+				MetaData->SetValue(NewProp_CurrentOxygen, TEXT("Category"), TEXT("OxygenTank"));
+				MetaData->SetValue(NewProp_CurrentOxygen, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_CurrentOxygen, TEXT("ToolTip"), TEXT("The player's current oxygen level"));
+				MetaData->SetValue(NewProp_InitialOxygen, TEXT("Category"), TEXT("OxygenTank"));
+				MetaData->SetValue(NewProp_InitialOxygen, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_InitialOxygen, TEXT("ToolTip"), TEXT("The player's initial oxygen level"));
+				MetaData->SetValue(NewProp_m_RotateSpeedVehicle, TEXT("Category"), TEXT("PlayerSpeeds"));
+				MetaData->SetValue(NewProp_m_RotateSpeedVehicle, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_m_SpeedVehicle, TEXT("Category"), TEXT("PlayerSpeeds"));
+				MetaData->SetValue(NewProp_m_SpeedVehicle, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_m_RotateSpeedPropel, TEXT("Category"), TEXT("PlayerSpeeds"));
+				MetaData->SetValue(NewProp_m_RotateSpeedPropel, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_m_SpeedPropel, TEXT("Category"), TEXT("PlayerSpeeds"));
+				MetaData->SetValue(NewProp_m_SpeedPropel, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_m_RotateSpeedSwim, TEXT("Category"), TEXT("PlayerSpeeds"));
+				MetaData->SetValue(NewProp_m_RotateSpeedSwim, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_m_SpeedSwim, TEXT("Category"), TEXT("PlayerSpeeds"));
+				MetaData->SetValue(NewProp_m_SpeedSwim, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_m_RotateSpeedPC, TEXT("Category"), TEXT("PlayerSpeeds"));
+				MetaData->SetValue(NewProp_m_RotateSpeedPC, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
+				MetaData->SetValue(NewProp_m_SpeedPC, TEXT("Category"), TEXT("PlayerSpeeds"));
+				MetaData->SetValue(NewProp_m_SpeedPC, TEXT("ModuleRelativePath"), TEXT("CharacterControl/SubEarthCharacter.h"));
 #endif
 			}
 		}
@@ -369,9 +560,13 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 			if (!(OuterClass->ClassFlags & CLASS_Constructed))
 			{
 				UObjectForceRegistration(OuterClass);
-				OuterClass->ClassFlags |= 0x2088028C;
+				OuterClass->ClassFlags |= 0x2090028C;
 
 
+PRAGMA_DISABLE_DEPRECATION_WARNINGS
+				UProperty* NewProp_CurrentWidget = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("CurrentWidget"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(CurrentWidget, ASubEarthGameMode), 0x0020080000000000, Z_Construct_UClass_UUserWidget_NoRegister());
+				UProperty* NewProp_PlayerHUDClass = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("PlayerHUDClass"), RF_Public|RF_Transient|RF_MarkAsNative) UClassProperty(CPP_PROPERTY_BASE(PlayerHUDClass, ASubEarthGameMode), 0x0024080000010005, Z_Construct_UClass_UUserWidget_NoRegister(), UClass::StaticClass());
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
 				OuterClass->ClassConfigName = FName(TEXT("Game"));
 				OuterClass->StaticLink();
 #if WITH_METADATA
@@ -380,6 +575,10 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("SubEarthGameMode.h"));
 				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("SubEarthGameMode.h"));
 				MetaData->SetValue(OuterClass, TEXT("ShowCategories"), TEXT("Input|MouseInput Input|TouchInput"));
+				MetaData->SetValue(NewProp_CurrentWidget, TEXT("ModuleRelativePath"), TEXT("SubEarthGameMode.h"));
+				MetaData->SetValue(NewProp_PlayerHUDClass, TEXT("BlueprintProtected"), TEXT("true"));
+				MetaData->SetValue(NewProp_PlayerHUDClass, TEXT("Category"), TEXT("OxygenTank"));
+				MetaData->SetValue(NewProp_PlayerHUDClass, TEXT("ModuleRelativePath"), TEXT("SubEarthGameMode.h"));
 #endif
 			}
 		}
@@ -403,7 +602,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 			if (!(OuterClass->ClassFlags & CLASS_Constructed))
 			{
 				UObjectForceRegistration(OuterClass);
-				OuterClass->ClassFlags |= 0x2080028C;
+				OuterClass->ClassFlags |= 0x2090028C;
 
 
 				OuterClass->ClassConfigName = FName(TEXT("Game"));
@@ -411,8 +610,8 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 #if WITH_METADATA
 				UMetaData* MetaData = OuterClass->GetOutermost()->GetMetaData();
 				MetaData->SetValue(OuterClass, TEXT("HideCategories"), TEXT("Rendering Actor Input Replication"));
-				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("SubEarthHUD.h"));
-				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("SubEarthHUD.h"));
+				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("HUD/SubEarthHUD.h"));
+				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("HUD/SubEarthHUD.h"));
 				MetaData->SetValue(OuterClass, TEXT("ShowCategories"), TEXT("Input|MouseInput Input|TouchInput"));
 #endif
 			}
@@ -422,86 +621,6 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 	}
 	static FCompiledInDefer Z_CompiledInDefer_UClass_ASubEarthHUD(Z_Construct_UClass_ASubEarthHUD, &ASubEarthHUD::StaticClass, TEXT("ASubEarthHUD"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(ASubEarthHUD);
-	UFunction* Z_Construct_UFunction_ASubEarthProjectile_OnHit()
-	{
-		struct SubEarthProjectile_eventOnHit_Parms
-		{
-			UPrimitiveComponent* HitComp;
-			AActor* OtherActor;
-			UPrimitiveComponent* OtherComp;
-			FVector NormalImpulse;
-			FHitResult Hit;
-		};
-		UObject* Outer=Z_Construct_UClass_ASubEarthProjectile();
-		static UFunction* ReturnFunction = NULL;
-		if (!ReturnFunction)
-		{
-			ReturnFunction = new(EC_InternalUseOnlyConstructor, Outer, TEXT("OnHit"), RF_Public|RF_Transient|RF_MarkAsNative) UFunction(FObjectInitializer(), NULL, 0x00C20401, 65535, sizeof(SubEarthProjectile_eventOnHit_Parms));
-			UProperty* NewProp_Hit = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("Hit"), RF_Public|RF_Transient|RF_MarkAsNative) UStructProperty(CPP_PROPERTY_BASE(Hit, SubEarthProjectile_eventOnHit_Parms), 0x0010008008000182, Z_Construct_UScriptStruct_FHitResult());
-			UProperty* NewProp_NormalImpulse = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("NormalImpulse"), RF_Public|RF_Transient|RF_MarkAsNative) UStructProperty(CPP_PROPERTY_BASE(NormalImpulse, SubEarthProjectile_eventOnHit_Parms), 0x0010000000000080, Z_Construct_UScriptStruct_FVector());
-			UProperty* NewProp_OtherComp = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("OtherComp"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(OtherComp, SubEarthProjectile_eventOnHit_Parms), 0x0010000000080080, Z_Construct_UClass_UPrimitiveComponent_NoRegister());
-			UProperty* NewProp_OtherActor = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("OtherActor"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(OtherActor, SubEarthProjectile_eventOnHit_Parms), 0x0010000000000080, Z_Construct_UClass_AActor_NoRegister());
-			UProperty* NewProp_HitComp = new(EC_InternalUseOnlyConstructor, ReturnFunction, TEXT("HitComp"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(HitComp, SubEarthProjectile_eventOnHit_Parms), 0x0010000000080080, Z_Construct_UClass_UPrimitiveComponent_NoRegister());
-			ReturnFunction->Bind();
-			ReturnFunction->StaticLink();
-#if WITH_METADATA
-			UMetaData* MetaData = ReturnFunction->GetOutermost()->GetMetaData();
-			MetaData->SetValue(ReturnFunction, TEXT("ModuleRelativePath"), TEXT("SubEarthProjectile.h"));
-			MetaData->SetValue(ReturnFunction, TEXT("ToolTip"), TEXT("called when projectile hits something"));
-			MetaData->SetValue(NewProp_Hit, TEXT("NativeConst"), TEXT(""));
-			MetaData->SetValue(NewProp_OtherComp, TEXT("EditInline"), TEXT("true"));
-			MetaData->SetValue(NewProp_HitComp, TEXT("EditInline"), TEXT("true"));
-#endif
-		}
-		return ReturnFunction;
-	}
-	UClass* Z_Construct_UClass_ASubEarthProjectile_NoRegister()
-	{
-		return ASubEarthProjectile::StaticClass();
-	}
-	UClass* Z_Construct_UClass_ASubEarthProjectile()
-	{
-		static UClass* OuterClass = NULL;
-		if (!OuterClass)
-		{
-			Z_Construct_UClass_AActor();
-			Z_Construct_UPackage__Script_SubEarth();
-			OuterClass = ASubEarthProjectile::StaticClass();
-			if (!(OuterClass->ClassFlags & CLASS_Constructed))
-			{
-				UObjectForceRegistration(OuterClass);
-				OuterClass->ClassFlags |= 0x20800080;
-
-				OuterClass->LinkChild(Z_Construct_UFunction_ASubEarthProjectile_OnHit());
-
-PRAGMA_DISABLE_DEPRECATION_WARNINGS
-				UProperty* NewProp_ProjectileMovement = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("ProjectileMovement"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(ProjectileMovement, ASubEarthProjectile), 0x00400000000a001d, Z_Construct_UClass_UProjectileMovementComponent_NoRegister());
-				UProperty* NewProp_CollisionComp = new(EC_InternalUseOnlyConstructor, OuterClass, TEXT("CollisionComp"), RF_Public|RF_Transient|RF_MarkAsNative) UObjectProperty(CPP_PROPERTY_BASE(CollisionComp, ASubEarthProjectile), 0x00400000000b0009, Z_Construct_UClass_USphereComponent_NoRegister());
-PRAGMA_ENABLE_DEPRECATION_WARNINGS
-				OuterClass->AddFunctionToFunctionMapWithOverriddenName(Z_Construct_UFunction_ASubEarthProjectile_OnHit(), "OnHit"); // 2635910303
-				OuterClass->ClassConfigName = FName(TEXT("Game"));
-				OuterClass->StaticLink();
-#if WITH_METADATA
-				UMetaData* MetaData = OuterClass->GetOutermost()->GetMetaData();
-				MetaData->SetValue(OuterClass, TEXT("IncludePath"), TEXT("SubEarthProjectile.h"));
-				MetaData->SetValue(OuterClass, TEXT("ModuleRelativePath"), TEXT("SubEarthProjectile.h"));
-				MetaData->SetValue(NewProp_ProjectileMovement, TEXT("AllowPrivateAccess"), TEXT("true"));
-				MetaData->SetValue(NewProp_ProjectileMovement, TEXT("Category"), TEXT("Movement"));
-				MetaData->SetValue(NewProp_ProjectileMovement, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_ProjectileMovement, TEXT("ModuleRelativePath"), TEXT("SubEarthProjectile.h"));
-				MetaData->SetValue(NewProp_ProjectileMovement, TEXT("ToolTip"), TEXT("Projectile movement component"));
-				MetaData->SetValue(NewProp_CollisionComp, TEXT("Category"), TEXT("Projectile"));
-				MetaData->SetValue(NewProp_CollisionComp, TEXT("EditInline"), TEXT("true"));
-				MetaData->SetValue(NewProp_CollisionComp, TEXT("ModuleRelativePath"), TEXT("SubEarthProjectile.h"));
-				MetaData->SetValue(NewProp_CollisionComp, TEXT("ToolTip"), TEXT("Sphere collision component"));
-#endif
-			}
-		}
-		check(OuterClass->GetClass());
-		return OuterClass;
-	}
-	static FCompiledInDefer Z_CompiledInDefer_UClass_ASubEarthProjectile(Z_Construct_UClass_ASubEarthProjectile, &ASubEarthProjectile::StaticClass, TEXT("ASubEarthProjectile"), false, nullptr, nullptr, nullptr);
-	DEFINE_VTABLE_PTR_HELPER_CTOR(ASubEarthProjectile);
 	UPackage* Z_Construct_UPackage__Script_SubEarth()
 	{
 		static UPackage* ReturnPackage = NULL;
@@ -510,8 +629,8 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 			ReturnPackage = CastChecked<UPackage>(StaticFindObjectFast(UPackage::StaticClass(), NULL, FName(TEXT("/Script/SubEarth")), false, false));
 			ReturnPackage->SetPackageFlags(PKG_CompiledIn | 0x00000000);
 			FGuid Guid;
-			Guid.A = 0xECF3255C;
-			Guid.B = 0x9D136BA6;
+			Guid.A = 0x2AE393B7;
+			Guid.B = 0x317A852D;
 			Guid.C = 0x00000000;
 			Guid.D = 0x00000000;
 			ReturnPackage->SetGuid(Guid);

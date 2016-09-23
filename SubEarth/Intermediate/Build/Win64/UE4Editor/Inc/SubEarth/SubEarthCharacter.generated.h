@@ -13,9 +13,63 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define SUBEARTH_SubEarthCharacter_generated_h
 
-#define SubEarth_Source_SubEarth_SubEarthCharacter_h_13_RPC_WRAPPERS
-#define SubEarth_Source_SubEarth_SubEarthCharacter_h_13_RPC_WRAPPERS_NO_PURE_DECLS
-#define SubEarth_Source_SubEarth_SubEarthCharacter_h_13_INCLASS_NO_PURE_DECLS \
+#define SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execUpdateCurrentOxygen) \
+	{ \
+		P_GET_PROPERTY(UFloatProperty,Z_Param_Oxygen); \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		this->UpdateCurrentOxygen(Z_Param_Oxygen); \
+		P_NATIVE_END; \
+	} \
+ \
+	DECLARE_FUNCTION(execGetCurrentOxygen) \
+	{ \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		*(float*)Z_Param__Result=this->GetCurrentOxygen(); \
+		P_NATIVE_END; \
+	} \
+ \
+	DECLARE_FUNCTION(execGetInitialOxygen) \
+	{ \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		*(float*)Z_Param__Result=this->GetInitialOxygen(); \
+		P_NATIVE_END; \
+	}
+
+
+#define SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execUpdateCurrentOxygen) \
+	{ \
+		P_GET_PROPERTY(UFloatProperty,Z_Param_Oxygen); \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		this->UpdateCurrentOxygen(Z_Param_Oxygen); \
+		P_NATIVE_END; \
+	} \
+ \
+	DECLARE_FUNCTION(execGetCurrentOxygen) \
+	{ \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		*(float*)Z_Param__Result=this->GetCurrentOxygen(); \
+		P_NATIVE_END; \
+	} \
+ \
+	DECLARE_FUNCTION(execGetInitialOxygen) \
+	{ \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		*(float*)Z_Param__Result=this->GetInitialOxygen(); \
+		P_NATIVE_END; \
+	}
+
+
+#define SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_INCLASS_NO_PURE_DECLS \
 	private: \
 	static void StaticRegisterNativesASubEarthCharacter(); \
 	friend SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthCharacter(); \
@@ -26,7 +80,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	enum {IsIntrinsic=COMPILED_IN_INTRINSIC};
 
 
-#define SubEarth_Source_SubEarth_SubEarthCharacter_h_13_INCLASS \
+#define SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_INCLASS \
 	private: \
 	static void StaticRegisterNativesASubEarthCharacter(); \
 	friend SUBEARTH_API class UClass* Z_Construct_UClass_ASubEarthCharacter(); \
@@ -37,7 +91,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	enum {IsIntrinsic=COMPILED_IN_INTRINSIC};
 
 
-#define SubEarth_Source_SubEarth_SubEarthCharacter_h_13_STANDARD_CONSTRUCTORS \
+#define SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API ASubEarthCharacter(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(ASubEarthCharacter) \
@@ -50,7 +104,7 @@ private: \
 public:
 
 
-#define SubEarth_Source_SubEarth_SubEarthCharacter_h_13_ENHANCED_CONSTRUCTORS \
+#define SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API ASubEarthCharacter(ASubEarthCharacter&&); \
@@ -61,29 +115,29 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(ASubEarthCharacter); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(ASubEarthCharacter)
 
 
-#define SubEarth_Source_SubEarth_SubEarthCharacter_h_10_PROLOG
-#define SubEarth_Source_SubEarth_SubEarthCharacter_h_13_GENERATED_BODY_LEGACY \
+#define SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_9_PROLOG
+#define SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	SubEarth_Source_SubEarth_SubEarthCharacter_h_13_RPC_WRAPPERS \
-	SubEarth_Source_SubEarth_SubEarthCharacter_h_13_INCLASS \
-	SubEarth_Source_SubEarth_SubEarthCharacter_h_13_STANDARD_CONSTRUCTORS \
+	SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_RPC_WRAPPERS \
+	SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_INCLASS \
+	SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define SubEarth_Source_SubEarth_SubEarthCharacter_h_13_GENERATED_BODY \
+#define SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	SubEarth_Source_SubEarth_SubEarthCharacter_h_13_RPC_WRAPPERS_NO_PURE_DECLS \
-	SubEarth_Source_SubEarth_SubEarthCharacter_h_13_INCLASS_NO_PURE_DECLS \
-	SubEarth_Source_SubEarth_SubEarthCharacter_h_13_ENHANCED_CONSTRUCTORS \
+	SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_RPC_WRAPPERS_NO_PURE_DECLS \
+	SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_INCLASS_NO_PURE_DECLS \
+	SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h_12_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID SubEarth_Source_SubEarth_SubEarthCharacter_h
+#define CURRENT_FILE_ID SubEarth_Source_SubEarth_CharacterControl_SubEarthCharacter_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

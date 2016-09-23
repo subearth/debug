@@ -6,26 +6,23 @@
 ===========================================================================*/
 
 #ifndef SUBEARTH_Interactable_generated_h
-	#include "Interactable.h"
+	#include "Objects/Interactable.h"
 #endif
 #ifndef SUBEARTH_Pickup_generated_h
-	#include "Pickup.h"
+	#include "Objects/Pickup.h"
 #endif
 #ifndef SUBEARTH_Hand_generated_h
-	#include "Hand.h"
+	#include "CharacterControl/Hand.h"
 #endif
 #ifndef SUBEARTH_ColorChangingOrb_generated_h
-	#include "ColorChangingOrb.h"
+	#include "Objects/ColorChangingOrb.h"
 #endif
 #ifndef SUBEARTH_SubEarthCharacter_generated_h
-	#include "SubEarthCharacter.h"
+	#include "CharacterControl/SubEarthCharacter.h"
 #endif
 #ifndef SUBEARTH_SubEarthGameMode_generated_h
 	#include "SubEarthGameMode.h"
 #endif
 #ifndef SUBEARTH_SubEarthHUD_generated_h
-	#include "SubEarthHUD.h"
-#endif
-#ifndef SUBEARTH_SubEarthProjectile_generated_h
-	#include "SubEarthProjectile.h"
+	#include "HUD/SubEarthHUD.h"
 #endif
