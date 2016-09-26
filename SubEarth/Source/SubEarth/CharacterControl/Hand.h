@@ -4,6 +4,7 @@
 
 #include "Components/ActorComponent.h"
 #include "Objects/Pickup.h"
+#include "MotionControllerComponent.h"
 
 #include "Hand.generated.h"
 
@@ -14,7 +15,7 @@ class SUBEARTH_API UHand : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
+
 	UHand();
 
 	// Called when the game starts
@@ -32,7 +33,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		UBoxComponent* handCollider;
 
-	USceneComponent* GetHandSceneComponent(void) { return handSceneComponent; }
+	USceneComponent* GetHandSceneComponent(void) { return savedHandSceneComponent; }
+
+	void SetMotionController(UMotionControllerComponent* motion_controller);
 
 	void PickupObject(APickup* object);
 	void DropObject(void);
@@ -55,6 +58,10 @@ private:
 
 	/* The object in the hand */
 	APickup* pickupObject;
+	UMotionControllerComponent* m_controller;
+	
+	USceneComponent* savedHandSceneComponent;
+
 
 	bool isHandEmpty;
 	bool isGrabbing;  // true if in the process of grabbing an object

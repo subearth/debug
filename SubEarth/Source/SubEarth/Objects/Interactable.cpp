@@ -40,11 +40,11 @@ void AInteractable::Tick(float DeltaTime)
 }
 
 void AInteractable::OnPlayerHandOverlap(UPrimitiveComponent* overlappedComponent,
-	AActor* otherActor,
-	UPrimitiveComponent* otherComponent,
-	int32 otherBodyIndex,
-	bool bFromSweep,
-	const FHitResult& SweepResult)
+	                                    AActor* otherActor,
+	                                    UPrimitiveComponent* otherComponent,
+	                                    int32 otherBodyIndex,
+	                                    bool bFromSweep,
+	                                    const FHitResult& SweepResult)
 {
 	// We want to check that our character collided an interactable object.
 	if (otherActor->IsA(ASubEarthCharacter::StaticClass()))

@@ -1,3 +1,0 @@
-C:\Users\gamep\Desktop\SubEarth\SubEarth\Source\SubEarth\SubEarth.Build.cs
-C:\Users\gamep\Desktop\SubEarth\SubEarth\Source\SubEarth.Target.cs
-C:\Users\gamep\Desktop\SubEarth\SubEarth\Source\SubEarthEditor.Target.cs

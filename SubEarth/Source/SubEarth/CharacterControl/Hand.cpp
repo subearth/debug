@@ -13,6 +13,7 @@ UHand::UHand()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	handSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("HandRoot"));
+	savedHandSceneComponent = handSceneComponent;
 
 	handMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HandMesh"));
 	handMesh->SetupAttachment(handSceneComponent);
@@ -22,11 +23,16 @@ UHand::UHand()
 	handCollider->SetupAttachment(handSceneComponent);
 
 	isHandEmpty = true;
+	
 
 	// Start off holding nothing.
 	pickupObject = NULL;
 }
 
+void UHand::SetMotionController(UMotionControllerComponent* motion_controller)
+{
+	m_controller = motion_controller;
+}
 
 // Called when the game starts
 void UHand::BeginPlay()
@@ -58,6 +64,9 @@ void UHand::PickupObject(APickup* object)
 
 	isHandEmpty = false;
 	pickupObject = object;
+
+	m_controller->SetupAttachment(object->GetRootComponent());
+
 	UE_LOG(LogTemp, Log, TEXT("AHand::PickupObject Object picked up"));
 }
 
@@ -91,10 +100,7 @@ bool UHand::IsGrabbing(void)
 /******************************************************************************/
 void UHand::PressButton1(void)
 {
-	if (pickupObject != NULL)
-	{
-		pickupObject->ExecuteAction1();
-	}
+	// Used for propolsion
 }
 
 /******************************************************************************/
@@ -109,7 +115,10 @@ void UHand::PressButton2(void)
 /******************************************************************************/
 void UHand::PressButton3(void)
 {
-	// Used for propulstion
+	if (pickupObject != NULL)
+	{
+		pickupObject->ExecuteAction2();
+	}
 }
 
 /******************************************************************************/
@@ -117,6 +126,6 @@ void UHand::PressButton4(void)
 {
 	if (pickupObject != NULL)
 	{
-		pickupObject->ExecuteAction1();
+		pickupObject->ExecuteAction3();
 	}
 }

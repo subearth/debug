@@ -4,6 +4,8 @@
 
 #include "GameFramework/Character.h"
 #include "CharacterControl/Hand.h"
+#include "Objects/Pickup.h"
+
 #include "SubEarthCharacter.generated.h"
 
 UCLASS()
@@ -61,8 +63,6 @@ public:
 
 	TArray<FString> ShowInventory;
 
-	bool bIsLeftPickingUp = false;
-	bool bIsRightPickingUp = false;
 
 	/****************************************/
 	/*		END INVENTORY VARAIBLES			*/
@@ -74,15 +74,15 @@ public:
 
 	/*The player's initial oxygen level*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
-		float InitialOxygen;
+		float m_initialOxygen;
 
 	/*The player's current oxygen level*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
-		float CurrentOxygen;
+		float m_currentOxygen;
 
 	/*The player's oxygen use rate*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
-		float OxygenUseRate;
+		float m_oxygenUseRate;
 
 	/****************************************/
 	/*			END HUD VARAIBLES			*/
@@ -125,27 +125,32 @@ public:
 
 	// Left Hand
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = leftHand, meta = (AllowPrivateAccess = "true"))
-		class UHand* leftHand;
+		class UHand* m_leftHand;
 
 	// Right Hand
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = rightHand, meta = (AllowPrivateAccess = "true"))
-		class UHand* rightHand;
+		class UHand* m_rightHand;
 
 protected:
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Unbind functionality for all inputs
-	void ClearAllBindings();
+	void LeftHandButton1();
+	void LeftHandButton2();
+	void LeftHandButton3();
+	void LeftHandButton4();
+	void RightHandButton1();
+	void RightHandButton2();
+	void RightHandButton3();
+	void RightHandButton4();
+
+	void LeftHandToggleGrab(void);
+	void RightHandToggleGrab(void);
+
+	void MapMotionControllersToHands();
 
 	// Bind functionality to input for PC controls
 	void SetupControlsPC();
-	
-	// Bind functionality to input for Swim controls
-	void SetupControlsSwim();
-
-	// Bind functionality to input for Propel controls
-	void SetupControlsPropel();
 
 	// Bind functionality to input for Vehicle controls
 	void SetupControlsVehicle();
@@ -176,27 +181,14 @@ protected:
 	/****************************************/
 
 	/* Handles pickup and inventory */
-	void GrabDropObject(int hand);
-	void LeftHandGrabDropObj();
-	void RightHandGrabDropObj();
 	void Inventory();
-
-	void LeftGrab();
-	void LeftDrop();
-
-	void RightGrab();
-	void RightDrop();
 
 	/****************************************/
 	/*		END INVENTORY METHODS			*/
 	/****************************************/
 
 
-
-
 private:
-	// Player input component
-	class UInputComponent* PlayerInputComponent;
 
 	// Player camera scene component
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraControl, meta = (AllowPrivateAccess = "true"))
@@ -215,7 +207,7 @@ private:
 		class UMotionControllerComponent* R_MotionController;
 
 	// Player control mode
-	ePlayerControlMode m_PlayerControlMode;
+	int m_PlayerControlMode;
 
 	// HMD Location and rotation
 	FVector m_PlayerHMDLocation;
@@ -224,6 +216,12 @@ private:
 	FVector m_LeftLastLocation;
 	FVector m_RightLastLocation;
 
+	// The Sub earth character has four pockets to store picked up objects
+	APickup* pocketLeftShoulder;
+	APickup* pocketRightShoulder;
+	APickup* pocketLeftLeg;
+	APickup* pocketRightLeg;
 
-
+	bool m_swimEnabled;
+	bool m_propelEnabled;
 };

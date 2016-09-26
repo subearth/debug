@@ -13,9 +13,12 @@ ASubEarthCharacter::ASubEarthCharacter()
 {
 	// Initialize member variables:
 	
-	m_PlayerControlMode = ePlayerControlMode::PROPEL;
 	m_PlayerHMDLocation = FVector(0.0f, 0.0f, 0.0f);
 	m_PlayerHMDRotation = FRotator(0.0f, 0.0f, 0.0f);
+
+	m_PlayerControlMode = (int)ePlayerControlMode::PROPEL;
+	m_swimEnabled = false;
+	m_propelEnabled = true;
 
 	m_SpeedPC = 1.0f;
 	m_RotateSpeedPC = 1.0f;
@@ -29,18 +32,14 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_SpeedVehicle = 1.0f;
 	m_RotateSpeedVehicle = 1.0f;
 
-	InitialOxygen = 100.0f;
-	CurrentOxygen = InitialOxygen;
-	OxygenUseRate = 0.01f;
-
-	/*isLeftHandEmpty = true;
-	isRightHandEmpty = true;*/
+	m_initialOxygen = 100.0f;
+	m_currentOxygen = m_initialOxygen;
+	m_oxygenUseRate = 0.01f;
 
 	// Initialize components:
 
 	// Set size for collision capsule:
 	GetCapsuleComponent()->InitCapsuleSize(22.0, 96.0f);
-	//GetCapsuleComponent()->InitCapsuleSize(22.0, 30.0f);
 
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -49,7 +48,6 @@ ASubEarthCharacter::ASubEarthCharacter()
 	PlayerCameraSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("PlayerCameraScene"));
 	PlayerCameraSceneComponent->SetupAttachment(GetCapsuleComponent());
 	PlayerCameraSceneComponent->RelativeLocation = FVector(0.0f, 0.0f, 60.0f); // Position the camera
-	//PlayerCameraSceneComponent->RelativeLocation = FVector(0.0f, 0.0f, 0.0f); // Position the camera
 
 	// Create the Player Camera:
 	PlayerCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
@@ -71,12 +69,22 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_LeftLastLocation = L_MotionController->GetComponentLocation();
 	m_RightLastLocation = R_MotionController->GetComponentLocation();
 
-	// Create left hand component
-	leftHand = CreateDefaultSubobject<UHand>(TEXT("LeftHand"));
+	// Create left hand component and position over the motion controllers
+	m_leftHand = CreateDefaultSubobject<UHand>(TEXT("LeftHand"));
+	m_leftHand->SetMotionController(L_MotionController);
+	USceneComponent* lhs = m_leftHand->GetHandSceneComponent();
+	lhs->SetupAttachment(L_MotionController);
+	lhs->RelativeLocation = m_LeftLastLocation;
 
-	// Create right hand component
-	rightHand = CreateDefaultSubobject<UHand>(TEXT("RightHand"));
-	
+	// Create right hand component and position over the motion controllers
+	m_rightHand = CreateDefaultSubobject<UHand>(TEXT("RightHand"));
+	m_rightHand->SetMotionController(R_MotionController);
+	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
+	rhs->SetupAttachment(R_MotionController);
+	rhs->RelativeLocation = m_RightLastLocation;
+
+	//MapMotionControllersToHands();
+	SetupControlsPC();
 }
 
 /******************************************************************************/
@@ -98,11 +106,11 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(0.0f, EOrientPositionSelector::Position);
 	//UHeadMountedDisplayFunctionLibrary::position
 	// Update the player Oxygen levels:
-	UpdateCurrentOxygen(-DeltaTime * OxygenUseRate * InitialOxygen);
-	UE_LOG(LogTemp, Log, TEXT("Oxegen: %f"), CurrentOxygen);
+	UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate * m_initialOxygen);
+	//UE_LOG(LogTemp, Log, TEXT("Oxygen: %f"), m_currentOxygen);
 	
 	// Place the player at the HMD:
-	if (m_PlayerControlMode == ePlayerControlMode::PC)
+	if (m_PlayerControlMode == (int)ePlayerControlMode::PC)
 	{
 		
 	}
@@ -116,101 +124,78 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 }
 /******************************************************************************/
 // Called to bind functionality to input
-void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
+void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
-	//Super::SetupPlayerInputComponent(InputComponent);
-	
-	check(InputComponent);
-	PlayerInputComponent = InputComponent;
+	check(PlayerInputComponent);
 
-	ClearAllBindings();
-	//SetupControlsPC();
-	SetupControlsPropel();
-}
-/******************************************************************************/
-
-// Clear all action and axis bindings:
-void ASubEarthCharacter::ClearAllBindings()
-{
-	PlayerInputComponent->AxisBindings.Reset();
-	PlayerInputComponent->ClearActionBindings();
-
-	// Add the cycle mode (Ctrl + m): 
 	PlayerInputComponent->BindAction("CycleMode", IE_Pressed, this, &ASubEarthCharacter::CyclePlayerControlMode);
+
+	// Player controls:
+	PlayerInputComponent->BindAction("ShowInventory", IE_Pressed, this, &ASubEarthCharacter::Inventory);
+
+	// L-Trigger, Q
+	PlayerInputComponent->BindAction("LeftHandToggleGrab", IE_Pressed, this, &ASubEarthCharacter::LeftHandToggleGrab);
+	PlayerInputComponent->BindAction("LeftHandToggleGrab", IE_Released, this, &ASubEarthCharacter::LeftHandToggleGrab);
+
+	// R-Trigger, E
+	PlayerInputComponent->BindAction("RightHandToggleGrab", IE_Pressed, this, &ASubEarthCharacter::RightHandToggleGrab);
+	PlayerInputComponent->BindAction("RightHandToggleGrab", IE_Released, this, &ASubEarthCharacter::RightHandToggleGrab);
+
+	// (L) face button 2, 3, 4,  Keyboard 1, 2, 3
+	PlayerInputComponent->BindAction("LeftHandButton2", IE_Pressed, this, &ASubEarthCharacter::LeftHandButton2);
+	PlayerInputComponent->BindAction("LeftHandButton3", IE_Pressed, this, &ASubEarthCharacter::LeftHandButton3);
+	PlayerInputComponent->BindAction("LeftHandButton4", IE_Pressed, this, &ASubEarthCharacter::LeftHandButton4);
+
+	// (R) face button 2, 3, 4,  Keyboard 4, 5, 6
+	PlayerInputComponent->BindAction("RightHandButton2", IE_Pressed, this, &ASubEarthCharacter::RightHandButton2);
+	PlayerInputComponent->BindAction("RightHandButton3", IE_Pressed, this, &ASubEarthCharacter::RightHandButton3);
+	PlayerInputComponent->BindAction("RightHandButton4", IE_Pressed, this, &ASubEarthCharacter::RightHandButton4);
+
+	// Keyboard only: W A S D
+	PlayerInputComponent->BindAxis("MoveForward", this, &ASubEarthCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ASubEarthCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+
+	// L/R Face button 1 (Swim and Propel are mutually exclusive)
+	PlayerInputComponent->BindAxis("LeftSwim", this, &ASubEarthCharacter::LeftSwim);
+	PlayerInputComponent->BindAxis("RightSwim", this, &ASubEarthCharacter::RightSwim);
+
+	// L/R Face button 1 (Swim and Propel are mutually exclusive)
+	PlayerInputComponent->BindAxis("LeftPropel", this, &ASubEarthCharacter::LeftPropel);
+	PlayerInputComponent->BindAxis("RightPropel", this, &ASubEarthCharacter::RightPropel);
 }
 /******************************************************************************/
 
 // Bind functionality to input for PC controls
 void ASubEarthCharacter::SetupControlsPC()
 {
-	//// Put hands in front:
-	//USceneComponent* lhs = leftHand->GetHandSceneComponent();
-	//lhs->SetupAttachment(RootComponent);
-	//lhs->RelativeLocation = FVector(120.0f, -25.0f, -5.0f);
+	// Position the left and right hands statically in front of the body
+	USceneComponent* lhs = m_leftHand->GetHandSceneComponent();
+	lhs->RelativeLocation = FVector(120.0f, -25.0f, -5.0f);
 
-	//USceneComponent* rhs = rightHand->GetHandSceneComponent();
-	//rhs->SetupAttachment(RootComponent);
-	//rhs->RelativeLocation = FVector(120.0f, 25.0f, -5.0f);
-
-	// Player controls:
-	PlayerInputComponent->BindAction("ShowInventory", IE_Pressed, this, &ASubEarthCharacter::Inventory);
-	PlayerInputComponent->BindAction("LeftPickItUp", IE_Pressed, this, &ASubEarthCharacter::LeftGrab);
-	PlayerInputComponent->BindAction("LeftPickItUp", IE_Released, this, &ASubEarthCharacter::LeftDrop);
-	PlayerInputComponent->BindAction("RightPickItUp", IE_Pressed, this, &ASubEarthCharacter::RightGrab);
-	PlayerInputComponent->BindAction("RightPickItUp", IE_Released, this, &ASubEarthCharacter::RightDrop);
-
-	// WASD bindings:
-	PlayerInputComponent->BindAxis("MoveForward", this, &ASubEarthCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ASubEarthCharacter::MoveRight);
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	
+	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
+	rhs->RelativeLocation = FVector(120.0f, 25.0f, -5.0f);
 }
 /******************************************************************************/
 
 // Bind functionality to input for Swim controls
-void ASubEarthCharacter::SetupControlsSwim()
+void ASubEarthCharacter::MapMotionControllersToHands()
 {
-	/*USceneComponent* lhs = leftHand->GetHandSceneComponent();
-	lhs->SetupAttachment(L_MotionController);
-	lhs->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
-
-	USceneComponent* rhs = rightHand->GetHandSceneComponent();
-	rhs->SetupAttachment(R_MotionController);
-	rhs->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);*/
-
 	// Reintialize the hand locations:
 	m_LeftLastLocation = L_MotionController->GetComponentLocation();
 	m_RightLastLocation = R_MotionController->GetComponentLocation();
-	
-	PlayerInputComponent->BindAxis("LeftSwim", this, &ASubEarthCharacter::LeftSwim);
-	PlayerInputComponent->BindAxis("RightSwim", this, &ASubEarthCharacter::RightSwim);
-}
-/******************************************************************************/
 
-// Bind functionality to input for Propel controls
-void ASubEarthCharacter::SetupControlsPropel() 
-{
-	/*USceneComponent* lhs = leftHand->GetHandSceneComponent();
-	lhs->SetupAttachment(L_MotionController);
-	lhs->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
+	// Position the left and right hands over the motion controllers
+	USceneComponent* lhs = m_leftHand->GetHandSceneComponent();
+	lhs->RelativeLocation = m_LeftLastLocation;
 
-	USceneComponent* rhs = rightHand->GetHandSceneComponent();
-	rhs->SetupAttachment(R_MotionController);
-	rhs->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);*/
-
-	// Player controls:
-	PlayerInputComponent->BindAction("ShowInventory", IE_Pressed, this, &ASubEarthCharacter::Inventory);
-	PlayerInputComponent->BindAction("LeftPickItUp", IE_Pressed, this, &ASubEarthCharacter::LeftGrab);
-	PlayerInputComponent->BindAction("LeftPickItUp", IE_Released, this, &ASubEarthCharacter::LeftDrop);
-	PlayerInputComponent->BindAction("RightPickItUp", IE_Pressed, this, &ASubEarthCharacter::RightGrab);
-	PlayerInputComponent->BindAction("RightPickItUp", IE_Released, this, &ASubEarthCharacter::RightDrop);
-
-	PlayerInputComponent->BindAxis("LeftPropel", this, &ASubEarthCharacter::LeftPropel);
-	PlayerInputComponent->BindAxis("RightPropel", this, &ASubEarthCharacter::RightPropel);
+	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
+	rhs->RelativeLocation = m_RightLastLocation;
 
 }
 /******************************************************************************/
+
 // Bind functionality to input for Vehicle controls
 void ASubEarthCharacter::SetupControlsVehicle()
 {
@@ -221,34 +206,51 @@ void ASubEarthCharacter::SetupControlsVehicle()
 // For development: cycles the player controls
 void ASubEarthCharacter::CyclePlayerControlMode()
 {
-	ClearAllBindings();
-
-	switch (m_PlayerControlMode)
+	switch ((ePlayerControlMode)m_PlayerControlMode)
 	{
-	case ePlayerControlMode::PC:
-		m_PlayerControlMode = ePlayerControlMode::SWIM;
-		SetupControlsSwim();
-		break;
-	case ePlayerControlMode::SWIM:
-		m_PlayerControlMode = ePlayerControlMode::PROPEL;
-		SetupControlsPropel();
-		break;
-	case ePlayerControlMode::PROPEL:
-		m_PlayerControlMode = ePlayerControlMode::VEHICLE;
-		SetupControlsVehicle();
-		break;
-	case ePlayerControlMode::VEHICLE:
-		m_PlayerControlMode = ePlayerControlMode::PC;
-		SetupControlsPC();
-		break;
-	default:
-		m_PlayerControlMode = ePlayerControlMode::PC;
-		SetupControlsPC();
-		break;
+		case ePlayerControlMode::PC:
+		{
+			m_PlayerControlMode = ePlayerControlMode::SWIM;
+			m_propelEnabled = false;
+			m_swimEnabled = true;
+			MapMotionControllersToHands();
+			break;
+		}
+		case ePlayerControlMode::SWIM:
+		{
+			m_PlayerControlMode = ePlayerControlMode::PROPEL;
+			m_propelEnabled = true;
+			m_swimEnabled = false;
+			MapMotionControllersToHands();
+			break;
+		}
+		case ePlayerControlMode::PROPEL:
+		{
+			m_PlayerControlMode = ePlayerControlMode::VEHICLE;
+			m_propelEnabled = false;
+			m_swimEnabled = false;
+			SetupControlsVehicle();
+			break;
+		}
+		case ePlayerControlMode::VEHICLE:
+		{
+			m_PlayerControlMode = ePlayerControlMode::PC;
+			m_propelEnabled = false;
+			m_swimEnabled = false;
+			SetupControlsPC();
+			break;
+		}
+		default:
+		{
+			m_PlayerControlMode = ePlayerControlMode::PC;
+			m_propelEnabled = false;
+			m_swimEnabled = false;
+			SetupControlsPC();
+			break;
+		}
 	}	
 	
-	UE_LOG(LogTemp, Log, TEXT("Mode Change"));
-	
+	UE_LOG(LogTemp, Log, TEXT("Mode Change: %d"), m_PlayerControlMode);
 }
 
 /******************************************************************************/
@@ -301,29 +303,32 @@ void ASubEarthCharacter::LeftSwim(float val)
 // Right Swim
 void ASubEarthCharacter::RightSwim(float val)
 {
-	FVector handLocation = R_MotionController->GetComponentLocation();
-	FVector handDifference = m_RightLastLocation - handLocation;
-	FVector handUp = R_MotionController->GetUpVector();
+	if (m_swimEnabled)
+	{
+		FVector handLocation = R_MotionController->GetComponentLocation();
+		FVector handDifference = m_RightLastLocation - handLocation;
+		FVector handUp = R_MotionController->GetUpVector();
 
-	float dist = FVector::DotProduct(handUp, handDifference) * m_SpeedSwim;
-	AddMovementInput(handUp, dist);
+		float dist = FVector::DotProduct(handUp, handDifference) * m_SpeedSwim;
+		AddMovementInput(handUp, dist);
 
-	// Rotate towards the swim direction:
-	//FRotator handRotation = L_MotionController->GetComponentRotation();
-	//FRotator playerRotation = GetCapsuleComponent()->GetComponentRotation();
-	//float angle = (handRotation.Yaw - playerRotation.Yaw) * m_RotateSpeedPropel * val;
-	////GetCapsuleComponent()->AddWorldRotation(FRotator(0.0f, angle, 0.0f));
-	//AddControllerYawInput(angle);
+		// Rotate towards the swim direction:
+		//FRotator handRotation = L_MotionController->GetComponentRotation();
+		//FRotator playerRotation = GetCapsuleComponent()->GetComponentRotation();
+		//float angle = (handRotation.Yaw - playerRotation.Yaw) * m_RotateSpeedPropel * val;
+		////GetCapsuleComponent()->AddWorldRotation(FRotator(0.0f, angle, 0.0f));
+		//AddControllerYawInput(angle);
 
-	// Update the last location:
-	m_LeftLastLocation = handLocation;
+		// Update the last location:
+		m_LeftLastLocation = handLocation;
+	}
 }
 
 /******************************************************************************/
 // Left Propel
 void ASubEarthCharacter::LeftPropel(float val)
 {
-	if (val != 0.0f)
+	if (m_propelEnabled && val != 0.0f)
 	{
 		// Move in the direction of the thruster:
 		FVector handForward = L_MotionController->GetForwardVector();
@@ -370,52 +375,86 @@ void ASubEarthCharacter::RightPropel(float val)
 // Get the air capacity of the player:
 float ASubEarthCharacter::GetInitialOxygen()
 {
-	return InitialOxygen;
+	return m_initialOxygen;
 }
 
 /******************************************************************************/
 // Get how much Oxygen the player still has:
 float ASubEarthCharacter::GetCurrentOxygen()
 {
-	return CurrentOxygen;
+	return m_currentOxygen;
 }
 
 /******************************************************************************/
 // Add or remove oxygen from the player
-void ASubEarthCharacter::UpdateCurrentOxygen(float Oxygen)
+void ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
 {
-	CurrentOxygen = CurrentOxygen + Oxygen;
+	m_currentOxygen = m_currentOxygen + oxygen;
 }
 
-/***************************************************************************************************************************************************/
-void ASubEarthCharacter::LeftGrab()
+/******************************************************************************/
+void ASubEarthCharacter::LeftHandButton1()
 {
-	bIsLeftPickingUp = true;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Left hand Pickup"));
+	m_leftHand->PressButton1();
+}
+void ASubEarthCharacter::LeftHandButton2()
+{
+
+}
+void ASubEarthCharacter::LeftHandButton3()
+{
+
+}
+void ASubEarthCharacter::LeftHandButton4()
+{
+
+}
+/******************************************************************************/
+void ASubEarthCharacter::RightHandButton1()
+{
+
+}
+void ASubEarthCharacter::RightHandButton2()
+{
+
+}
+void ASubEarthCharacter::RightHandButton3()
+{
+
+}
+void ASubEarthCharacter::RightHandButton4()
+{
 
 }
 
-/***************************************************************************************************************************************************/
-void ASubEarthCharacter::LeftDrop()
+/******************************************************************************/
+void ASubEarthCharacter::LeftHandToggleGrab()
 {
-	bIsLeftPickingUp = false;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Left Pickup complete"));
+	if (m_leftHand->IsGrabbing())
+	{
+		m_leftHand->SetGrabbing(false);
+	}
+	else
+	{
+		m_leftHand->SetGrabbing(true);
+	}
 
+	UE_LOG(LogTemp, Log, TEXT("Left Hand isEmpty: %d"), m_leftHand->IsHandEmpty());
 }
 
-void ASubEarthCharacter::RightGrab()
+/******************************************************************************/
+void ASubEarthCharacter::RightHandToggleGrab()
 {
-	bIsRightPickingUp = true;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Right hand Pickup"));
+	if (m_rightHand->IsGrabbing())
+	{
+		m_rightHand->SetGrabbing(false);
+	}
+	else
+	{
+		m_rightHand->SetGrabbing(true);
+	}
 
-}
-
-/***************************************************************************************************************************************************/
-void ASubEarthCharacter::RightDrop()
-{
-	bIsRightPickingUp = false;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Right Pickup complete"));
-
+	UE_LOG(LogTemp, Log, TEXT("Right Hand isEmpty: %d"), m_rightHand->IsHandEmpty());
 }
 
 /****************************************************************************************************************************************************/
