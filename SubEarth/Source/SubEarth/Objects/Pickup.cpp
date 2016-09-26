@@ -79,7 +79,7 @@ void APickup::CollisionOccured(UPrimitiveComponent* overlappedComponent,
 	}
 }
 
-/*
+/* Keep these. We will end up needed OnPlayerHandOverlap or similar function
 void APickup::PickupItem()
 {
 MyPlayerController->ShowInventory.Add(*pickupName);
