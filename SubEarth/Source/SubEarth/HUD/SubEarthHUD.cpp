@@ -57,7 +57,12 @@ void ASubEarthHUD::DrawHUD()
 		ASubEarthCharacter* MyCharacter = Cast<ASubEarthCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 		FString PowerLevelString = FString::Printf(TEXT("%10.1f"), FMath::Abs(MyCharacter->m_currentOxygen));
 	//	DrawText(PowerLevelString, FColor::White, Center.X, Center.Y, HUDFont);
-		DrawText(PowerLevelString, FColor::White, 50, 50, HUDFont);
+		DrawText(PowerLevelString, FColor::White, 200, 70, HUDFont);
+
+		DrawRect(FColor::Green, 50, 50, MyCharacter->m_currentOxygen, 20.0f);
+
+		if (MyCharacter->m_currentOxygen == 0)
+			DrawText("GAME OVER", FColor::Red, Center.X, Center.Y, HUDFont);
 
 		FString Inventory1 = FString::Printf(TEXT("Right Down"));
 		FString Inventory2 = FString::Printf(TEXT("Right Up"));

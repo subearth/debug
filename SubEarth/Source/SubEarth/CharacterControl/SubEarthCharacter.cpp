@@ -32,9 +32,9 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_SpeedVehicle = 1.0f;
 	m_RotateSpeedVehicle = 1.0f;
 
-	m_initialOxygen = 100.0f;
+	m_initialOxygen = 400.0f;
 	m_currentOxygen = m_initialOxygen;
-	m_oxygenUseRate = 0.01f;
+	m_oxygenUseRate = 0.05f;
 
 	// Initialize components:
 
@@ -389,7 +389,13 @@ float ASubEarthCharacter::GetCurrentOxygen()
 // Add or remove oxygen from the player
 void ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
 {
-	m_currentOxygen = m_currentOxygen + oxygen;
+	if (m_currentOxygen > 0)
+	{
+		m_currentOxygen = m_currentOxygen + oxygen;
+	}
+	else
+		m_currentOxygen = 0;
+
 }
 
 /******************************************************************************/
