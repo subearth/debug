@@ -102,7 +102,7 @@ void ASubEarthCharacter::BeginPlay()
 void ASubEarthCharacter::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
-	
+
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(0.0f, EOrientPositionSelector::Position);
 	//UHeadMountedDisplayFunctionLibrary::position
 	// Update the player Oxygen levels:

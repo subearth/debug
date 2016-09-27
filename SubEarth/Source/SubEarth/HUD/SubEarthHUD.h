@@ -13,6 +13,9 @@ class SUBEARTH_API ASubEarthHUD : public AHUD
 {
 	GENERATED_BODY()
 	
+		UPROPERTY()
+		UFont* HUDFont;
+
 public:
 	ASubEarthHUD();
 
@@ -25,5 +28,6 @@ private:
 	class ASubEarthCharacter* p_Player;
 	class UTexture2D* CrosshairTex;
 	
+
 	
 };
