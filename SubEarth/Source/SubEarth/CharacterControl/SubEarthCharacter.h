@@ -224,4 +224,5 @@ private:
 
 	bool m_swimEnabled;
 	bool m_propelEnabled;
+	bool m_pcEnabled;
 };

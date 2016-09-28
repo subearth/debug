@@ -83,8 +83,8 @@ ASubEarthCharacter::ASubEarthCharacter()
 	rhs->SetupAttachment(R_MotionController);
 	rhs->RelativeLocation = m_RightLastLocation;
 
-	//MapMotionControllersToHands();
-	SetupControlsPC();
+	MapMotionControllersToHands();
+	//SetupControlsPC();
 }
 
 /******************************************************************************/
@@ -176,10 +176,11 @@ void ASubEarthCharacter::SetupControlsPC()
 
 	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
 	rhs->RelativeLocation = FVector(120.0f, 25.0f, -5.0f);
+	UE_LOG(LogTemp, Log, TEXT("SetupControlsPC"));
 }
 /******************************************************************************/
 
-// Bind functionality to input for Swim controls
+// Bind functionality to input for Propel and Swim controls
 void ASubEarthCharacter::MapMotionControllersToHands()
 {
 	// Reintialize the hand locations:
@@ -192,6 +193,7 @@ void ASubEarthCharacter::MapMotionControllersToHands()
 
 	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
 	rhs->RelativeLocation = m_RightLastLocation;
+	UE_LOG(LogTemp, Log, TEXT("MapMotionControllersToHands"));
 
 }
 /******************************************************************************/
@@ -212,6 +214,7 @@ void ASubEarthCharacter::CyclePlayerControlMode()
 		{
 			m_PlayerControlMode = ePlayerControlMode::SWIM;
 			m_propelEnabled = false;
+			m_pcEnabled = false;
 			m_swimEnabled = true;
 			MapMotionControllersToHands();
 			break;
@@ -220,14 +223,17 @@ void ASubEarthCharacter::CyclePlayerControlMode()
 		{
 			m_PlayerControlMode = ePlayerControlMode::PROPEL;
 			m_propelEnabled = true;
+			m_pcEnabled = false;
 			m_swimEnabled = false;
 			MapMotionControllersToHands();
 			break;
 		}
 		case ePlayerControlMode::PROPEL:
 		{
+			// Vehicle not fully setup yet.
 			m_PlayerControlMode = ePlayerControlMode::VEHICLE;
 			m_propelEnabled = false;
+			m_pcEnabled = false;
 			m_swimEnabled = false;
 			SetupControlsVehicle();
 			break;
@@ -236,16 +242,14 @@ void ASubEarthCharacter::CyclePlayerControlMode()
 		{
 			m_PlayerControlMode = ePlayerControlMode::PC;
 			m_propelEnabled = false;
+			m_pcEnabled = true;
 			m_swimEnabled = false;
 			SetupControlsPC();
 			break;
 		}
 		default:
 		{
-			m_PlayerControlMode = ePlayerControlMode::PC;
-			m_propelEnabled = false;
-			m_swimEnabled = false;
-			SetupControlsPC();
+			UE_LOG(LogTemp, Log, TEXT("Should not get here. Mode Change: %d"), m_PlayerControlMode);
 			break;
 		}
 	}	
@@ -257,7 +261,7 @@ void ASubEarthCharacter::CyclePlayerControlMode()
 // Movement in the direction of the camera
 void ASubEarthCharacter::MoveForward(float val)
 {
-	if (val != 0.0f)
+	if (m_pcEnabled && val != 0.0f)
 	{		
 		FVector cameraForward = PlayerCameraComponent->GetForwardVector();
 		float disp = val * m_SpeedPC;
@@ -269,7 +273,7 @@ void ASubEarthCharacter::MoveForward(float val)
 // Movement lateral to the direction of the camera
 void ASubEarthCharacter::MoveRight(float val)
 {
-	if (val != 0.0f)
+	if (m_pcEnabled && val != 0.0f)
 	{
 		FVector cameraRight = PlayerCameraComponent->GetRightVector();	
 		float disp = val * m_SpeedPC;
