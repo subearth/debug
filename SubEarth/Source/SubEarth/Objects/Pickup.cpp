@@ -24,60 +24,6 @@ APickup::APickup()
 	*/
 }
 
-void APickup::CollisionOccured(UPrimitiveComponent* overlappedComponent,
-	                           AActor* otherActor,
-	                           UPrimitiveComponent* otherComponent,
-	                           int32 otherBodyIndex,
-	                           bool bFromSweep,
-	                           const FHitResult& SweepResult)
-{
-	UE_LOG(LogTemp, Log, TEXT("APickup::CollisionOccured  A collision occured with a pickup object"));
-
-	if (otherActor->IsA(ASubEarthCharacter::StaticClass())) // Type check before casting
-	{
-		ASubEarthCharacter* character = (ASubEarthCharacter*)otherActor;
-
-		// We only want to pick up the obect iff the hand overlapped the pickup
-		// objects collider, AND the user presses the button to pick up the object.
-
-		UHand* hand = NULL;
-
-		// Is it the left or right hand?
-		if (otherComponent == character->m_leftHand->handCollider)
-		{
-			hand = character->m_leftHand;
-			UE_LOG(LogTemp, Log, TEXT("LEFT HAND"));
-		}
-		else if (otherComponent == character->m_rightHand->handCollider)
-		{
-			hand = character->m_rightHand;
-			UE_LOG(LogTemp, Log, TEXT("RIGHT HAND"));
-		}
-
-		if (hand != NULL)
-		{
-			if (hand->IsGrabbing()) // Is the pickup button pressed
-			{
-				if (hand->IsHandEmpty())
-				{
-					hand->PickupObject(this);
-				}
-				else
-				{
-					UE_LOG(LogTemp, Log, TEXT("hand not empty"));
-				}
-			}
-			else
-			{
-				UE_LOG(LogTemp, Log, TEXT("Not grabbing"));
-			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("APickup::CollisionOccured Not a hand component"));
-		}
-	}
-}
 
 /* Keep these. We will end up needed OnPlayerHandOverlap or similar function
 void APickup::PickupItem()

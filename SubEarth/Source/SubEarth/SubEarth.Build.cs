@@ -1,11 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 using UnrealBuildTool;
-
 public class SubEarth : ModuleRules
+
 {
 	public SubEarth(TargetInfo Target)
 	{
+        OptimizeCode = CodeOptimization.Never;
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay" });
 
         /* START HUD */

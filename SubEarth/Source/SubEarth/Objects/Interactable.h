@@ -20,6 +20,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
+	USceneComponent* GetObjectRoot();
+
 protected:
 
 	UPROPERTY(EditAnywhere)
@@ -32,18 +34,13 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* objectCollider;
 
-	UFUNCTION()
-		void OnPlayerHandOverlap(UPrimitiveComponent* overlappedComponent,
-			                     AActor* otherActor,
-			                     UPrimitiveComponent* otherComponent,
-			                     int32 otherBodyIndex,
-			                     bool bFromSweep,
-			                     const FHitResult& SweepResult);
 
-	virtual void CollisionOccured(UPrimitiveComponent* overlappedComponent,
+	/*
+		virtual void CollisionOccured(UPrimitiveComponent* overlappedComponent,
 		                          AActor* otherActor,
 		                          UPrimitiveComponent* otherComponent,
 		                          int32 otherBodyIndex,
 		                          bool bFromSweep,
 		                          const FHitResult& SweepResult) PURE_VIRTUAL(AInteractable::CollisionOccured, );
+		*/
 };

@@ -54,6 +54,14 @@ public:
 	void PressButton3(void);
 	void PressButton4(void);
 
+	UFUNCTION()
+	void CollisionOccured(UPrimitiveComponent* overlappedComponent,
+		AActor* otherActor,
+		UPrimitiveComponent* otherComponent,
+		int32 otherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
+
 private:
 
 	/* The object in the hand */

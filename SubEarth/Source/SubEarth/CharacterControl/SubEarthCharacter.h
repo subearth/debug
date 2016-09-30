@@ -32,7 +32,6 @@ public:
 		BOTH_HANDS
 	};
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSpeeds)
 		float m_SpeedPC;
 

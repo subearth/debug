@@ -17,13 +17,6 @@ public:
 
 	APickup();
 
-	virtual void CollisionOccured(UPrimitiveComponent* overlappedComponent,
-		                          AActor* otherActor,
-		                          UPrimitiveComponent* otherComponent,
-		                          int32 otherBodyIndex,
-		                          bool bFromSweep,
-		                          const FHitResult& SweepResult) override;
-
 	// A pickup object has three possible actions
 	virtual void ExecuteAction1(void) PURE_VIRTUAL(APickup::ExecuteAction1, );
 	virtual void ExecuteAction2(void) PURE_VIRTUAL(APickup::ExecuteAction2, );

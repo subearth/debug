@@ -20,9 +20,12 @@ AInteractable::AInteractable()
 	objectMesh->SetupAttachment(objectRoot);
 
 	objectCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("ObjectCollider"));
-	objectCollider->bGenerateOverlapEvents = true;
-	objectCollider->OnComponentBeginOverlap.AddDynamic(this, &AInteractable::OnPlayerHandOverlap);
 	objectCollider->SetupAttachment(objectRoot);
+}
+
+USceneComponent* AInteractable::GetObjectRoot()
+{
+	return objectRoot;
 }
 
 // Called when the game starts or when spawned
@@ -37,30 +40,5 @@ void AInteractable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-void AInteractable::OnPlayerHandOverlap(UPrimitiveComponent* overlappedComponent,
-	                                    AActor* otherActor,
-	                                    UPrimitiveComponent* otherComponent,
-	                                    int32 otherBodyIndex,
-	                                    bool bFromSweep,
-	                                    const FHitResult& SweepResult)
-{
-	// We want to check that our character collided an interactable object.
-	if (otherActor->IsA(ASubEarthCharacter::StaticClass()))
-	{
-		UE_LOG(LogTemp, Log, TEXT("AInteractable::OnPlayerHandOverlap  Some part of the SubEarth Character collided with an interactable object"));
-		CollisionOccured(overlappedComponent,
-			otherActor,
-			otherComponent,
-			otherBodyIndex,
-			bFromSweep,
-			SweepResult);
-
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("AInteractable::OnPlayerHandOverlap   Not a ASubEarthCharacter object"));
-	}
 }
 

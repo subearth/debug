@@ -76,6 +76,7 @@ ASubEarthCharacter::ASubEarthCharacter()
 	lhs->SetupAttachment(L_MotionController);
 	lhs->RelativeLocation = m_LeftLastLocation;
 
+
 	// Create right hand component and position over the motion controllers
 	m_rightHand = CreateDefaultSubobject<UHand>(TEXT("RightHand"));
 	m_rightHand->SetMotionController(R_MotionController);
@@ -83,8 +84,8 @@ ASubEarthCharacter::ASubEarthCharacter()
 	rhs->SetupAttachment(R_MotionController);
 	rhs->RelativeLocation = m_RightLastLocation;
 
-	MapMotionControllersToHands();
-	//SetupControlsPC();
+	//MapMotionControllersToHands();
+	SetupControlsPC();
 }
 
 /******************************************************************************/
@@ -455,6 +456,7 @@ void ASubEarthCharacter::LeftHandToggleGrab()
 /******************************************************************************/
 void ASubEarthCharacter::RightHandToggleGrab()
 {
+	/*
 	if (m_rightHand->IsGrabbing())
 	{
 		m_rightHand->SetGrabbing(false);
@@ -463,8 +465,8 @@ void ASubEarthCharacter::RightHandToggleGrab()
 	{
 		m_rightHand->SetGrabbing(true);
 	}
-
-	UE_LOG(LogTemp, Log, TEXT("Right Hand isEmpty: %d"), m_rightHand->IsHandEmpty());
+	*/
+	//UE_LOG(LogTemp, Log, TEXT("Right Hand isEmpty: %d"), m_rightHand->IsHandEmpty());
 }
 
 /****************************************************************************************************************************************************/
