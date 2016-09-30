@@ -186,7 +186,6 @@ protected:
 	/*		END INVENTORY METHODS			*/
 	/****************************************/
 
-
 private:
 
 	// Player camera scene component

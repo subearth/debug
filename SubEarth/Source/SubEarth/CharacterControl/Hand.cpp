@@ -28,18 +28,23 @@ UHand::UHand()
 	handMesh->SetupAttachment(handSceneComponent);
 
 	FString ColliderName = HandName + "Collider";
-	//handCollider = this->CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
-	handCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
+	//handCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
+	handCollider = CreateDefaultSubobject<UCapsuleComponent>(FName(*ColliderName));
 	handCollider->bGenerateOverlapEvents = true;
-	handCollider->OnComponentBeginOverlap.AddDynamic(this, &UHand::CollisionOccured);
+	handCollider->OnComponentBeginOverlap.AddDynamic(this, &UHand::BeginOverlap);
+	handCollider->OnComponentEndOverlap.AddDynamic(this, &UHand::EndOverlap);
 	handCollider->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
+	handCollider->SetWorldRotation(FRotator(90.f, 0.f, 0.f));
 	handCollider->SetupAttachment(handSceneComponent);
-
+	
+	
 	isHandEmpty = true;
 
 	// Start off holding nothing.
 	pickupObject = NULL;
 	
+	InHandActor = NULL;
+	CollidedActor = NULL;
 }
 
 void UHand::SetMotionController(UMotionControllerComponent* motion_controller)
@@ -67,21 +72,33 @@ void UHand::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentT
 
 
 /******************************************************************************/
-void UHand::PickupObject(APickup* object)
+void UHand::PickupObject()
 {
+	APickup* pickup_obj = (APickup*)CollidedActor;
 	// If you have an object in your hand, drop it so you can pick up the new object
-	if (!isHandEmpty)
+	/*if (!isHandEmpty)
 	{
 		DropObject();
 	}
 
 	isHandEmpty = false;
-	pickupObject = object;
-
-	object->DetachRootComponentFromParent();
-	object->AttachToComponent(savedHandSceneComponent, FAttachmentTransformRules::KeepRelativeTransform);
-	object->GetRootComponent()->RelativeLocation = FVector(0, 0, 0);
+	pickupObject = object;*/
+	//CollidedActor->GetRootComponent()->SetupAttachment(savedHandSceneComponent);
 	
+	//pickup_obj->DetachRootComponentFromParent();
+	
+	//pickup_obj->AttachToComponent(handSceneComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	//pickup_obj->AttachToComponent(savedHandSceneComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	//pickup_obj->GetRootComponent()->RelativeLocation = FVector(0, 0, 0);
+	
+	//CollidedActor->SetActorLocation(FVector::ZeroVector);
+	//CollidedActor->DetachRootComponentFromParent();
+	//CollidedActor->AttachRootComponentTo(handSceneComponent);
+	CollidedActor->AttachToComponent(savedHandSceneComponent,FAttachmentTransformRules::SnapToTargetIncludingScale);
+	//CollidedActor->GetRootComponent()->RelativeLocation = FVector::ZeroVector;
+
+	InHandActor = CollidedActor;
+	CollidedActor = NULL;
 	//object->GetObjectRoot()->SetupAttachment(savedHandSceneComponent);
 	UE_LOG(LogTemp, Log, TEXT("AHand::PickupObject Object picked up"));
 }
@@ -89,8 +106,15 @@ void UHand::PickupObject(APickup* object)
 /******************************************************************************/
 void UHand::DropObject()
 {
-	isHandEmpty = true;
-	pickupObject = NULL;
+	//isHandEmpty = true;
+	//pickupObject = NULL;
+	InHandActor->DetachRootComponentFromParent();
+	//InHandActor->Destroy();
+	//InHandActor->AttachToComponent(, FAttachmentTransformRules::KeepRelativeTransform);
+	InHandActor = NULL;
+
+	
+	//pickup_obj->GetRootComponent()->RelativeLocation = FVector(0, 0, 0);
 	UE_LOG(LogTemp, Log, TEXT("AHand::DropObject Dropped the object"));
 }
 
@@ -146,8 +170,8 @@ void UHand::PressButton4(void)
 	}
 }
 
-
-void UHand::CollisionOccured(UPrimitiveComponent* overlappedComponent,
+/******************************************************************************/
+void UHand::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 	AActor* otherActor,
 	UPrimitiveComponent* otherComponent,
 	int32 otherBodyIndex,
@@ -156,27 +180,83 @@ void UHand::CollisionOccured(UPrimitiveComponent* overlappedComponent,
 {
 	UE_LOG(LogTemp, Log, TEXT("UHand::CollisionOccured  A collision occured with a interactable object"));
 
-	if (otherActor->IsA(APickup::StaticClass())) // Type check before casting
+	CollidedActor = otherActor;
+
+	//if (otherActor->IsA(APickup::StaticClass())) // Type check before casting
+	//{
+	//	APickup* pickup_obj = (APickup*)otherActor;
+
+	//	// We only want to pick up the object iff the hand overlapped the pickup
+	//	// objects collider, AND the user presses the button to pick up the object.
+
+	//	if (IsGrabbing()) // Is the pickup button pressed
+	//	{
+	//		if (IsHandEmpty())
+	//		{
+	//			PickupObject(pickup_obj);
+	//		}
+	//		else
+	//		{
+	//			UE_LOG(LogTemp, Log, TEXT("hand not empty"));
+	//		}
+	//	}
+	//	else
+	//	{
+	//		UE_LOG(LogTemp, Log, TEXT("Not grabbing"));
+	//	}
+	//}
+}
+
+/******************************************************************************/
+
+void UHand::EndOverlap(UPrimitiveComponent* overlappedComponent,
+	AActor* otherActor,
+	UPrimitiveComponent* otherComponent,
+	int32 otherBodyIndex)
+{
+	UE_LOG(LogTemp, Log, TEXT("UHand::CollisionOccured  A collision occured with a interactable object"));
+
+	CollidedActor = NULL;
+
+	//if (otherActor->IsA(APickup::StaticClass())) // Type check before casting
+	//{
+	//	APickup* pickup_obj = (APickup*)otherActor;
+
+	//	// We only want to pick up the object iff the hand overlapped the pickup
+	//	// objects collider, AND the user presses the button to pick up the object.
+
+	//	if (IsGrabbing()) // Is the pickup button pressed
+	//	{
+	//		if (IsHandEmpty())
+	//		{
+	//			PickupObject(pickup_obj);
+	//		}
+	//		else
+	//		{
+	//			UE_LOG(LogTemp, Log, TEXT("hand not empty"));
+	//		}
+	//	}
+	//	else
+	//	{
+	//		UE_LOG(LogTemp, Log, TEXT("Not grabbing"));
+	//	}
+	//}
+}
+
+void UHand::UseHand()
+{
+	// Drop what's in our hand:
+	if (InHandActor != NULL)
 	{
-		APickup* pickup_obj = (APickup*)otherActor;
-
-		// We only want to pick up the object iff the hand overlapped the pickup
-		// objects collider, AND the user presses the button to pick up the object.
-
-		if (IsGrabbing()) // Is the pickup button pressed
+		DropObject();
+	}
+	// Try to pickup what we are colliding with:
+	else if (CollidedActor != NULL)
+	{
+		// Make sure it is a pickup...
+		if (CollidedActor->IsA(APickup::StaticClass())) // Type check before casting
 		{
-			if (IsHandEmpty())
-			{
-				PickupObject(pickup_obj);
-			}
-			else
-			{
-				UE_LOG(LogTemp, Log, TEXT("hand not empty"));
-			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("Not grabbing"));
+			PickupObject();
 		}
 	}
 }

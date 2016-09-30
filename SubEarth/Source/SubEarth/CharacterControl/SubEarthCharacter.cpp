@@ -102,6 +102,9 @@ ASubEarthCharacter::ASubEarthCharacter()
 		m_rightHand->handMesh->SetRelativeLocation(FVector(0.f, -2.f, 0.f));
 		m_rightHand->handMesh->SetRelativeRotation(FRotator(-45.f, 180.f, 0.f));
 		m_rightHand->handMesh->SetRelativeScale3D(FVector(6.f, 6.f, 6.f));
+
+		m_leftHand->handCollider->bHiddenInGame = false;
+		m_rightHand->handCollider->bHiddenInGame = false;
 	}
 
 	//MapMotionControllersToHands();
@@ -144,11 +147,11 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 
 	// L-Trigger, Q
 	PlayerInputComponent->BindAction("LeftHandToggleGrab", IE_Pressed, this, &ASubEarthCharacter::LeftHandToggleGrab);
-	PlayerInputComponent->BindAction("LeftHandToggleGrab", IE_Released, this, &ASubEarthCharacter::LeftHandToggleGrab);
+	//PlayerInputComponent->BindAction("LeftHandToggleGrab", IE_Released, this, &ASubEarthCharacter::Empty);
 
 	// R-Trigger, E
 	PlayerInputComponent->BindAction("RightHandToggleGrab", IE_Pressed, this, &ASubEarthCharacter::RightHandToggleGrab);
-	PlayerInputComponent->BindAction("RightHandToggleGrab", IE_Released, this, &ASubEarthCharacter::RightHandToggleGrab);
+	//PlayerInputComponent->BindAction("RightHandToggleGrab", IE_Released, this, &ASubEarthCharacter::Empty);
 
 	// (L) face button 2, 3, 4,  Keyboard 1, 2, 3
 	PlayerInputComponent->BindAction("LeftHandButton2", IE_Pressed, this, &ASubEarthCharacter::LeftHandButton2);
@@ -184,11 +187,11 @@ void ASubEarthCharacter::SetupControlsPC()
 	PlayerCameraComponent->bUsePawnControlRotation = true;
 	
 	// Position the left and right hands statically in front of the body
-	R_MotionController->RelativeLocation = FVector::ZeroVector;
+	L_MotionController->RelativeLocation = FVector::ZeroVector;
 	USceneComponent* lhs = m_leftHand->GetHandSceneComponent();
 	lhs->RelativeLocation = FVector(120.0f, -25.0f, -20.0f);
 
-	L_MotionController->RelativeLocation = FVector::ZeroVector;
+	R_MotionController->RelativeLocation = FVector::ZeroVector; 
 	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
 	rhs->RelativeLocation = FVector(120.0f, 25.0f, -20.0f);
 	UE_LOG(LogTemp, Log, TEXT("SetupControlsPC"));
@@ -306,22 +309,26 @@ void ASubEarthCharacter::MoveRight(float val)
 // Left Swim
 void ASubEarthCharacter::LeftSwim(float val)
 {
-	FVector handLocation = L_MotionController->GetComponentLocation();
-	FVector handDifference = m_LeftLastLocation - handLocation;
-	FVector handUp = L_MotionController->GetUpVector();
+	if (m_swimEnabled)
+	{
+		FVector handLocation = L_MotionController->GetComponentLocation();
+		FVector handDifference = m_LeftLastLocation - handLocation;
+		FVector handUp = L_MotionController->GetUpVector();
 
-	float dist = FVector::DotProduct(handUp, handDifference) * m_SpeedSwim;
-	AddMovementInput(handUp, dist);
+		float dist = FVector::DotProduct(handUp, handDifference) * m_SpeedSwim;
+		AddMovementInput(handUp, dist);
 
-	// Rotate towards the swim direction:
-	//FRotator handRotation = L_MotionController->GetComponentRotation();
-	//FRotator playerRotation = GetCapsuleComponent()->GetComponentRotation();
-	//float angle = (handRotation.Yaw - playerRotation.Yaw) * m_RotateSpeedPropel * val;
-	////GetCapsuleComponent()->AddWorldRotation(FRotator(0.0f, angle, 0.0f));
-	//AddControllerYawInput(angle);
+		// Rotate towards the swim direction:
+		//FRotator handRotation = L_MotionController->GetComponentRotation();
+		//FRotator playerRotation = GetCapsuleComponent()->GetComponentRotation();
+		//float angle = (handRotation.Yaw - playerRotation.Yaw) * m_RotateSpeedPropel * val;
+		////GetCapsuleComponent()->AddWorldRotation(FRotator(0.0f, angle, 0.0f));
+		//AddControllerYawInput(angle);
 
-	// Update the last location:
-	m_LeftLastLocation = handLocation;
+		// Update the last location:
+		m_LeftLastLocation = handLocation;
+	}
+	
 }
 
 /******************************************************************************/
@@ -461,14 +468,16 @@ void ASubEarthCharacter::RightHandButton4()
 /******************************************************************************/
 void ASubEarthCharacter::LeftHandToggleGrab()
 {
-	if (m_leftHand->IsGrabbing())
+	//m_leftHand->SetGrabbing(!m_leftHand->IsGrabbing());
+	m_leftHand->UseHand();
+	/*if (m_leftHand->IsGrabbing())
 	{
 		m_leftHand->SetGrabbing(false);
 	}
 	else
 	{
 		m_leftHand->SetGrabbing(true);
-	}
+	}*/
 
 	UE_LOG(LogTemp, Log, TEXT("Left Hand isEmpty: %d"), m_leftHand->IsHandEmpty());
 }
@@ -476,6 +485,8 @@ void ASubEarthCharacter::LeftHandToggleGrab()
 /******************************************************************************/
 void ASubEarthCharacter::RightHandToggleGrab()
 {
+	m_rightHand->UseHand();
+	//m_rightHand->SetGrabbing(!m_rightHand->IsGrabbing());
 	/*
 	if (m_rightHand->IsGrabbing())
 	{
@@ -486,7 +497,7 @@ void ASubEarthCharacter::RightHandToggleGrab()
 		m_rightHand->SetGrabbing(true);
 	}
 	*/
-	//UE_LOG(LogTemp, Log, TEXT("Right Hand isEmpty: %d"), m_rightHand->IsHandEmpty());
+	UE_LOG(LogTemp, Log, TEXT("Right Hand isEmpty: %d"), m_rightHand->IsHandEmpty());
 }
 
 /****************************************************************************************************************************************************/

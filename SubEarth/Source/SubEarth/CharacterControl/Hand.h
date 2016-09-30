@@ -31,13 +31,13 @@ public:
 		class UStaticMeshComponent* handMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class UBoxComponent* handCollider;
+		class UCapsuleComponent* handCollider;
 
-	//USceneComponent* GetHandSceneComponent(void) { return savedHandSceneComponent; }
-	USceneComponent* GetHandSceneComponent(void) { return handSceneComponent; }
+	USceneComponent* GetHandSceneComponent(void) { return savedHandSceneComponent; }
+	//USceneComponent* GetHandSceneComponent(void) { return handSceneComponent; }
 	void SetMotionController(UMotionControllerComponent* motion_controller);
 
-	void PickupObject(APickup* object);
+	void PickupObject(void);
 	void DropObject(void);
 
 	bool IsHandEmpty(void);
@@ -55,12 +55,20 @@ public:
 	void PressButton4(void);
 
 	UFUNCTION()
-	void CollisionOccured(UPrimitiveComponent* overlappedComponent,
+	void BeginOverlap(UPrimitiveComponent* overlappedComponent,
 		AActor* otherActor,
 		UPrimitiveComponent* otherComponent,
 		int32 otherBodyIndex,
 		bool bFromSweep,
 		const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void EndOverlap(UPrimitiveComponent* overlappedComponent,
+		AActor* otherActor,
+		UPrimitiveComponent* otherComponent,
+		int32 otherBodyIndex);
+
+	void UseHand();
 
 private:
 
@@ -69,7 +77,8 @@ private:
 	UMotionControllerComponent* m_controller;
 	
 	USceneComponent* savedHandSceneComponent;
-
+	AActor* InHandActor;
+	AActor* CollidedActor;
 
 	bool isHandEmpty;
 	bool isGrabbing;  // true if in the process of grabbing an object
