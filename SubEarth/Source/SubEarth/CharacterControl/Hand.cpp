@@ -10,39 +10,26 @@
 // Sets default values for this component's properties
 UHand::UHand()
 {
-	// Unable to figure out how to pass FName's into the constructor. May not be allowed
-	// by UE4.  The following integer appending is to create unique names for the objects
-	static int itr = 0;
-
-	FString temp;
-
-	temp = "HandRoot";
-	temp.AppendInt(itr);
-	FName root = FName(*temp);
-
-	temp = "HandMesh";
-	temp.AppendInt(itr);
-	FName mesh = FName(*temp);
-
-	temp = "HandCollider";
-	temp.AppendInt(itr);
-	FName collider = FName(*temp);
-
-	itr++;
-	
-
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
 
-	handSceneComponent = this->CreateDefaultSubobject<USceneComponent>(root);
+	FString HandName = GetName();
+
+	FString RootName = HandName + "Root";
+	//handSceneComponent = this->CreateDefaultSubobject<USceneComponent>(FName(*RootName));
+	handSceneComponent = CreateDefaultSubobject<USceneComponent>(FName(*RootName));
 	savedHandSceneComponent = handSceneComponent;
 
-	handMesh = this->CreateDefaultSubobject<UStaticMeshComponent>(mesh);
+	FString MeshName = HandName + "Mesh";
+	//handMesh = this->CreateDefaultSubobject<UStaticMeshComponent>(FName(*MeshName));
+	handMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName(*MeshName));	
 	handMesh->SetupAttachment(handSceneComponent);
 
-	handCollider = this->CreateDefaultSubobject<UBoxComponent>(collider);
+	FString ColliderName = HandName + "Collider";
+	//handCollider = this->CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
+	handCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
 	handCollider->bGenerateOverlapEvents = true;
 	handCollider->OnComponentBeginOverlap.AddDynamic(this, &UHand::CollisionOccured);
 	handCollider->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
@@ -52,8 +39,8 @@ UHand::UHand()
 
 	// Start off holding nothing.
 	pickupObject = NULL;
+	
 }
-
 
 void UHand::SetMotionController(UMotionControllerComponent* motion_controller)
 {
@@ -173,7 +160,7 @@ void UHand::CollisionOccured(UPrimitiveComponent* overlappedComponent,
 	{
 		APickup* pickup_obj = (APickup*)otherActor;
 
-		// We only want to pick up the obect iff the hand overlapped the pickup
+		// We only want to pick up the object iff the hand overlapped the pickup
 		// objects collider, AND the user presses the button to pick up the object.
 
 		if (IsGrabbing()) // Is the pickup button pressed

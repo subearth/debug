@@ -16,9 +16,10 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_PlayerHMDLocation = FVector(0.0f, 0.0f, 0.0f);
 	m_PlayerHMDRotation = FRotator(0.0f, 0.0f, 0.0f);
 
-	m_PlayerControlMode = (int)ePlayerControlMode::PROPEL;
+	m_PlayerControlMode = (int)ePlayerControlMode::PC;
+	m_pcEnabled = true;
 	m_swimEnabled = false;
-	m_propelEnabled = true;
+	m_propelEnabled = false;
 
 	m_SpeedPC = 1.0f;
 	m_RotateSpeedPC = 1.0f;
@@ -69,20 +70,39 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_LeftLastLocation = L_MotionController->GetComponentLocation();
 	m_RightLastLocation = R_MotionController->GetComponentLocation();
 
-	// Create left hand component and position over the motion controllers
-	m_leftHand = CreateDefaultSubobject<UHand>(TEXT("LeftHand"));
+	// Create left hand component
+	m_leftHand = CreateDefaultSubobject<UHand>(TEXT("L_Hand"));
 	m_leftHand->SetMotionController(L_MotionController);
+	
+	// Create right hand component
+	m_rightHand = CreateDefaultSubobject<UHand>(TEXT("R_Hand"));
+	m_rightHand->SetMotionController(R_MotionController);
+	
+	// Attach the left hand to the motion controller:
 	USceneComponent* lhs = m_leftHand->GetHandSceneComponent();
 	lhs->SetupAttachment(L_MotionController);
-	lhs->RelativeLocation = m_LeftLastLocation;
+	lhs->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
+	//lhs->RelativeLocation = m_LeftLastLocation;
 
-
-	// Create right hand component and position over the motion controllers
-	m_rightHand = CreateDefaultSubobject<UHand>(TEXT("RightHand"));
-	m_rightHand->SetMotionController(R_MotionController);
+	// Attach the right hand to the motion controller:
 	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
 	rhs->SetupAttachment(R_MotionController);
-	rhs->RelativeLocation = m_RightLastLocation;
+	rhs->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
+	//rhs->RelativeLocation = m_RightLastLocation;
+
+	// Add the hand mesh to the left and right mesh component
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> HandMesh(TEXT("StaticMesh'/Game/Assets/Character/Hand'"));
+	if (HandMesh.Object)
+	{
+		m_leftHand->handMesh->SetStaticMesh(HandMesh.Object);
+		m_leftHand->handMesh->SetRelativeLocation(FVector(0.f, -2.f, 0.f));
+		m_leftHand->handMesh->SetRelativeRotation(FRotator(-45.f, 180.f, 0.f));
+		m_leftHand->handMesh->SetRelativeScale3D(FVector(6.f, -6.f, 6.f));
+		m_rightHand->handMesh->SetStaticMesh(HandMesh.Object);
+		m_rightHand->handMesh->SetRelativeLocation(FVector(0.f, -2.f, 0.f));
+		m_rightHand->handMesh->SetRelativeRotation(FRotator(-45.f, 180.f, 0.f));
+		m_rightHand->handMesh->SetRelativeScale3D(FVector(6.f, 6.f, 6.f));
+	}
 
 	//MapMotionControllersToHands();
 	SetupControlsPC();
@@ -104,23 +124,11 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(0.0f, EOrientPositionSelector::Position);
-	//UHeadMountedDisplayFunctionLibrary::position
 	// Update the player Oxygen levels:
 	UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate * m_initialOxygen);
 	//UE_LOG(LogTemp, Log, TEXT("Oxygen: %f"), m_currentOxygen);
 	
-	// Place the player at the HMD:
-	if (m_PlayerControlMode == (int)ePlayerControlMode::PC)
-	{
-		
-	}
-	else
-	{
-		//UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(m_PlayerHMDRotation, m_PlayerHMDLocation);
-		//PlayerCameraComponent->SetWorldRotation(m_PlayerHMDRotation);
-		//UE_LOG(LogTemp, Log, TEXT("HMD Rotation: %f, %f, %f"), m_PlayerHMDRotation.Yaw, m_PlayerHMDRotation.Pitch, m_PlayerHMDRotation.Roll);
-	}
+	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(0.0f, EOrientPositionSelector::Position);
 
 }
 /******************************************************************************/
@@ -152,11 +160,11 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	PlayerInputComponent->BindAction("RightHandButton3", IE_Pressed, this, &ASubEarthCharacter::RightHandButton3);
 	PlayerInputComponent->BindAction("RightHandButton4", IE_Pressed, this, &ASubEarthCharacter::RightHandButton4);
 
-	// Keyboard only: W A S D
+	// Keyboard only: W, A, S, D, Mouse X, Mouse Y
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASubEarthCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASubEarthCharacter::MoveRight);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
 	// L/R Face button 1 (Swim and Propel are mutually exclusive)
 	PlayerInputComponent->BindAxis("LeftSwim", this, &ASubEarthCharacter::LeftSwim);
@@ -171,12 +179,18 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 // Bind functionality to input for PC controls
 void ASubEarthCharacter::SetupControlsPC()
 {
+	// Allow for mouse yaw and pitch:
+	bUseControllerRotationYaw = true;
+	PlayerCameraComponent->bUsePawnControlRotation = true;
+	
 	// Position the left and right hands statically in front of the body
+	R_MotionController->RelativeLocation = FVector::ZeroVector;
 	USceneComponent* lhs = m_leftHand->GetHandSceneComponent();
-	lhs->RelativeLocation = FVector(120.0f, -25.0f, -5.0f);
+	lhs->RelativeLocation = FVector(120.0f, -25.0f, -20.0f);
 
+	L_MotionController->RelativeLocation = FVector::ZeroVector;
 	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
-	rhs->RelativeLocation = FVector(120.0f, 25.0f, -5.0f);
+	rhs->RelativeLocation = FVector(120.0f, 25.0f, -20.0f);
 	UE_LOG(LogTemp, Log, TEXT("SetupControlsPC"));
 }
 /******************************************************************************/
@@ -184,16 +198,22 @@ void ASubEarthCharacter::SetupControlsPC()
 // Bind functionality to input for Propel and Swim controls
 void ASubEarthCharacter::MapMotionControllersToHands()
 {
+	// Allow for mouse yaw and pitch:
+	bUseControllerRotationYaw = false;
+	PlayerCameraComponent->bUsePawnControlRotation = false;
+
 	// Reintialize the hand locations:
 	m_LeftLastLocation = L_MotionController->GetComponentLocation();
 	m_RightLastLocation = R_MotionController->GetComponentLocation();
 
 	// Position the left and right hands over the motion controllers
 	USceneComponent* lhs = m_leftHand->GetHandSceneComponent();
-	lhs->RelativeLocation = m_LeftLastLocation;
+	//lhs->RelativeLocation = m_LeftLastLocation;
+	lhs->RelativeLocation = FVector(0.f, 0.f, 0.f);
 
 	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
-	rhs->RelativeLocation = m_RightLastLocation;
+	//rhs->RelativeLocation = m_RightLastLocation;
+	rhs->RelativeLocation = FVector(0.f, 0.f, 0.f);
 	UE_LOG(LogTemp, Log, TEXT("MapMotionControllersToHands"));
 
 }

@@ -25,16 +25,16 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		USceneComponent* handSceneComponent;
+		class USceneComponent* handSceneComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		UStaticMeshComponent* handMesh;
+		class UStaticMeshComponent* handMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		UBoxComponent* handCollider;
+		class UBoxComponent* handCollider;
 
-	USceneComponent* GetHandSceneComponent(void) { return savedHandSceneComponent; }
-
+	//USceneComponent* GetHandSceneComponent(void) { return savedHandSceneComponent; }
+	USceneComponent* GetHandSceneComponent(void) { return handSceneComponent; }
 	void SetMotionController(UMotionControllerComponent* motion_controller);
 
 	void PickupObject(APickup* object);
