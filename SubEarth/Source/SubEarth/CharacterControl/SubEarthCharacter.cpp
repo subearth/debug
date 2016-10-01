@@ -17,9 +17,6 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_PlayerHMDRotation = FRotator(0.0f, 0.0f, 0.0f);
 
 	m_PlayerControlMode = (int)ePlayerControlMode::PC;
-	m_pcEnabled = true;
-	m_swimEnabled = false;
-	m_propelEnabled = false;
 
 	m_SpeedPC = 1.0f;
 	m_RotateSpeedPC = 1.0f;
@@ -66,17 +63,15 @@ ASubEarthCharacter::ASubEarthCharacter()
 	R_MotionController->Hand = EControllerHand::Right;
 	R_MotionController->SetupAttachment(PlayerCameraSceneComponent);
 
-	// Initialize the hand locations:
+	// Initialize the left/right locations:
 	m_LeftLastLocation = L_MotionController->GetComponentLocation();
 	m_RightLastLocation = R_MotionController->GetComponentLocation();
 
 	// Create left hand component
 	m_leftHand = CreateDefaultSubobject<UHand>(TEXT("L_Hand"));
-	m_leftHand->SetMotionController(L_MotionController);
 	
 	// Create right hand component
 	m_rightHand = CreateDefaultSubobject<UHand>(TEXT("R_Hand"));
-	m_rightHand->SetMotionController(R_MotionController);
 	
 	// Attach the left hand to the motion controller:
 	USceneComponent* lhs = m_leftHand->GetHandSceneComponent();
@@ -107,8 +102,8 @@ ASubEarthCharacter::ASubEarthCharacter()
 		m_rightHand->handCollider->bHiddenInGame = false;
 	}
 
-	//MapMotionControllersToHands();
-	SetupControlsPC();
+	MapMotionControllersToHands();
+	//SetupControlsPC();
 }
 
 /******************************************************************************/
@@ -147,11 +142,9 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 
 	// L-Trigger, Q
 	PlayerInputComponent->BindAction("LeftHandToggleGrab", IE_Pressed, this, &ASubEarthCharacter::LeftHandToggleGrab);
-	//PlayerInputComponent->BindAction("LeftHandToggleGrab", IE_Released, this, &ASubEarthCharacter::Empty);
 
 	// R-Trigger, E
 	PlayerInputComponent->BindAction("RightHandToggleGrab", IE_Pressed, this, &ASubEarthCharacter::RightHandToggleGrab);
-	//PlayerInputComponent->BindAction("RightHandToggleGrab", IE_Released, this, &ASubEarthCharacter::Empty);
 
 	// (L) face button 2, 3, 4,  Keyboard 1, 2, 3
 	PlayerInputComponent->BindAction("LeftHandButton2", IE_Pressed, this, &ASubEarthCharacter::LeftHandButton2);
@@ -194,7 +187,6 @@ void ASubEarthCharacter::SetupControlsPC()
 	R_MotionController->RelativeLocation = FVector::ZeroVector; 
 	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
 	rhs->RelativeLocation = FVector(120.0f, 25.0f, -20.0f);
-	UE_LOG(LogTemp, Log, TEXT("SetupControlsPC"));
 }
 /******************************************************************************/
 
@@ -217,8 +209,6 @@ void ASubEarthCharacter::MapMotionControllersToHands()
 	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
 	//rhs->RelativeLocation = m_RightLastLocation;
 	rhs->RelativeLocation = FVector(0.f, 0.f, 0.f);
-	UE_LOG(LogTemp, Log, TEXT("MapMotionControllersToHands"));
-
 }
 /******************************************************************************/
 
@@ -237,55 +227,45 @@ void ASubEarthCharacter::CyclePlayerControlMode()
 		case ePlayerControlMode::PC:
 		{
 			m_PlayerControlMode = ePlayerControlMode::SWIM;
-			m_propelEnabled = false;
-			m_pcEnabled = false;
-			m_swimEnabled = true;
 			MapMotionControllersToHands();
+			UE_LOG(LogTemp, Log, TEXT("Player Control Mode: SWIM"));
 			break;
 		}
 		case ePlayerControlMode::SWIM:
 		{
 			m_PlayerControlMode = ePlayerControlMode::PROPEL;
-			m_propelEnabled = true;
-			m_pcEnabled = false;
-			m_swimEnabled = false;
 			MapMotionControllersToHands();
+			UE_LOG(LogTemp, Log, TEXT("Player Control Mode: PROPEL"));
 			break;
 		}
 		case ePlayerControlMode::PROPEL:
 		{
 			// Vehicle not fully setup yet.
 			m_PlayerControlMode = ePlayerControlMode::VEHICLE;
-			m_propelEnabled = false;
-			m_pcEnabled = false;
-			m_swimEnabled = false;
 			SetupControlsVehicle();
+			UE_LOG(LogTemp, Log, TEXT("Player Control Mode: VEHICLE"));
 			break;
 		}
 		case ePlayerControlMode::VEHICLE:
 		{
 			m_PlayerControlMode = ePlayerControlMode::PC;
-			m_propelEnabled = false;
-			m_pcEnabled = true;
-			m_swimEnabled = false;
 			SetupControlsPC();
+			UE_LOG(LogTemp, Log, TEXT("Player Control Mode: PC"));
 			break;
 		}
 		default:
 		{
-			UE_LOG(LogTemp, Log, TEXT("Should not get here. Mode Change: %d"), m_PlayerControlMode);
+			UE_LOG(LogTemp, Log, TEXT("Should not get here. Attempted Mode: %d"), m_PlayerControlMode);
 			break;
 		}
 	}	
-	
-	UE_LOG(LogTemp, Log, TEXT("Mode Change: %d"), m_PlayerControlMode);
 }
 
 /******************************************************************************/
 // Movement in the direction of the camera
 void ASubEarthCharacter::MoveForward(float val)
 {
-	if (m_pcEnabled && val != 0.0f)
+	if (val != 0.0f)
 	{		
 		FVector cameraForward = PlayerCameraComponent->GetForwardVector();
 		float disp = val * m_SpeedPC;
@@ -297,7 +277,7 @@ void ASubEarthCharacter::MoveForward(float val)
 // Movement lateral to the direction of the camera
 void ASubEarthCharacter::MoveRight(float val)
 {
-	if (m_pcEnabled && val != 0.0f)
+	if (val != 0.0f)
 	{
 		FVector cameraRight = PlayerCameraComponent->GetRightVector();	
 		float disp = val * m_SpeedPC;
@@ -309,7 +289,7 @@ void ASubEarthCharacter::MoveRight(float val)
 // Left Swim
 void ASubEarthCharacter::LeftSwim(float val)
 {
-	if (m_swimEnabled)
+	if (m_PlayerControlMode == (int)ePlayerControlMode::SWIM)
 	{
 		FVector handLocation = L_MotionController->GetComponentLocation();
 		FVector handDifference = m_LeftLastLocation - handLocation;
@@ -335,7 +315,7 @@ void ASubEarthCharacter::LeftSwim(float val)
 // Right Swim
 void ASubEarthCharacter::RightSwim(float val)
 {
-	if (m_swimEnabled)
+	if (m_PlayerControlMode == (int)ePlayerControlMode::SWIM)
 	{
 		FVector handLocation = R_MotionController->GetComponentLocation();
 		FVector handDifference = m_RightLastLocation - handLocation;
@@ -360,7 +340,7 @@ void ASubEarthCharacter::RightSwim(float val)
 // Left Propel
 void ASubEarthCharacter::LeftPropel(float val)
 {
-	if (m_propelEnabled && val != 0.0f)
+	if ((m_PlayerControlMode == (int)ePlayerControlMode::PROPEL) && (val != 0.0f))
 	{
 		// Move in the direction of the thruster:
 		FVector handForward = L_MotionController->GetForwardVector();
@@ -384,7 +364,7 @@ void ASubEarthCharacter::LeftPropel(float val)
 // Right Propel
 void ASubEarthCharacter::RightPropel(float val)
 {
-	if (val != 0.0f)
+	if ((m_PlayerControlMode == (int)ePlayerControlMode::PROPEL) && (val != 0.0f))
 	{
 		// Move in the direction of the thruster:
 		FVector handForward = R_MotionController->GetForwardVector();
@@ -426,8 +406,9 @@ void ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
 		m_currentOxygen = m_currentOxygen + oxygen;
 	}
 	else
+	{
 		m_currentOxygen = 0;
-
+	}
 }
 
 /******************************************************************************/
@@ -437,67 +418,44 @@ void ASubEarthCharacter::LeftHandButton1()
 }
 void ASubEarthCharacter::LeftHandButton2()
 {
-
+	m_leftHand->PressButton2();
 }
 void ASubEarthCharacter::LeftHandButton3()
 {
-
+	m_leftHand->PressButton3();
 }
 void ASubEarthCharacter::LeftHandButton4()
 {
-
+	m_leftHand->PressButton4();
 }
 /******************************************************************************/
 void ASubEarthCharacter::RightHandButton1()
 {
-
+	m_rightHand->PressButton1();
 }
 void ASubEarthCharacter::RightHandButton2()
 {
-
+	m_rightHand->PressButton2();
 }
 void ASubEarthCharacter::RightHandButton3()
 {
-
+	m_rightHand->PressButton3();
 }
 void ASubEarthCharacter::RightHandButton4()
 {
-
+	m_rightHand->PressButton4();
 }
 
 /******************************************************************************/
 void ASubEarthCharacter::LeftHandToggleGrab()
 {
-	//m_leftHand->SetGrabbing(!m_leftHand->IsGrabbing());
 	m_leftHand->UseHand();
-	/*if (m_leftHand->IsGrabbing())
-	{
-		m_leftHand->SetGrabbing(false);
-	}
-	else
-	{
-		m_leftHand->SetGrabbing(true);
-	}*/
-
-	UE_LOG(LogTemp, Log, TEXT("Left Hand isEmpty: %d"), m_leftHand->IsHandEmpty());
 }
 
 /******************************************************************************/
 void ASubEarthCharacter::RightHandToggleGrab()
 {
 	m_rightHand->UseHand();
-	//m_rightHand->SetGrabbing(!m_rightHand->IsGrabbing());
-	/*
-	if (m_rightHand->IsGrabbing())
-	{
-		m_rightHand->SetGrabbing(false);
-	}
-	else
-	{
-		m_rightHand->SetGrabbing(true);
-	}
-	*/
-	UE_LOG(LogTemp, Log, TEXT("Right Hand isEmpty: %d"), m_rightHand->IsHandEmpty());
 }
 
 /****************************************************************************************************************************************************/

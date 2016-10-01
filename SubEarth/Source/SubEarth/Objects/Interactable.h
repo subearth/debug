@@ -25,22 +25,12 @@ public:
 protected:
 
 	UPROPERTY(EditAnywhere)
-		USceneComponent* objectRoot;
+		USceneComponent* m_objectRoot;
 
 	// Static mesh for the object being picked up
 	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* objectMesh;
+		UStaticMeshComponent* m_objectMesh;
 
 	UPROPERTY(EditAnywhere)
-		UBoxComponent* objectCollider;
-
-
-	/*
-		virtual void CollisionOccured(UPrimitiveComponent* overlappedComponent,
-		                          AActor* otherActor,
-		                          UPrimitiveComponent* otherComponent,
-		                          int32 otherBodyIndex,
-		                          bool bFromSweep,
-		                          const FHitResult& SweepResult) PURE_VIRTUAL(AInteractable::CollisionOccured, );
-		*/
+		UBoxComponent* m_objectCollider;
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
+#include "Objects/Interactable.h"
 #include "Objects/Pickup.h"
 #include "MotionControllerComponent.h"
 
@@ -33,21 +34,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UCapsuleComponent* handCollider;
 
-	USceneComponent* GetHandSceneComponent(void) { return savedHandSceneComponent; }
-	//USceneComponent* GetHandSceneComponent(void) { return handSceneComponent; }
-	void SetMotionController(UMotionControllerComponent* motion_controller);
-
-	void PickupObject(void);
-	void DropObject(void);
-
-	bool IsHandEmpty(void);
-
-	/** When the user presses the button to pick up the object, this function
-	needs to be called
-	@param grabbing Set true if button is depressed, false otherwise */
-	void SetGrabbing(bool grabbing);
-
-	bool IsGrabbing(void);
+	USceneComponent* GetHandSceneComponent(void) { return m_savedHandSceneComponent; }
 
 	void PressButton1(void);
 	void PressButton2(void);
@@ -72,14 +59,21 @@ public:
 
 private:
 
-	/* The object in the hand */
-	APickup* pickupObject;
-	UMotionControllerComponent* m_controller;
-	
-	USceneComponent* savedHandSceneComponent;
-	AActor* InHandActor;
-	AActor* CollidedActor;
+	void PickupObject(APickup* pickup_obj);
+	void DropObject(void);
 
-	bool isHandEmpty;
-	bool isGrabbing;  // true if in the process of grabbing an object
+	/* The object that the hand collidor is overlapping */
+	AInteractable* m_overlappedInteractable;
+
+	/* The current object in the hand. NULL if hand is empty */
+	APickup* m_pickupInHand;
+	
+	USceneComponent* m_savedHandSceneComponent;
+	
+	// The hand can only interact with interactable objects. Maybe these were added
+	// so that the hand could push off a wall? 
+	//AActor* InHandActor;
+	//AActor* CollidedActor;
+
+	bool m_isHandEmpty;
 };

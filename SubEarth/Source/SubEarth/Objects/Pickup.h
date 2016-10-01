@@ -22,11 +22,9 @@ public:
 	virtual void ExecuteAction2(void) PURE_VIRTUAL(APickup::ExecuteAction2, );
 	virtual void ExecuteAction3(void) PURE_VIRTUAL(APickup::ExecuteAction3, );
 
-/*
-	UFUNCTION()
-		void OnPlayerHandOverlap(UPrimitiveComponent* overlappedComponent, class AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	/** Returns the default orientation of the object when it is placed in the hand */
+	virtual void SetDefaultInHandOrientation(void);
 
-	UFUNCTION()
-		void OnPlayerOverlapExit(UPrimitiveComponent * overlappedComponent, class AActor * otherActor, UPrimitiveComponent * otherComponent, int32 otherBodyIndex);
-*/
+	/** Returns the default orientation of the object when it is placed in the world */
+	virtual void SetDefaultWorldOrientation(void);
 };

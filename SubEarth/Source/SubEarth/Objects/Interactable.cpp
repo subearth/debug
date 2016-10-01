@@ -8,24 +8,22 @@
 // Sets default values
 AInteractable::AInteractable()
 {
-	//Super::AActor(); // Call parents constructor
-
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	objectRoot = CreateDefaultSubobject<USceneComponent>(TEXT("ObjectRoot"));
-	RootComponent = objectRoot;
+	m_objectRoot = CreateDefaultSubobject<USceneComponent>(TEXT("ObjectRoot"));
+	RootComponent = m_objectRoot;
 
-	objectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ObjectMesh"));
-	objectMesh->SetupAttachment(objectRoot);
+	m_objectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ObjectMesh"));
+	m_objectMesh->SetupAttachment(m_objectRoot);
 
-	objectCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("ObjectCollider"));
-	objectCollider->SetupAttachment(objectRoot);
+	m_objectCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("ObjectCollider"));
+	m_objectCollider->SetupAttachment(m_objectRoot);
 }
 
 USceneComponent* AInteractable::GetObjectRoot()
 {
-	return objectRoot;
+	return m_objectRoot;
 }
 
 // Called when the game starts or when spawned

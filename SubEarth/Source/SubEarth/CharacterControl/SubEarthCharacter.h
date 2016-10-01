@@ -219,8 +219,4 @@ private:
 	APickup* pocketRightShoulder;
 	APickup* pocketLeftLeg;
 	APickup* pocketRightLeg;
-
-	bool m_swimEnabled;
-	bool m_propelEnabled;
-	bool m_pcEnabled;
 };

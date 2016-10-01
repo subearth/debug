@@ -7,7 +7,7 @@
 /******************************************************************************/
 AColorChangingOrb::AColorChangingOrb()
 {
-	objectCollider->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f)); // Needs to be pushed down one more level
+	m_objectCollider->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f)); // Needs to be pushed down one more level
 }
 
 /******************************************************************************/
@@ -26,4 +26,16 @@ void AColorChangingOrb::ExecuteAction2(void)
 void AColorChangingOrb::ExecuteAction3(void)
 {
 	UE_LOG(LogTemp, Log, TEXT("AColorChangingOrb::ExecuteAction3"));
+}
+
+/******************************************************************************/
+void AColorChangingOrb::SetDefaultInHandOrientation(void)
+{
+	m_objectRoot->RelativeRotation = FRotator(21.0f, 10.5f, 50.5f);
+}
+
+/******************************************************************************/
+void AColorChangingOrb::SetDefaultWorldOrientation(void)
+{
+	m_objectRoot->RelativeRotation = FRotator(-21.0f, -10.5f, -50.5f);
 }
