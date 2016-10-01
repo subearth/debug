@@ -11,13 +11,18 @@ AInteractable::AInteractable()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	m_objectRoot = CreateDefaultSubobject<USceneComponent>(TEXT("ObjectRoot"));
+	FString name = GetName();
+
+	FString RootName = name + "Root";
+	m_objectRoot = CreateDefaultSubobject<USceneComponent>(*RootName);
 	RootComponent = m_objectRoot;
 
-	m_objectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ObjectMesh"));
+	FString MeshName = name + "Mesh";
+	m_objectMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName(*MeshName));
 	m_objectMesh->SetupAttachment(m_objectRoot);
 
-	m_objectCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("ObjectCollider"));
+	FString ColliderName = name + "Collider";
+	m_objectCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
 	m_objectCollider->SetupAttachment(m_objectRoot);
 }
 

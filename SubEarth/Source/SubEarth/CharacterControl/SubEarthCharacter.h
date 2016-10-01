@@ -5,7 +5,7 @@
 #include "GameFramework/Character.h"
 #include "CharacterControl/Hand.h"
 #include "Objects/Pickup.h"
-
+#include "Pocket.h"
 #include "SubEarthCharacter.generated.h"
 
 UCLASS()
@@ -22,14 +22,6 @@ public:
 		SWIM,
 		PROPEL,
 		VEHICLE
-	};
-
-	enum Hand_e
-	{
-		NO_HAND_SELECTED,
-		LEFT_HAND,
-		RIGHT_HAND,
-		BOTH_HANDS
 	};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSpeeds)
@@ -215,8 +207,8 @@ private:
 	FVector m_RightLastLocation;
 
 	// The Sub earth character has four pockets to store picked up objects
-	APickup* pocketLeftShoulder;
-	APickup* pocketRightShoulder;
-	APickup* pocketLeftLeg;
-	APickup* pocketRightLeg;
+	APocket* pocketLeftShoulder;
+	APocket* pocketRightShoulder;
+	APocket* pocketLeftLeg;
+	APocket* pocketRightLeg;
 };

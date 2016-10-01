@@ -2,6 +2,7 @@
 
 #include "SubEarth.h"
 #include "CharacterControl/Hand.h"
+#include "Pocket.h"
 #include <string> 
 
 // Sets default values for this component's properties
@@ -157,7 +158,23 @@ void UHand::UseHand()
 		}
 		else if (m_overlappedInteractable->IsA(AInteractable::StaticClass()))
 		{
-			// Interact with the object. This could be like the "enter" key
+			if (m_overlappedInteractable->IsA(APocket::StaticClass()))
+			{
+				// Interact with the object. This could be like the "enter" key
+				APocket* pocket = (APocket*)m_overlappedInteractable;
+				
+				if (pocket->IsPocketEmpty() && !m_isHandEmpty)
+				{
+					pocket->PlaceItemInPocket(m_pickupInHand);
+					// TODO need to properly remove the object from the hand 
+					// place in pocket.
+				}
+				else
+				{
+					APickup* pickup = pocket->TakeItemOutOfPocket();
+					PickupObject(pickup);
+				}
+			}
 		}
 	}
 	// If we were holding something, drop it.

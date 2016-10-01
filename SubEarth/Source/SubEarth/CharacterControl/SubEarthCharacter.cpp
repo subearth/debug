@@ -2,7 +2,6 @@
 
 #include "SubEarth.h"
 #include "SubEarthCharacter.h"
-
 #include "GameFramework/InputSettings.h"
 #include "Kismet/HeadMountedDisplayFunctionLibrary.h"
 #include "MotionControllerComponent.h"
@@ -15,8 +14,6 @@ ASubEarthCharacter::ASubEarthCharacter()
 	
 	m_PlayerHMDLocation = FVector(0.0f, 0.0f, 0.0f);
 	m_PlayerHMDRotation = FRotator(0.0f, 0.0f, 0.0f);
-
-	m_PlayerControlMode = (int)ePlayerControlMode::PC;
 
 	m_SpeedPC = 1.0f;
 	m_RotateSpeedPC = 1.0f;
@@ -102,8 +99,33 @@ ASubEarthCharacter::ASubEarthCharacter()
 		m_rightHand->handCollider->bHiddenInGame = false;
 	}
 
-	MapMotionControllersToHands();
-	//SetupControlsPC();
+	/* TODO 
+	Ran out of time. I was trying to add the pockets to the actor. The pockets are
+	interactable objects. Essentially, anything the hands can interact with are interactable
+	objects. Take a look "UHand::UseHand()" for how I intended to use it. */
+
+	/*
+	// Create right hand component
+	pocketLeftShoulder = CreateDefaultSubobject<APocket>(TEXT("LEFT_SHOULD_POCKET"));
+	pocketRightShoulder = CreateDefaultSubobject<APocket>(TEXT("RIGHT_SHOULD_POCKET"));
+	pocketLeftLeg = CreateDefaultSubobject<APocket>(TEXT("LEFT_LEG_POCKET"));
+	pocketRightLeg = CreateDefaultSubobject<APocket>(TEXT("RIGHT_LEG_POCKET"));
+
+	// Attach to camera object
+	pocketLeftShoulder->GetObjectRoot()->SetupAttachment(PlayerCameraSceneComponent);
+	pocketRightShoulder->GetObjectRoot()->SetupAttachment(PlayerCameraSceneComponent);
+	pocketLeftLeg->GetObjectRoot()->SetupAttachment(PlayerCameraSceneComponent);
+	pocketRightLeg->GetObjectRoot()->SetupAttachment(PlayerCameraSceneComponent);
+
+	// Setup the location of the pockets
+	// TODO setup the correct locations. I just threw these numbers in
+	pocketLeftShoulder->SetRelativePosition(FVector(-25.0f, 0.0f, 0.0f));
+	pocketRightShoulder->SetRelativePosition(FVector(25.0f, 0.0f, 0.0f));
+	pocketLeftLeg->SetRelativePosition(FVector(-25.0f, 50.0f, 0.0f));
+	pocketRightLeg->SetRelativePosition(FVector(25.0f, 50.0f, 0.0f));
+	*/
+	m_PlayerControlMode = (int)ePlayerControlMode::PC;
+	SetupControlsPC();
 }
 
 /******************************************************************************/

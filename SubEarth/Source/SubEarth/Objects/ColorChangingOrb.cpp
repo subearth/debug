@@ -7,7 +7,7 @@
 /******************************************************************************/
 AColorChangingOrb::AColorChangingOrb()
 {
-	m_objectCollider->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f)); // Needs to be pushed down one more level
+	m_objectCollider->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
 }
 
 /******************************************************************************/
