@@ -57,20 +57,20 @@ void ASubEarthHUD::DrawHUD()
 		ASubEarthCharacter* MyCharacter = Cast<ASubEarthCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 		FString PowerLevelString = FString::Printf(TEXT("%10.1f"), FMath::Abs(MyCharacter->m_currentOxygen));
 	//	DrawText(PowerLevelString, FColor::White, Center.X, Center.Y, HUDFont);
-		DrawText(PowerLevelString, FColor::White, 200, 70, HUDFont);
+		//DrawText(PowerLevelString, FColor::White, 200, 70, HUDFont);
 
-		DrawRect(FColor::Green, 50, 50, MyCharacter->m_currentOxygen, 20.0f);
+		//DrawRect(FColor::Green, 50, 50, MyCharacter->m_currentOxygen, 20.0f);
 
 		if (MyCharacter->m_currentOxygen == 0)
-			DrawText("GAME OVER", FColor::Red, Center.X, Center.Y, HUDFont);
+			//DrawText("GAME OVER", FColor::Red, Center.X, Center.Y, HUDFont);
 
 		FString Inventory1 = FString::Printf(TEXT("Right Down"));
 		FString Inventory2 = FString::Printf(TEXT("Right Up"));
 		FString Inventory3 = FString::Printf(TEXT("Left Down"));
 
-		DrawText(Inventory1, FColor::White, RightDown.X, RightDown.Y, HUDFont);
+		/*DrawText(Inventory1, FColor::White, RightDown.X, RightDown.Y, HUDFont);
 		DrawText(Inventory2, FColor::White, RightUp.X, RightUp.Y, HUDFont);
-		DrawText(Inventory3, FColor::White, LeftDown.X, LeftDown.Y, HUDFont);
+		DrawText(Inventory3, FColor::White, LeftDown.X, LeftDown.Y, HUDFont);*/
 
 
 }

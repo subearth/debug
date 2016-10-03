@@ -30,6 +30,11 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_initialOxygen = 400.0f;
 	m_currentOxygen = m_initialOxygen;
 	m_oxygenUseRate = 0.05f;
+	m_oxygenPercent = 1.0f;
+	m_oxygenWarning = 0.0f;
+
+	m_initialOxygenString = FString::SanitizeFloat(m_initialOxygen);
+	m_currentOxygenString = FString::SanitizeFloat(m_currentOxygen);
 
 	// Initialize components:
 
@@ -146,6 +151,7 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 
 	// Update the player Oxygen levels:
 	UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate * m_initialOxygen);
+	
 	//UE_LOG(LogTemp, Log, TEXT("Oxygen: %f"), m_currentOxygen);
 	
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(0.0f, EOrientPositionSelector::Position);
@@ -426,11 +432,23 @@ void ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
 	if (m_currentOxygen > 0)
 	{
 		m_currentOxygen = m_currentOxygen + oxygen;
+		m_oxygenPercent = m_currentOxygen / m_initialOxygen;
 	}
 	else
 	{
-		m_currentOxygen = 0;
+		m_currentOxygen = 0.f;
+		m_oxygenPercent = 0.f;
 	}
+	if (m_oxygenPercent < 0.2f)
+	{
+		m_oxygenWarning = m_oxygenPercent;
+	}
+	else
+	{
+		m_oxygenWarning = 0.f;
+	}
+	m_initialOxygenString = FString::FromInt((int)m_initialOxygen);
+	m_currentOxygenString = FString::FromInt((int)m_currentOxygen);
 }
 
 /******************************************************************************/
