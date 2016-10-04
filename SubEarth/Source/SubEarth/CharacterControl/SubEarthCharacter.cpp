@@ -43,18 +43,18 @@ ASubEarthCharacter::ASubEarthCharacter()
 
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	// Create the Player Camera Scene Component:
 	PlayerCameraSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("PlayerCameraScene"));
 	PlayerCameraSceneComponent->SetupAttachment(GetCapsuleComponent());
 	PlayerCameraSceneComponent->RelativeLocation = FVector(0.0f, 0.0f, 60.0f); // Position the camera
-
+	
 	// Create the Player Camera:
 	PlayerCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 	PlayerCameraComponent->RelativeLocation = FVector(0.0f, 0.0f, 0.0f); // Position the camera
 	PlayerCameraComponent->RelativeRotation = FRotator(0.0f, 0.0f, 0.0f);
 	PlayerCameraComponent->SetupAttachment(PlayerCameraSceneComponent);
-
+	
 	// Create Left Motion Controller:
 	L_MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("L_MotionController"));
 	L_MotionController->Hand = EControllerHand::Left;
@@ -129,6 +129,12 @@ ASubEarthCharacter::ASubEarthCharacter()
 	pocketLeftLeg->SetRelativePosition(FVector(-25.0f, 50.0f, 0.0f));
 	pocketRightLeg->SetRelativePosition(FVector(25.0f, 50.0f, 0.0f));
 	*/
+
+	// Create the Rig Scene Component:
+	PlayerRigComponent = CreateDefaultSubobject<USceneComponent>(TEXT("PlayerRigScene"));
+	PlayerRigComponent->SetupAttachment(GetCapsuleComponent());
+	PlayerRigComponent->RelativeLocation = FVector(0.0f, 0.0f, 0.0f); 
+
 	m_PlayerControlMode = (int)ePlayerControlMode::PC;
 	SetupControlsPC();
 }
@@ -154,7 +160,16 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 	
 	//UE_LOG(LogTemp, Log, TEXT("Oxygen: %f"), m_currentOxygen);
 	
+	GetCapsuleComponent()->UpdateChildTransforms();
+	if (m_PlayerControlMode != (int)ePlayerControlMode::PC)
+	{
+		PlayerRigComponent->SetWorldRotation(FRotator(0.f, PlayerCameraComponent->GetComponentRotation().Yaw, 0.f));
+	}
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(0.0f, EOrientPositionSelector::Position);
+	
+	//UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(m_PlayerHMDRotation, m_PlayerHMDLocation);
+
+	
 
 }
 /******************************************************************************/
@@ -203,6 +218,7 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 // Bind functionality to input for PC controls
 void ASubEarthCharacter::SetupControlsPC()
 {
+	PlayerRigComponent->RelativeRotation = FRotator::ZeroRotator;
 	// Allow for mouse yaw and pitch:
 	bUseControllerRotationYaw = true;
 	PlayerCameraComponent->bUsePawnControlRotation = true;
@@ -224,6 +240,7 @@ void ASubEarthCharacter::MapMotionControllersToHands()
 	// Allow for mouse yaw and pitch:
 	bUseControllerRotationYaw = false;
 	PlayerCameraComponent->bUsePawnControlRotation = false;
+	//PlayerRigComponent->RelativeRotation = FRotator::ZeroRotator;
 
 	// Reintialize the hand locations:
 	m_LeftLastLocation = L_MotionController->GetComponentLocation();
@@ -325,7 +342,7 @@ void ASubEarthCharacter::LeftSwim(float val)
 
 		float dist = FVector::DotProduct(handUp, handDifference) * m_SpeedSwim;
 		AddMovementInput(handUp, dist);
-
+		
 		// Rotate towards the swim direction:
 		//FRotator handRotation = L_MotionController->GetComponentRotation();
 		//FRotator playerRotation = GetCapsuleComponent()->GetComponentRotation();
@@ -368,7 +385,8 @@ void ASubEarthCharacter::RightSwim(float val)
 // Left Propel
 void ASubEarthCharacter::LeftPropel(float val)
 {
-	if ((m_PlayerControlMode == (int)ePlayerControlMode::PROPEL) && (val != 0.0f))
+	//if ((m_PlayerControlMode == (int)ePlayerControlMode::PROPEL) && (val != 0.0f))
+	if ((m_PlayerControlMode == (int)ePlayerControlMode::PROPEL))
 	{
 		// Move in the direction of the thruster:
 		FVector handForward = L_MotionController->GetForwardVector();
@@ -392,7 +410,8 @@ void ASubEarthCharacter::LeftPropel(float val)
 // Right Propel
 void ASubEarthCharacter::RightPropel(float val)
 {
-	if ((m_PlayerControlMode == (int)ePlayerControlMode::PROPEL) && (val != 0.0f))
+	//if ((m_PlayerControlMode == (int)ePlayerControlMode::PROPEL) && (val != 0.0f))
+	if ((m_PlayerControlMode == (int)ePlayerControlMode::PROPEL))
 	{
 		// Move in the direction of the thruster:
 		FVector handForward = R_MotionController->GetForwardVector();

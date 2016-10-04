@@ -210,6 +210,10 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UMotionControllerComponent* R_MotionController;
 
+	// Player rig component
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraControl, meta = (AllowPrivateAccess = "true"))
+		class USceneComponent* PlayerRigComponent;
+
 	// Player control mode
 	int m_PlayerControlMode;
 

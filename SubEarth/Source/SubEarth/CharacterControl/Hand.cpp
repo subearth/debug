@@ -64,6 +64,8 @@ void UHand::PickupObject(APickup* pickup_obj)
 
 	pickup_obj->AttachToComponent(m_savedHandSceneComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	pickup_obj->SetDefaultInHandOrientation();
+	
+	pickup_obj->SetActorEnableCollision(false);
 
 	m_pickupInHand = pickup_obj;
 	m_overlappedInteractable = NULL; // We picked it up, therefore it is no longer overlapping
@@ -76,6 +78,7 @@ void UHand::PickupObject(APickup* pickup_obj)
 void UHand::DropObject()
 {
 	UE_LOG(LogTemp, Log, TEXT("AHand::DropObject %s"), *(m_pickupInHand->GetName()));
+	m_pickupInHand->SetActorEnableCollision(true);
 	m_pickupInHand->SetDefaultWorldOrientation();
 	m_pickupInHand->DetachRootComponentFromParent();
 	m_overlappedInteractable = (AInteractable*)m_pickupInHand; // We just dropped it, therefore it is currently overlapping
