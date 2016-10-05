@@ -17,7 +17,7 @@ public:
 
 	AOxygenTank();
 	void GetOxygenTank(void);
-	bool IsOxygenTankPickedUp = false;
+	bool IsOxygenTankPickedUp ;
 	
 	
 };
