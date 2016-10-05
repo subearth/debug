@@ -25,6 +25,7 @@ UPocket::UPocket()
 	m_objectCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
 	m_objectCollider->SetupAttachment(m_objectRoot);
 	m_objectCollider->SetWorldScale3D(FVector(0.2f, 0.2f, 0.2f));
+	m_objectCollider->bGenerateOverlapEvents = true;
 
 	m_objectCollider->bHiddenInGame = false;
 
@@ -71,9 +72,20 @@ bool UPocket::IsPocketEmpty()
 /******************************************************************************/
 APickup* UPocket::TakeItemOutOfPocket(void)
 {
-	APickup* pickup = m_pickupInPocket;
-	m_pickupInPocket = NULL;
-	m_isPocketEmpty = true;
+	APickup* pickup = NULL;
+
+	if (!m_isPocketEmpty && m_pickupInPocket != NULL)
+	{
+		pickup = m_pickupInPocket;
+		pickup->DetachRootComponentFromParent();
+		pickup->SetDefaultInHandOrientation();
+		pickup->SetActorEnableCollision(true);
+
+		m_pickupInPocket = NULL;
+		m_isPocketEmpty = true;
+
+		UE_LOG(LogTemp, Log, TEXT("Took %s out of pocket"), *pickup->GetName());
+	}
 
 	return pickup;
 }
@@ -81,6 +93,33 @@ APickup* UPocket::TakeItemOutOfPocket(void)
 /******************************************************************************/
 void UPocket::PlaceItemInPocket(APickup* pickup)
 {
-	m_pickupInPocket = pickup;
-	m_isPocketEmpty = false;
+	if (m_isPocketEmpty)
+	{
+		m_pickupInPocket = pickup;
+		m_isPocketEmpty = false;
+
+		pickup->AttachToComponent(m_objectRoot, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		pickup->SetDefaultWorldOrientation(); // TODO this create orientation for "In Pocket"
+		pickup->SetActorEnableCollision(false);
+
+
+		UE_LOG(LogTemp, Log, TEXT("Placed %s in pocket"), *pickup->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Attempted to add %s to the pocket when the pocket is not empty!"), *pickup->GetName());
+	}
+}
+
+/******************************************************************************/
+FString UPocket::GetNameOfPickupInPocket(void)
+{
+	FString str = "EMPTY";
+
+	if (m_pickupInPocket != NULL)
+	{
+		str = m_pickupInPocket->GetName();
+	}
+
+	return str;
 }

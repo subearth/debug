@@ -31,6 +31,11 @@ public:
 
 	USceneComponent* GetObjectRoot(void);
 
+	FString GetNameOfPickupInPocket(void);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UBoxComponent* m_objectCollider;
+
 private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -40,8 +45,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* m_objectMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class UBoxComponent* m_objectCollider;
+
 
 	USceneComponent* m_savedObjectRoot;
 

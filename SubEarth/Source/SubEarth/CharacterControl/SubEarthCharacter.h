@@ -52,7 +52,7 @@ public:
 	/*		START INVENTORY VARAIBLES		*/
 	/****************************************/
 
-	TArray<FString> ShowInventory;
+	//TArray<FString> ShowInventory;
 
 
 	/****************************************/
@@ -135,6 +135,8 @@ public:
 	// Right Hand
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = rightHand, meta = (AllowPrivateAccess = "true"))
 		class UHand* m_rightHand;
+
+	UPocket* GetOverlappedPocket(UPrimitiveComponent* otherComponent);
 
 protected:
 	// Called to bind functionality to input
@@ -226,11 +228,11 @@ private:
 
 	// The Sub earth character has four pockets to store picked up objects
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class UPocket* pocketLeftShoulder;
+		class UPocket* m_pocketLeftShoulder;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class UPocket* pocketRightShoulder;
+		class UPocket* m_pocketRightShoulder;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class UPocket* pocketLeftLeg;
+		class UPocket* m_pocketLeftLeg;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class UPocket* pocketRightLeg;
+		class UPocket* m_pocketRightLeg;
 };

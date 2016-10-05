@@ -2,7 +2,7 @@
 
 #include "SubEarth.h"
 #include "CharacterControl/Hand.h"
-#include "Pocket.h"
+#include "CharacterControl/SubEarthCharacter.h"
 #include <string> 
 
 // Sets default values for this component's properties
@@ -36,9 +36,7 @@ UHand::UHand()
 	m_isHandEmpty = true;
 	m_pickupInHand = NULL;
 	m_overlappedInteractable = NULL;
-	
-	//InHandActor = NULL;
-	//CollidedActor = NULL;
+	m_overlappedPocket = NULL;
 }
 
 // Called when the game starts
@@ -127,15 +125,27 @@ void UHand::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 	                     bool bFromSweep,
 	                     const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with object: %s"), *(otherActor->GetName()));
+	//UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with object: %s"), *(otherActor->GetName()));
 
 	if (otherActor->IsA(AInteractable::StaticClass())) // Type check before casting
 	{
 		m_overlappedInteractable = (AInteractable*)otherActor;
 	}
+	else if (otherActor->IsA(ASubEarthCharacter::StaticClass())) // Type check before casting
+	{
+		ASubEarthCharacter* sub = (ASubEarthCharacter*)otherActor;
+
+		UPocket* temp = sub->GetOverlappedPocket(otherComponent);
+
+		if (temp != NULL)
+		{
+			UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with object: %s"), *(otherActor->GetName()));
+			m_overlappedPocket = temp;
+		}
+	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap object %s is not an interactable object"), *(otherActor->GetName()));
+		//UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap object %s is not an interactable object"), *(otherActor->GetName()));
 	}
 }
 
@@ -147,12 +157,13 @@ void UHand::EndOverlap(UPrimitiveComponent* overlappedComponent,
 {
 	UE_LOG(LogTemp, Log, TEXT("UHand::EndOverlap with object: %s"), *(otherActor->GetName()));
 	m_overlappedInteractable = NULL;
+	m_overlappedPocket = NULL;
 }
 
 /******************************************************************************/
 void UHand::UseHand()
 {
-	// Is the hand overlapping something we need to interact with?
+	// Is the hand overlapping an interactable object
 	if (m_overlappedInteractable != NULL)
 	{
 		if (m_overlappedInteractable->IsA(APickup::StaticClass())) 
@@ -161,12 +172,15 @@ void UHand::UseHand()
 		}
 		else if (m_overlappedInteractable->IsA(AInteractable::StaticClass()))
 		{
-
+			// TODO trigger primary action of interactable
 		}
-		else if (m_overlappedInteractable->IsA(UPocket::StaticClass()))
+	}
+	else if (m_overlappedPocket != NULL)
+	{
+		if (m_overlappedPocket->IsA(UPocket::StaticClass()))
 		{
 			// Interact with the object. This could be like the "enter" key
-			UPocket* pocket = (UPocket*)m_overlappedInteractable;
+			UPocket* pocket = (UPocket*)m_overlappedPocket;
 
 			if (pocket->IsPocketEmpty() && !m_isHandEmpty)
 			{
@@ -174,9 +188,15 @@ void UHand::UseHand()
 				// TODO need to properly remove the object from the hand 
 				// place in pocket.
 			}
-			else
+			else if (!pocket->IsPocketEmpty() && m_isHandEmpty)
 			{
 				APickup* pickup = pocket->TakeItemOutOfPocket();
+				PickupObject(pickup);
+			}
+			else if (!pocket->IsPocketEmpty() && !m_isHandEmpty)
+			{
+				APickup* pickup = pocket->TakeItemOutOfPocket();
+				pocket->PlaceItemInPocket(m_pickupInHand);
 				PickupObject(pickup);
 			}
 		}

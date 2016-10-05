@@ -40,6 +40,7 @@ ASubEarthCharacter::ASubEarthCharacter()
 
 	// Set size for collision capsule:
 	GetCapsuleComponent()->InitCapsuleSize(22.0, 96.0f);
+	GetCapsuleComponent()->bHiddenInGame = false;
 
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -115,22 +116,22 @@ ASubEarthCharacter::ASubEarthCharacter()
 	objects. Take a look "UHand::UseHand()" for how I intended to use it. */
 
 	// Create four pockets
-	pocketLeftShoulder = CreateDefaultSubobject<UPocket>(TEXT("LEFT_SHOULD_POCKET"));
-	pocketRightShoulder = CreateDefaultSubobject<UPocket>(TEXT("RIGHT_SHOULD_POCKET"));
-	pocketLeftLeg = CreateDefaultSubobject<UPocket>(TEXT("LEFT_LEG_POCKET"));
-	pocketRightLeg = CreateDefaultSubobject<UPocket>(TEXT("RIGHT_LEG_POCKET"));
+	m_pocketLeftShoulder = CreateDefaultSubobject<UPocket>(TEXT("LEFT_SHOULD_POCKET"));
+	m_pocketRightShoulder = CreateDefaultSubobject<UPocket>(TEXT("RIGHT_SHOULD_POCKET"));
+	m_pocketLeftLeg = CreateDefaultSubobject<UPocket>(TEXT("LEFT_LEG_POCKET"));
+	m_pocketRightLeg = CreateDefaultSubobject<UPocket>(TEXT("RIGHT_LEG_POCKET"));
 
 	// Attach the pockets to the RIG component
-	pocketLeftShoulder->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
-	pocketRightShoulder->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
-	pocketLeftLeg->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
-	pocketRightLeg->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
+	m_pocketLeftShoulder->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
+	m_pocketRightShoulder->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
+	m_pocketLeftLeg->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
+	m_pocketRightLeg->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
 
 	// Setup the location of the pockets
-	pocketLeftShoulder->SetRelativePosition(FVector(-5.0f, -10.0f, 40.0f));
-	pocketRightShoulder->SetRelativePosition(FVector(-5.0f, +10.0f, 40.0f));
-	pocketLeftLeg->SetRelativePosition(FVector(-15.0f, -15.0f, -30.0f));
-	pocketRightLeg->SetRelativePosition(FVector(-15.0f, 15.0f, -30.0f));
+	m_pocketLeftShoulder->SetRelativePosition(FVector(40.0f, -20.0f, 70.0f));
+	m_pocketRightShoulder->SetRelativePosition(FVector(40.0f, +20.0f, 70.0f));
+	m_pocketLeftLeg->SetRelativePosition(FVector(40.0f, -20.0f, 0.0f));
+	m_pocketRightLeg->SetRelativePosition(FVector(40.0f, 20.0f, 0.0f));
 
 	m_PlayerControlMode = (int)ePlayerControlMode::PC;
 	SetupControlsPC();
@@ -169,6 +170,36 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 	
 
 }
+
+/******************************************************************************/
+UPocket* ASubEarthCharacter::GetOverlappedPocket(UPrimitiveComponent* otherComponent)
+{
+	UPocket* ret = NULL;
+
+	if (otherComponent == m_pocketLeftShoulder->m_objectCollider)
+	{
+		ret = m_pocketLeftShoulder;
+	}
+	else if (otherComponent == m_pocketRightShoulder->m_objectCollider)
+	{
+		ret = m_pocketRightShoulder;
+	}
+	else if (otherComponent == m_pocketLeftLeg->m_objectCollider)
+	{
+		ret = m_pocketLeftLeg;
+	}
+	else if (otherComponent == m_pocketRightLeg->m_objectCollider)
+	{
+		ret = m_pocketRightLeg;
+	}
+	else
+	{
+
+	}
+
+	return ret;
+}
+
 /******************************************************************************/
 // Called to bind functionality to input
 void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -177,7 +208,7 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 
 	PlayerInputComponent->BindAction("CycleMode", IE_Pressed, this, &ASubEarthCharacter::CyclePlayerControlMode);
 
-	// Player controls:
+	// Shoulder Button left and right controller
 	PlayerInputComponent->BindAction("ShowInventory", IE_Pressed, this, &ASubEarthCharacter::Inventory);
 
 	// L-Trigger, Q
@@ -517,9 +548,14 @@ void ASubEarthCharacter::RightHandToggleGrab()
 /****************************************************************************************************************************************************/
 void ASubEarthCharacter::Inventory()
 {
-	for (auto& eachItem : ShowInventory)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *eachItem));
-	}
+	FString p1 = m_pocketLeftShoulder->GetNameOfPickupInPocket();
+	FString p2 = m_pocketRightShoulder->GetNameOfPickupInPocket();
+	FString p3 = m_pocketLeftLeg->GetNameOfPickupInPocket();
+	FString p4 = m_pocketRightLeg->GetNameOfPickupInPocket();
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *p1));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *p2));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *p3));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *p4));
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT("End of Inventory"));
 }
