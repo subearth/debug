@@ -2,21 +2,26 @@
 
 #pragma once
 
-#include "Objects/Interactable.h"
+#include "Components/ActorComponent.h"
 #include "Objects/Pickup.h"
+
 #include "Pocket.generated.h"
 
-/**
- * 
- */
-UCLASS()
-class SUBEARTH_API APocket : public AInteractable
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class SUBEARTH_API UPocket : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:
+public:	
+	// Sets default values for this component's properties
+	UPocket();
 
-	APocket();
+	// Called when the game starts
+	virtual void BeginPlay() override;
+	
+	// Called every frame
+	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
 	void SetRelativePosition(FVector position);
 
@@ -24,11 +29,25 @@ public:
 	APickup* TakeItemOutOfPocket(void);
 	void PlaceItemInPocket(APickup* pickup);
 
-private:	
+	USceneComponent* GetObjectRoot(void);
 
+private:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class USceneComponent* m_objectRoot;
+
+	// Static mesh for the object being picked up
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* m_objectMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UBoxComponent* m_objectCollider;
+
+	USceneComponent* m_savedObjectRoot;
 
 	/* The current object in the pocket. NULL if pocket is empty */
 	APickup* m_pickupInPocket;
 
 	bool m_isPocketEmpty;
+		
 };

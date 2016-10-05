@@ -161,22 +161,23 @@ void UHand::UseHand()
 		}
 		else if (m_overlappedInteractable->IsA(AInteractable::StaticClass()))
 		{
-			if (m_overlappedInteractable->IsA(APocket::StaticClass()))
+
+		}
+		else if (m_overlappedInteractable->IsA(UPocket::StaticClass()))
+		{
+			// Interact with the object. This could be like the "enter" key
+			UPocket* pocket = (UPocket*)m_overlappedInteractable;
+
+			if (pocket->IsPocketEmpty() && !m_isHandEmpty)
 			{
-				// Interact with the object. This could be like the "enter" key
-				APocket* pocket = (APocket*)m_overlappedInteractable;
-				
-				if (pocket->IsPocketEmpty() && !m_isHandEmpty)
-				{
-					pocket->PlaceItemInPocket(m_pickupInHand);
-					// TODO need to properly remove the object from the hand 
-					// place in pocket.
-				}
-				else
-				{
-					APickup* pickup = pocket->TakeItemOutOfPocket();
-					PickupObject(pickup);
-				}
+				pocket->PlaceItemInPocket(m_pickupInHand);
+				// TODO need to properly remove the object from the hand 
+				// place in pocket.
+			}
+			else
+			{
+				APickup* pickup = pocket->TakeItemOutOfPocket();
+				PickupObject(pickup);
 			}
 		}
 	}

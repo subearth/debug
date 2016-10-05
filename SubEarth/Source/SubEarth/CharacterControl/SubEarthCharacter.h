@@ -5,7 +5,7 @@
 #include "GameFramework/Character.h"
 #include "CharacterControl/Hand.h"
 #include "Objects/Pickup.h"
-#include "Pocket.h"
+#include "CharacterControl/Pocket.h"
 #include "SubEarthCharacter.generated.h"
 
 UCLASS()
@@ -225,8 +225,12 @@ private:
 	FVector m_RightLastLocation;
 
 	// The Sub earth character has four pockets to store picked up objects
-	APocket* pocketLeftShoulder;
-	APocket* pocketRightShoulder;
-	APocket* pocketLeftLeg;
-	APocket* pocketRightLeg;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UPocket* pocketLeftShoulder;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UPocket* pocketRightShoulder;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UPocket* pocketLeftLeg;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UPocket* pocketRightLeg;
 };
