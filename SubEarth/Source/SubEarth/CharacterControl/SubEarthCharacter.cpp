@@ -154,6 +154,11 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 	Super::Tick( DeltaTime );
 
 	// Update the player Oxygen levels:
+	if (IsOxygenTankPickedUp == true)
+	{
+		m_currentOxygen = m_initialOxygen;
+	}
+
 	UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate * m_initialOxygen);
 	
 	//UE_LOG(LogTemp, Log, TEXT("Oxygen: %f"), m_currentOxygen);

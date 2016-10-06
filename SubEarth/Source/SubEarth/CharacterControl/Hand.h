@@ -7,7 +7,7 @@
 #include "Objects/Pickup.h"
 #include "CharacterControl/Pocket.h"
 #include "MotionControllerComponent.h"
-
+#include "Objects/OxygenTank.h"
 #include "Hand.generated.h"
 
 

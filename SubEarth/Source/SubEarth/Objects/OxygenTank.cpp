@@ -14,8 +14,8 @@ AOxygenTank::AOxygenTank() {
 void AOxygenTank::GetOxygenTank() {
 
 	//Update oxygen value here
-	ASubEarthCharacter* MyCharacter = Cast<ASubEarthCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
-	MyCharacter->m_currentOxygen += MyCharacter -> m_initialOxygen;
+//	ASubEarthCharacter* MyCharacter = Cast<ASubEarthCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+//	MyCharacter->m_currentOxygen += MyCharacter -> m_initialOxygen;
 
 	IsOxygenTankPickedUp = true;
 }

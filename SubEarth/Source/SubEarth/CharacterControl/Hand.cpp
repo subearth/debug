@@ -4,6 +4,7 @@
 #include "CharacterControl/Hand.h"
 #include "CharacterControl/SubEarthCharacter.h"
 #include <string> 
+#include "Objects/OxygenTank.h"
 
 // Sets default values for this component's properties
 UHand::UHand()
@@ -70,6 +71,11 @@ void UHand::PickupObject(APickup* pickup_obj)
 	m_isHandEmpty = false;
 
 	UE_LOG(LogTemp, Log, TEXT("AHand::PickupObject %s"), *(m_pickupInHand->GetName()));
+
+	ASubEarthCharacter* MyCharacter = Cast<ASubEarthCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+	MyCharacter->IsOxygenTankPickedUp = true;
+	
+
 }
 
 /******************************************************************************/

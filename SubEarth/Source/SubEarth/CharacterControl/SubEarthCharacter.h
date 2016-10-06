@@ -63,6 +63,9 @@ public:
 	/*			START HUD VARAIBLES			*/
 	/****************************************/
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
+		bool IsOxygenTankPickedUp;
+
 	/*The player's initial oxygen level*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
 		float m_initialOxygen;
