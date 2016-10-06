@@ -33,7 +33,7 @@ public:
 		class UStaticMeshComponent* handMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class UCapsuleComponent* handCollider;
+		class UBoxComponent* handCollider;
 
 	USceneComponent* GetHandSceneComponent(void) { return m_savedHandSceneComponent; }
 

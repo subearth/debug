@@ -6,7 +6,10 @@
 #include "CharacterControl/Hand.h"
 #include "Objects/Pickup.h"
 #include "CharacterControl/Pocket.h"
+//#include <ForceFeedback.h>
+//#include <ForceFeedbackEffect.h>
 #include "SubEarthCharacter.generated.h"
+
 
 UCLASS()
 class SUBEARTH_API ASubEarthCharacter : public ACharacter
@@ -238,4 +241,5 @@ private:
 		class UPocket* m_pocketLeftLeg;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UPocket* m_pocketRightLeg;
+	
 };

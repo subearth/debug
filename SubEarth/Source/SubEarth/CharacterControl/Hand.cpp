@@ -23,14 +23,16 @@ UHand::UHand()
 	FString MeshName = HandName + "Mesh";
 	handMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName(*MeshName));	
 	handMesh->SetupAttachment(handSceneComponent);
+	handMesh->bGenerateOverlapEvents = false;
 
 	FString ColliderName = HandName + "Collider";
-	handCollider = CreateDefaultSubobject<UCapsuleComponent>(FName(*ColliderName));
+	handCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
 	handCollider->bGenerateOverlapEvents = true;
 	handCollider->OnComponentBeginOverlap.AddDynamic(this, &UHand::BeginOverlap);
 	handCollider->OnComponentEndOverlap.AddDynamic(this, &UHand::EndOverlap);
-	handCollider->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
-	handCollider->SetWorldRotation(FRotator(90.f, 0.f, 0.f));
+	handCollider->SetWorldScale3D(FVector(0.3f, 0.3f, 0.05f));
+	handCollider->SetWorldLocation(FVector(0.f, 0.f, -4.f));
+	//handCollider->SetWorldRotation(FRotator(90.f, 0.f, 0.f));
 	handCollider->SetupAttachment(handSceneComponent);
 	
 	// Start off holding nothing.
@@ -137,6 +139,10 @@ void UHand::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 	{
 		m_overlappedInteractable = (AInteractable*)otherActor;
 	}
+	/*else if (otherComponent->GetOwner()->IsA(UPocket::StaticClass()))
+	{
+		UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with component: %s"), *(otherComponent->GetName()));
+	}*/
 	else if (otherActor->IsA(ASubEarthCharacter::StaticClass())) // Type check before casting
 	{
 		ASubEarthCharacter* sub = (ASubEarthCharacter*)otherActor;
@@ -191,6 +197,8 @@ void UHand::UseHand()
 			if (pocket->IsPocketEmpty() && !m_isHandEmpty)
 			{
 				pocket->PlaceItemInPocket(m_pickupInHand);
+				m_isHandEmpty = true;
+				m_pickupInHand = NULL;
 				// TODO need to properly remove the object from the hand 
 				// place in pocket.
 			}

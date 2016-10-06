@@ -39,8 +39,9 @@ ASubEarthCharacter::ASubEarthCharacter()
 	// Initialize components:
 
 	// Set size for collision capsule:
-	GetCapsuleComponent()->InitCapsuleSize(22.0, 96.0f);
-	GetCapsuleComponent()->bHiddenInGame = false;
+	GetCapsuleComponent()->InitCapsuleSize(10.0, 96.0f);
+	GetCapsuleComponent()->bGenerateOverlapEvents = false;
+	GetCapsuleComponent()->bHiddenInGame = true;
 
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -128,11 +129,11 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_pocketRightLeg->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
 
 	// Setup the location of the pockets
-	m_pocketLeftShoulder->SetRelativePosition(FVector(40.0f, -20.0f, 70.0f));
-	m_pocketRightShoulder->SetRelativePosition(FVector(40.0f, +20.0f, 70.0f));
-	m_pocketLeftLeg->SetRelativePosition(FVector(40.0f, -20.0f, 0.0f));
-	m_pocketRightLeg->SetRelativePosition(FVector(40.0f, 20.0f, 0.0f));
-
+	m_pocketLeftShoulder->SetRelativePosition(FVector(10.0f, -20.0f, 30.0f));
+	m_pocketRightShoulder->SetRelativePosition(FVector(10.0f, +20.0f, 30.0f));
+	m_pocketLeftLeg->SetRelativePosition(FVector(10.0f, -20.0f, 0.0f));
+	m_pocketRightLeg->SetRelativePosition(FVector(10.0f, 20.0f, 0.0f));
+	
 	m_PlayerControlMode = (int)ePlayerControlMode::PC;
 	SetupControlsPC();
 }
@@ -157,6 +158,7 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 	if (IsOxygenTankPickedUp == true)
 	{
 		m_currentOxygen = m_initialOxygen;
+		IsOxygenTankPickedUp = false;
 	}
 
 	UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate * m_initialOxygen);
@@ -172,7 +174,8 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 	
 	//UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(m_PlayerHMDRotation, m_PlayerHMDLocation);
 
-	
+	/*m_LeftLastLocation = L_MotionController->GetComponentLocation();
+	m_RightLastLocation = R_MotionController->GetComponentLocation();*/
 
 }
 
@@ -371,10 +374,17 @@ void ASubEarthCharacter::LeftSwim(float val)
 	{
 		FVector handLocation = L_MotionController->GetComponentLocation();
 		FVector handDifference = m_LeftLastLocation - handLocation;
+		float movementSize = handDifference.Size();
+		handDifference.Normalize();
 		FVector handUp = L_MotionController->GetUpVector();
 
-		float dist = FVector::DotProduct(handUp, handDifference) * m_SpeedSwim;
-		AddMovementInput(handUp, dist);
+		float alignment = FVector::DotProduct(handUp, handDifference);
+		
+		if (alignment > 0.5)
+		{
+			AddMovementInput(handDifference, m_SpeedSwim*movementSize);
+		}
+		//AddMovementInput(handUp, dist);
 		
 		// Rotate towards the swim direction:
 		//FRotator handRotation = L_MotionController->GetComponentRotation();
@@ -397,10 +407,16 @@ void ASubEarthCharacter::RightSwim(float val)
 	{
 		FVector handLocation = R_MotionController->GetComponentLocation();
 		FVector handDifference = m_RightLastLocation - handLocation;
+		float movementSize = handDifference.Size();
+		handDifference.Normalize();
 		FVector handUp = R_MotionController->GetUpVector();
 
-		float dist = FVector::DotProduct(handUp, handDifference) * m_SpeedSwim;
-		AddMovementInput(handUp, dist);
+		float alignment = FVector::DotProduct(handUp, handDifference);
+		
+		if (alignment > 0.5)
+		{
+			AddMovementInput(handDifference, m_SpeedSwim*movementSize);
+		}
 
 		// Rotate towards the swim direction:
 		//FRotator handRotation = L_MotionController->GetComponentRotation();
@@ -410,7 +426,10 @@ void ASubEarthCharacter::RightSwim(float val)
 		//AddControllerYawInput(angle);
 
 		// Update the last location:
-		m_LeftLastLocation = handLocation;
+		m_RightLastLocation = handLocation;
+
+		
+		
 	}
 }
 
@@ -481,7 +500,7 @@ float ASubEarthCharacter::GetCurrentOxygen()
 // Add or remove oxygen from the player
 void ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
 {
-	if (m_currentOxygen > 0)
+	if (m_currentOxygen > 0.f)
 	{
 		m_currentOxygen = m_currentOxygen + oxygen;
 		m_oxygenPercent = m_currentOxygen / m_initialOxygen;
