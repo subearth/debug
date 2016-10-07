@@ -17,7 +17,12 @@ public:
 
 	AOxygenTank();
 	void GetOxygenTank(void);
-	bool IsOxygenTankPickedUp ;
+	//bool IsOxygenTankPickedUp ;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = oxygenLevels)
+		float m_currentOxygen;
+
+private:
 	
 	
 };

@@ -20,10 +20,14 @@ AInteractable::AInteractable()
 	FString MeshName = name + "Mesh";
 	m_objectMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName(*MeshName));
 	m_objectMesh->SetupAttachment(m_objectRoot);
+	m_objectMesh->SetRelativeLocation(FVector::ZeroVector);
+	m_objectMesh->SetRelativeRotation(FRotator::ZeroRotator);
 
 	FString ColliderName = name + "Collider";
 	m_objectCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
 	m_objectCollider->SetupAttachment(m_objectRoot);
+	m_objectCollider->SetRelativeLocation(FVector::ZeroVector);
+	m_objectCollider->SetRelativeRotation(FRotator::ZeroRotator);
 }
 
 USceneComponent* AInteractable::GetObjectRoot()
