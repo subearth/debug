@@ -23,13 +23,14 @@ public:
 	USceneComponent* GetObjectRoot();
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractableComponents, meta = (AllowPrivateAccess = "true"))
+
+	UPROPERTY(EditAnywhere)
 		USceneComponent* m_objectRoot;
 
 	// Static mesh for the object being picked up
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractableComponents, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* m_objectMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractableComponents, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere)
 		UBoxComponent* m_objectCollider;
 };

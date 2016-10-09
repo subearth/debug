@@ -161,7 +161,7 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 		IsOxygenTankPickedUp = false;
 	}
 
-	UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate);
+	UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate * m_initialOxygen);
 	
 	//UE_LOG(LogTemp, Log, TEXT("Oxygen: %f"), m_currentOxygen);
 	
@@ -379,11 +379,10 @@ void ASubEarthCharacter::LeftSwim(float val)
 		FVector handUp = L_MotionController->GetUpVector();
 
 		float alignment = FVector::DotProduct(handUp, handDifference);
-		FVector movementDirection = handDifference + PlayerCameraComponent->GetForwardVector();
+		
 		if (alignment > 0.5)
 		{
-			//AddMovementInput(handDifference, m_SpeedSwim*movementSize);
-			AddMovementInput(movementDirection, m_SpeedSwim*movementSize);
+			AddMovementInput(handDifference, m_SpeedSwim*movementSize);
 		}
 		//AddMovementInput(handUp, dist);
 		
@@ -413,11 +412,10 @@ void ASubEarthCharacter::RightSwim(float val)
 		FVector handUp = R_MotionController->GetUpVector();
 
 		float alignment = FVector::DotProduct(handUp, handDifference);
-		FVector movementDirection = handDifference + PlayerCameraComponent->GetForwardVector();
+		
 		if (alignment > 0.5)
 		{
-			//AddMovementInput(handDifference, m_SpeedSwim*movementSize);
-			AddMovementInput(movementDirection, m_SpeedSwim*movementSize);
+			AddMovementInput(handDifference, m_SpeedSwim*movementSize);
 		}
 
 		// Rotate towards the swim direction:

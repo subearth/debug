@@ -139,6 +139,10 @@ void UHand::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 	{
 		m_overlappedInteractable = (AInteractable*)otherActor;
 	}
+	/*else if (otherComponent->GetOwner()->IsA(UPocket::StaticClass()))
+	{
+		UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with component: %s"), *(otherComponent->GetName()));
+	}*/
 	else if (otherActor->IsA(ASubEarthCharacter::StaticClass())) // Type check before casting
 	{
 		ASubEarthCharacter* sub = (ASubEarthCharacter*)otherActor;

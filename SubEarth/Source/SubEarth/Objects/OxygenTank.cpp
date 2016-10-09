@@ -8,8 +8,7 @@
 AOxygenTank::AOxygenTank() {
 
 	//Constructor			
-	//IsOxygenTankPickedUp = false;
-	m_currentOxygen = 100;
+	IsOxygenTankPickedUp = false;
 }
 
 void AOxygenTank::GetOxygenTank() {
