@@ -5,12 +5,27 @@
 #include "GameFramework/Actor.h"
 #include "Interactable.generated.h"
 
+class APickup;
+
 UCLASS(abstract)
 class SUBEARTH_API AInteractable : public AActor
 {
 	GENERATED_BODY()
 
 public:
+
+	enum Interactable_e
+	{
+		PICKUP_OBJECT,
+		GENERIC_DOOR
+	};
+
+	enum Pickup_e
+	{
+		COLOR_CHANGING_ORB,
+		GENERIC_KEY
+	};
+
 	// Sets default values for this actor's properties
 	AInteractable();
 
@@ -20,7 +35,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
-	USceneComponent* GetObjectRoot();
+	USceneComponent* GetObjectRoot(void);
+
+	Interactable_e GetInteractableType(void);
+
+	// The primary action for an interactable gets called when the user hand is overlapped
+	// with the interactable and the user pulls the trigger.
+	virtual void ExecutePrimaryAction(APickup* pickup = NULL) PURE_VIRTUAL(AInteractable::ExecutePrimaryAction, );
 
 protected:
 
@@ -33,4 +54,6 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* m_objectCollider;
+
+	Interactable_e m_interactableType;
 };

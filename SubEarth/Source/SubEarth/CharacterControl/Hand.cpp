@@ -101,27 +101,54 @@ void UHand::PressButton1(void)
 /******************************************************************************/
 void UHand::PressButton2(void)
 {
-	if (m_pickupInHand != NULL)
+	// If the hand is not empty
+	if (m_pickupInHand != NULL) 
 	{
-		m_pickupInHand->ExecuteAction1();
+		// If the hand is not overlapping an interactable
+		if (m_overlappedInteractable == NULL) 
+		{
+			m_pickupInHand->ExecuteAction1();
+		}
+		else
+		{
+			m_pickupInHand->ExecuteAction1(m_overlappedInteractable);
+		}
 	}
 }
 
 /******************************************************************************/
 void UHand::PressButton3(void)
 {
+	// If the hand is not empty
 	if (m_pickupInHand != NULL)
 	{
-		m_pickupInHand->ExecuteAction2();
+		// If the hand is not overlapping an interactable
+		if (m_overlappedInteractable == NULL)
+		{
+			m_pickupInHand->ExecuteAction2();
+		}
+		else
+		{
+			m_pickupInHand->ExecuteAction2(m_overlappedInteractable);
+		}
 	}
 }
 
 /******************************************************************************/
 void UHand::PressButton4(void)
 {
+	// If the hand is not empty
 	if (m_pickupInHand != NULL)
 	{
-		m_pickupInHand->ExecuteAction3();
+		// If the hand is not overlapping an interactable
+		if (m_overlappedInteractable == NULL)
+		{
+			m_pickupInHand->ExecuteAction3();
+		}
+		else
+		{
+			m_pickupInHand->ExecuteAction3(m_overlappedInteractable);
+		}
 	}
 }
 
@@ -133,16 +160,12 @@ void UHand::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 	                     bool bFromSweep,
 	                     const FHitResult& SweepResult)
 {
-	//UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with object: %s"), *(otherActor->GetName()));
+	UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with object: %s"), *(otherActor->GetName()));
 
 	if (otherActor->IsA(AInteractable::StaticClass())) // Type check before casting
 	{
 		m_overlappedInteractable = (AInteractable*)otherActor;
 	}
-	/*else if (otherComponent->GetOwner()->IsA(UPocket::StaticClass()))
-	{
-		UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with component: %s"), *(otherComponent->GetName()));
-	}*/
 	else if (otherActor->IsA(ASubEarthCharacter::StaticClass())) // Type check before casting
 	{
 		ASubEarthCharacter* sub = (ASubEarthCharacter*)otherActor;
@@ -178,13 +201,25 @@ void UHand::UseHand()
 	// Is the hand overlapping an interactable object
 	if (m_overlappedInteractable != NULL)
 	{
-		if (m_overlappedInteractable->IsA(APickup::StaticClass())) 
-		{			
-			PickupObject((APickup*)m_overlappedInteractable);
-		}
-		else if (m_overlappedInteractable->IsA(AInteractable::StaticClass()))
+		switch (m_overlappedInteractable->GetInteractableType())
 		{
-			// TODO trigger primary action of interactable
+			case AInteractable::PICKUP_OBJECT:
+			{
+				PickupObject((APickup*)m_overlappedInteractable);
+				break;
+			}
+			case AInteractable::GENERIC_DOOR:
+			{
+				if (m_isHandEmpty)
+				{
+					m_overlappedInteractable->ExecutePrimaryAction();
+				}
+				else
+				{
+					m_overlappedInteractable->ExecutePrimaryAction(m_pickupInHand);
+				}
+				break;
+			}
 		}
 	}
 	else if (m_overlappedPocket != NULL)

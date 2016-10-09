@@ -3,19 +3,19 @@
 #pragma once
 
 #include "Objects/Pickup.h"
-#include "ColorChangingOrb.generated.h"
+#include "GenericKey.generated.h"
 
 /**
-*
-*/
+ * 
+ */
 UCLASS()
-class SUBEARTH_API AColorChangingOrb : public APickup
+class SUBEARTH_API AGenericKey : public APickup
 {
 	GENERATED_BODY()
-
+	
 public:
 
-	AColorChangingOrb();
+	AGenericKey();
 
 	// Inherited. See parent for description
 	virtual void ExecuteAction1(AInteractable* interactable = NULL) override;
@@ -27,5 +27,5 @@ public:
 
 	// Inherited. See parent for description
 	virtual void SetDefaultWorldOrientation(void) override;
-
+	
 };

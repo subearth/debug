@@ -31,6 +31,11 @@ USceneComponent* AInteractable::GetObjectRoot()
 	return m_objectRoot;
 }
 
+AInteractable::Interactable_e  AInteractable::GetInteractableType(void)
+{
+	return m_interactableType;
+}
+
 // Called when the game starts or when spawned
 void AInteractable::BeginPlay()
 {
