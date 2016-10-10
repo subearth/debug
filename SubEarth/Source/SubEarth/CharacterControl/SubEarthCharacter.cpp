@@ -144,6 +144,14 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_oxygenTankSlotLeft->SetRelativePosition(FVector(10.0f, -20.0f, -30.0f));
 	m_oxygenTankSlotRight->SetRelativePosition(FVector(10.0f, +20.0f, -30.0f));
 
+	m_heartCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("HEART"));
+	m_heartCollider->SetupAttachment(PlayerRigComponent);
+	m_heartCollider->SetRelativeLocation(FVector(10.0f, 0.0f, 30.0f));
+	m_heartCollider->SetWorldScale3D(FVector(0.2f, 0.2f, 0.2f));
+	m_heartCollider->bGenerateOverlapEvents = true;
+	m_heartCollider->OnComponentBeginOverlap.AddDynamic(this, &ASubEarthCharacter::HeartTriggerEnter);
+	m_heartCollider->OnComponentEndOverlap.AddDynamic(this, &ASubEarthCharacter::HeartTriggerExit);
+
 
 	m_PlayerControlMode = (int)ePlayerControlMode::PC;
 	SetupControlsPC();
@@ -599,4 +607,26 @@ void ASubEarthCharacter::Inventory()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *p3));
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *p4));
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT("End of Inventory"));
+}
+/******************************************************************************/
+void ASubEarthCharacter::HeartTriggerEnter(UPrimitiveComponent* overlappedComponent,
+	AActor* otherActor,
+	UPrimitiveComponent* otherComponent,
+	int32 otherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult) {
+
+	if (otherActor->IsA(AHeart::StaticClass())) {
+		m_PlayerControlMode = ePlayerControlMode::PROPEL;
+		MapMotionControllersToHands();
+		UE_LOG(LogTemp, Log, TEXT("Player Control Mode: PROPEL"));
+		//Destroy(otherActor);
+	}
+}
+
+void ASubEarthCharacter::HeartTriggerExit(UPrimitiveComponent* overlappedComponent,
+	AActor* otherActor,
+	UPrimitiveComponent* otherComponent,
+	int32 otherBodyIndex) {
+
 }

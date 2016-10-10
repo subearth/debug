@@ -8,6 +8,7 @@
 #include "CharacterControl/PocketComponent.h"
 #include "CharacterControl/OxygenTankSlot.h"
 #include "Objects/Pickup.h"
+#include "Objects/Heart.h"
 //#include <ForceFeedback.h>
 //#include <ForceFeedbackEffect.h>
 #include "SubEarthCharacter.generated.h"
@@ -246,5 +247,21 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 		class UOxygenTankSlot* m_oxygenTankSlotRight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UBoxComponent* m_heartCollider;
+	UFUNCTION()
+		void HeartTriggerEnter(UPrimitiveComponent* overlappedComponent,
+			AActor* otherActor,
+			UPrimitiveComponent* otherComponent,
+			int32 otherBodyIndex,
+			bool bFromSweep,
+			const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void HeartTriggerExit(UPrimitiveComponent* overlappedComponent,
+			AActor* otherActor,
+			UPrimitiveComponent* otherComponent,
+			int32 otherBodyIndex);
 	
 };
