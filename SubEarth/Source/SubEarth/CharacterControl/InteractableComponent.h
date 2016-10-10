@@ -2,40 +2,44 @@
 
 #pragma once
 
-#include "GameFramework/Actor.h"
-#include "Interactable.generated.h"
+#include "Components/ActorComponent.h"
+#include "InteractableComponent.generated.h"
 
 class APickup;
 
 UCLASS(abstract)
-class SUBEARTH_API AInteractable : public AActor
+class SUBEARTH_API UInteractableComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
 
-	enum Interactable_e
+	enum InteractableComponent_e
 	{
-		PICKUP_OBJECT,
-		GENERIC_DOOR
+		POCKET,
+		OXYGEN_TANK_SLOT
 	};
 
-	// Sets default values for this actor's properties
-	AInteractable();
+	// Sets default values for this component's properties
+	UInteractableComponent();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	// Called every frame
-	//virtual void Tick(float DeltaSeconds) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	USceneComponent* GetObjectRoot(void);
-
-	Interactable_e GetInteractableType(void);
+	void SetRelativePosition(FVector position);
+	InteractableComponent_e GetInteractableComponentType(void);
 
 	// The primary action for an interactable gets called when the user hand is overlapped
 	// with the interactable and the user pulls the trigger.
 	virtual void ExecutePrimaryAction(APickup* pickup = NULL) PURE_VIRTUAL(AInteractable::ExecutePrimaryAction, );
+
+	// TODO make this private again!
+	UPROPERTY(EditAnywhere)
+		UBoxComponent* m_objectCollider;
 
 protected:
 
@@ -46,8 +50,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* m_objectMesh;
 
-	UPROPERTY(EditAnywhere)
-		UBoxComponent* m_objectCollider;
+	
 
-	Interactable_e m_interactableType;
+	USceneComponent* m_savedObjectRoot;
+
+	InteractableComponent_e m_interactableComponentType;
 };

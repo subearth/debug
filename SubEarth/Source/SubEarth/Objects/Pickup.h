@@ -15,6 +15,12 @@ class SUBEARTH_API APickup : public AInteractable
 
 public:
 
+	enum Pickup_e
+	{
+		COLOR_CHANGING_ORB,
+		GENERIC_KEY
+	};
+
 	APickup();
 
 	// Inherited. See parent for description

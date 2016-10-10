@@ -16,20 +16,24 @@ AGenericKey::AGenericKey()
 /******************************************************************************/
 void AGenericKey::ExecuteAction1(AInteractable* interactable)
 {
-	Interactable_e interactable_type = interactable->GetInteractableType();
-
-	if (interactable_type == GENERIC_DOOR)
+	if (interactable != NULL)
 	{
-		AGenericDoor* door = (AGenericDoor*)interactable;
-		door->ToggleLock();
+		Interactable_e interactable_type = interactable->GetInteractableType();
 
-		if (door->IsDoorLocked())
+		if (interactable_type == GENERIC_DOOR)
 		{
-			UE_LOG(LogTemp, Log, TEXT("AGenericKey::ExecuteAction1  DOOR IS LOCKED"));
-		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("AGenericKey::ExecuteAction1  DOOR IS UNLOCKED"));
+			AGenericDoor* door = (AGenericDoor*)interactable;
+			door->ToggleLock();
+
+			// This is just for debugging
+			if (door->IsDoorLocked())
+			{
+				UE_LOG(LogTemp, Log, TEXT("AGenericKey::ExecuteAction1  DOOR IS LOCKED"));
+			}
+			else
+			{
+				UE_LOG(LogTemp, Log, TEXT("AGenericKey::ExecuteAction1  DOOR IS UNLOCKED"));
+			}
 		}
 	}
 }

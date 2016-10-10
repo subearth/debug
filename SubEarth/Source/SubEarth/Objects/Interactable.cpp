@@ -5,12 +5,9 @@
 
 #include "CharacterControl/SubEarthCharacter.h"
 
-// Sets default values
+/******************************************************************************/
 AInteractable::AInteractable()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 	FString name = GetName();
 
 	FString RootName = name + "Root";
@@ -26,27 +23,21 @@ AInteractable::AInteractable()
 	m_objectCollider->SetupAttachment(m_objectRoot);
 }
 
+/******************************************************************************/
 USceneComponent* AInteractable::GetObjectRoot()
 {
 	return m_objectRoot;
 }
 
+/******************************************************************************/
 AInteractable::Interactable_e  AInteractable::GetInteractableType(void)
 {
 	return m_interactableType;
 }
 
-// Called when the game starts or when spawned
+/******************************************************************************/
 void AInteractable::BeginPlay()
 {
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Log, TEXT("AInteractable BeginPlay started"));
 }
-
-// Called every frame
-void AInteractable::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

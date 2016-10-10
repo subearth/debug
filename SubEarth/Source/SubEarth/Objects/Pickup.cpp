@@ -9,7 +9,8 @@ APickup::APickup()
 	m_interactableType = PICKUP_OBJECT;
 }
 
-APickup::Pickup_e  APickup::GetPickupType(void)
+/******************************************************************************/
+APickup::Pickup_e APickup::GetPickupType(void)
 {
 	return m_pickupType;
 }

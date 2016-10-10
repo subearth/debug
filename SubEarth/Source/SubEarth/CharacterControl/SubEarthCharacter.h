@@ -3,9 +3,11 @@
 #pragma once
 
 #include "GameFramework/Character.h"
+#include "CharacterControl/InteractableComponent.h"
 #include "CharacterControl/Hand.h"
+#include "CharacterControl/PocketComponent.h"
+#include "CharacterControl/OxygenTankSlot.h"
 #include "Objects/Pickup.h"
-#include "CharacterControl/Pocket.h"
 //#include <ForceFeedback.h>
 //#include <ForceFeedbackEffect.h>
 #include "SubEarthCharacter.generated.h"
@@ -65,9 +67,6 @@ public:
 	/****************************************/
 	/*			START HUD VARAIBLES			*/
 	/****************************************/
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
-		bool IsOxygenTankPickedUp;
 
 	/*The player's initial oxygen level*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
@@ -142,7 +141,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = rightHand, meta = (AllowPrivateAccess = "true"))
 		class UHand* m_rightHand;
 
-	UPocket* GetOverlappedPocket(UPrimitiveComponent* otherComponent);
+	UInteractableComponent* GetOverlappedComponent(UPrimitiveComponent* otherComponent);
 
 protected:
 	// Called to bind functionality to input
@@ -234,12 +233,18 @@ private:
 
 	// The Sub earth character has four pockets to store picked up objects
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class UPocket* m_pocketLeftShoulder;
+		class UPocketComponent* m_pocketLeftShoulder;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class UPocket* m_pocketRightShoulder;
+		class UPocketComponent* m_pocketRightShoulder;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class UPocket* m_pocketLeftLeg;
+		class UPocketComponent* m_pocketLeftLeg;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		class UPocket* m_pocketRightLeg;
+		class UPocketComponent* m_pocketRightLeg;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UOxygenTankSlot* m_oxygenTankSlotLeft;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UOxygenTankSlot* m_oxygenTankSlotRight;
 	
 };

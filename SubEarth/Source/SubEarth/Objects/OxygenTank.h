@@ -16,8 +16,16 @@ class SUBEARTH_API AOxygenTank : public APickup
 public:
 
 	AOxygenTank();
-	void GetOxygenTank(void);
-	bool IsOxygenTankPickedUp ;
-	
-	
+
+	// Inherited. See parent for description
+	virtual void ExecuteAction1(AInteractable* interactable = NULL) override;
+	virtual void ExecuteAction2(AInteractable* interactable = NULL) override;
+	virtual void ExecuteAction3(AInteractable* interactable = NULL) override;
+
+	// Inherited. See parent for description
+	virtual void SetDefaultInHandOrientation(void) override;
+
+	// Inherited. See parent for description
+	virtual void SetDefaultWorldOrientation(void) override;
+
 };

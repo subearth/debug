@@ -39,7 +39,7 @@ UHand::UHand()
 	m_isHandEmpty = true;
 	m_pickupInHand = NULL;
 	m_overlappedInteractable = NULL;
-	m_overlappedPocket = NULL;
+	m_overlappedInterComp = NULL;
 }
 
 // Called when the game starts
@@ -73,11 +73,6 @@ void UHand::PickupObject(APickup* pickup_obj)
 	m_isHandEmpty = false;
 
 	UE_LOG(LogTemp, Log, TEXT("AHand::PickupObject %s"), *(m_pickupInHand->GetName()));
-
-	ASubEarthCharacter* MyCharacter = Cast<ASubEarthCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
-	MyCharacter->IsOxygenTankPickedUp = true;
-	
-
 }
 
 /******************************************************************************/
@@ -169,13 +164,12 @@ void UHand::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 	else if (otherActor->IsA(ASubEarthCharacter::StaticClass())) // Type check before casting
 	{
 		ASubEarthCharacter* sub = (ASubEarthCharacter*)otherActor;
+		UInteractableComponent* component = sub->GetOverlappedComponent(otherComponent);
 
-		UPocket* temp = sub->GetOverlappedPocket(otherComponent);
-
-		if (temp != NULL)
+		if (component != NULL)
 		{
 			UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with object: %s"), *(otherActor->GetName()));
-			m_overlappedPocket = temp;
+			m_overlappedInterComp = component;
 		}
 	}
 	else
@@ -192,7 +186,7 @@ void UHand::EndOverlap(UPrimitiveComponent* overlappedComponent,
 {
 	UE_LOG(LogTemp, Log, TEXT("UHand::EndOverlap with object: %s"), *(otherActor->GetName()));
 	m_overlappedInteractable = NULL;
-	m_overlappedPocket = NULL;
+	m_overlappedInterComp = NULL;
 }
 
 /******************************************************************************/
@@ -222,31 +216,40 @@ void UHand::UseHand()
 			}
 		}
 	}
-	else if (m_overlappedPocket != NULL)
+	else if (m_overlappedInterComp != NULL)
 	{
-		if (m_overlappedPocket->IsA(UPocket::StaticClass()))
+		switch (m_overlappedInterComp->GetInteractableComponentType())
 		{
-			// Interact with the object. This could be like the "enter" key
-			UPocket* pocket = (UPocket*)m_overlappedPocket;
+			case UInteractableComponent::POCKET:
+			{
+				UPocketComponent* pocket = (UPocketComponent*)m_overlappedInterComp;
 
-			if (pocket->IsPocketEmpty() && !m_isHandEmpty)
-			{
-				pocket->PlaceItemInPocket(m_pickupInHand);
-				m_isHandEmpty = true;
-				m_pickupInHand = NULL;
-				// TODO need to properly remove the object from the hand 
-				// place in pocket.
+				if (pocket->IsPocketEmpty() && !m_isHandEmpty)
+				{
+					pocket->PlaceItemInPocket(m_pickupInHand);
+					m_isHandEmpty = true;
+					m_pickupInHand = NULL;
+				}
+				else if (!pocket->IsPocketEmpty() && m_isHandEmpty)
+				{
+					APickup* pickup = pocket->TakeItemOutOfPocket();
+					PickupObject(pickup);
+				}
+				else if (!pocket->IsPocketEmpty() && !m_isHandEmpty)
+				{
+					APickup* pickup = pocket->TakeItemOutOfPocket();
+					pocket->PlaceItemInPocket(m_pickupInHand);
+					PickupObject(pickup);
+				}
+				break;
 			}
-			else if (!pocket->IsPocketEmpty() && m_isHandEmpty)
+			case UInteractableComponent::OXYGEN_TANK_SLOT:
 			{
-				APickup* pickup = pocket->TakeItemOutOfPocket();
-				PickupObject(pickup);
-			}
-			else if (!pocket->IsPocketEmpty() && !m_isHandEmpty)
-			{
-				APickup* pickup = pocket->TakeItemOutOfPocket();
-				pocket->PlaceItemInPocket(m_pickupInHand);
-				PickupObject(pickup);
+				UOxygenTankSlot* ots = (UOxygenTankSlot*)m_overlappedInterComp;
+				// TODO 
+				// Your hand has overlapped an oxygen tank slot and the trigger
+				// was pulled. 
+				break;
 			}
 		}
 	}

@@ -2,28 +2,24 @@
 
 #pragma once
 
-#include "Objects/Interactable.h"
-#include "GenericDoor.generated.h"
+#include "CharacterControl/InteractableComponent.h"
+#include "Objects/Pickup.h"
+#include "OxygenTankSlot.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SUBEARTH_API AGenericDoor : public AInteractable
+class SUBEARTH_API UOxygenTankSlot : public UInteractableComponent
 {
 	GENERATED_BODY()
 	
 public:
 
-	AGenericDoor();
+	UOxygenTankSlot();
 
 	// The primary action for the door is to open if it is unlocked.
 	virtual void ExecutePrimaryAction(APickup* pickup = NULL) override;
-	
-	void ToggleLock(void);
-	bool IsDoorLocked(void);
 
-private:
 
-	bool m_isLocked;
 };

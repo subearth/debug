@@ -5,7 +5,7 @@
 #include "Components/ActorComponent.h"
 #include "Objects/Interactable.h"
 #include "Objects/Pickup.h"
-#include "CharacterControl/Pocket.h"
+#include "CharacterControl/PocketComponent.h"
 #include "MotionControllerComponent.h"
 #include "Objects/OxygenTank.h"
 #include "Hand.generated.h"
@@ -65,7 +65,7 @@ private:
 
 	/* The object that the hand collidor is overlapping */
 	AInteractable* m_overlappedInteractable;
-	UPocket* m_overlappedPocket;
+	UInteractableComponent* m_overlappedInterComp;
 
 	/* The current object in the hand. NULL if hand is empty */
 	APickup* m_pickupInHand;

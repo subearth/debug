@@ -111,16 +111,11 @@ ASubEarthCharacter::ASubEarthCharacter()
 	PlayerRigComponent->SetupAttachment(GetCapsuleComponent());
 	PlayerRigComponent->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
 
-	/* TODO 
-	Ran out of time. I was trying to add the pockets to the actor. The pockets are
-	interactable objects. Essentially, anything the hands can interact with are interactable
-	objects. Take a look "UHand::UseHand()" for how I intended to use it. */
-
 	// Create four pockets
-	m_pocketLeftShoulder = CreateDefaultSubobject<UPocket>(TEXT("LEFT_SHOULD_POCKET"));
-	m_pocketRightShoulder = CreateDefaultSubobject<UPocket>(TEXT("RIGHT_SHOULD_POCKET"));
-	m_pocketLeftLeg = CreateDefaultSubobject<UPocket>(TEXT("LEFT_LEG_POCKET"));
-	m_pocketRightLeg = CreateDefaultSubobject<UPocket>(TEXT("RIGHT_LEG_POCKET"));
+	m_pocketLeftShoulder = CreateDefaultSubobject<UPocketComponent>(TEXT("LEFT_SHOULD_POCKET"));
+	m_pocketRightShoulder = CreateDefaultSubobject<UPocketComponent>(TEXT("RIGHT_SHOULD_POCKET"));
+	m_pocketLeftLeg = CreateDefaultSubobject<UPocketComponent>(TEXT("LEFT_LEG_POCKET"));
+	m_pocketRightLeg = CreateDefaultSubobject<UPocketComponent>(TEXT("RIGHT_LEG_POCKET"));
 
 	// Attach the pockets to the RIG component
 	m_pocketLeftShoulder->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
@@ -134,6 +129,22 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_pocketLeftLeg->SetRelativePosition(FVector(10.0f, -20.0f, 0.0f));
 	m_pocketRightLeg->SetRelativePosition(FVector(10.0f, 20.0f, 0.0f));
 	
+	// Create two oxygen tank slots
+	m_oxygenTankSlotLeft = CreateDefaultSubobject<UOxygenTankSlot>(TEXT("BACK_LEFT_OXYGEN_SLOT"));
+	m_oxygenTankSlotRight = CreateDefaultSubobject<UOxygenTankSlot>(TEXT("BACK_RIGHT_OXYGEN_SLOT"));
+
+	// Attach the oxygen tank slots to the RIG component
+	m_oxygenTankSlotLeft->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
+	m_oxygenTankSlotRight->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
+
+
+	// TODO location was picked arbitrarly. Need to setup actual location
+
+	// Setup the location of the oxygen tank slots
+	m_oxygenTankSlotLeft->SetRelativePosition(FVector(10.0f, -20.0f, -30.0f));
+	m_oxygenTankSlotRight->SetRelativePosition(FVector(10.0f, +20.0f, -30.0f));
+
+
 	m_PlayerControlMode = (int)ePlayerControlMode::PC;
 	SetupControlsPC();
 }
@@ -154,12 +165,14 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
-	// Update the player Oxygen levels:
-	if (IsOxygenTankPickedUp == true)
-	{
-		m_currentOxygen = m_initialOxygen;
-		IsOxygenTankPickedUp = false;
-	}
+	// TODO
+	// The oxygen tank is a pickup
+	// The SubEarth character needs to have something like a Pocket for oxygen tanks
+	// When the user picks up the oxygen tank, and puts it in the oxygen tank holder
+	// then the oxygen level increases
+
+
+	m_currentOxygen = m_initialOxygen;
 
 	UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate * m_initialOxygen);
 	
@@ -180,9 +193,9 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 }
 
 /******************************************************************************/
-UPocket* ASubEarthCharacter::GetOverlappedPocket(UPrimitiveComponent* otherComponent)
+UInteractableComponent* ASubEarthCharacter::GetOverlappedComponent(UPrimitiveComponent* otherComponent)
 {
-	UPocket* ret = NULL;
+	UInteractableComponent* ret = NULL;
 
 	if (otherComponent == m_pocketLeftShoulder->m_objectCollider)
 	{
@@ -200,9 +213,13 @@ UPocket* ASubEarthCharacter::GetOverlappedPocket(UPrimitiveComponent* otherCompo
 	{
 		ret = m_pocketRightLeg;
 	}
-	else
+	else if (otherComponent == m_oxygenTankSlotLeft->m_objectCollider)
 	{
-
+		ret = m_oxygenTankSlotLeft;
+	}
+	else if (otherComponent == m_oxygenTankSlotRight->m_objectCollider)
+	{
+		ret = m_oxygenTankSlotRight;
 	}
 
 	return ret;
