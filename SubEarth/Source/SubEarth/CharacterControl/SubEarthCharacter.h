@@ -95,6 +95,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
 		FString m_currentOxygenString;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
+		float m_leftOxygenTank;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
+		float m_rightOxygenTank;
+
 	/****************************************/
 	/*			END HUD VARAIBLES			*/
 	/****************************************/
@@ -115,7 +121,7 @@ public:
 	//*@param Oxygen This is the amount by which the player's Oxygen level will change  . It can be positive or negative.
 	//*/
 	UFUNCTION(BlueprintCallable, Category = "OxygenTank")
-		void UpdateCurrentOxygen(float Oxygen);
+		float UpdateCurrentOxygen(float Oxygen);
 
 	/****************************************/
 	/*			END HUD METHODS			*/

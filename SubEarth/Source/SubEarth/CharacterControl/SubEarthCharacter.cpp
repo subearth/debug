@@ -31,7 +31,7 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_currentOxygen = m_initialOxygen;
 	m_oxygenUseRate = 0.05f;
 	m_oxygenPercent = 1.0f;
-	m_oxygenWarning = 0.0f;
+	m_oxygenWarning = 0.0f; 
 
 	m_initialOxygenString = FString::SanitizeFloat(m_initialOxygen);
 	m_currentOxygenString = FString::SanitizeFloat(m_currentOxygen);
@@ -179,12 +179,16 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 	// When the user picks up the oxygen tank, and puts it in the oxygen tank holder
 	// then the oxygen level increases
 
+	//m_currentOxygen = m_initialOxygen;
 
-	m_currentOxygen = m_initialOxygen;
+	m_leftOxygenTank = UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate/2 * m_initialOxygen/2);
+	m_rightOxygenTank = UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate/2 * m_initialOxygen/2);
 
-	UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate * m_initialOxygen);
+	//UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate * m_initialOxygen);
 	
-	//UE_LOG(LogTemp, Log, TEXT("Oxygen: %f"), m_currentOxygen);
+	UE_LOG(LogTemp, Log, TEXT("Left Oxygen: %f"), m_leftOxygenTank);
+	UE_LOG(LogTemp, Log, TEXT("Right Oxygen: %f"), m_rightOxygenTank);
+
 	
 	GetCapsuleComponent()->UpdateChildTransforms();
 	if (m_PlayerControlMode != (int)ePlayerControlMode::PC)
@@ -523,7 +527,7 @@ float ASubEarthCharacter::GetCurrentOxygen()
 
 /******************************************************************************/
 // Add or remove oxygen from the player
-void ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
+float ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
 {
 	if (m_currentOxygen > 0.f)
 	{
@@ -545,6 +549,8 @@ void ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
 	}
 	m_initialOxygenString = FString::FromInt((int)m_initialOxygen);
 	m_currentOxygenString = FString::FromInt((int)m_currentOxygen);
+
+	return m_currentOxygen;
 }
 
 /******************************************************************************/
