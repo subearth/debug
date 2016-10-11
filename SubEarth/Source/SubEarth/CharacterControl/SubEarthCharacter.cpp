@@ -27,14 +27,13 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_SpeedVehicle = 1.0f;
 	m_RotateSpeedVehicle = 1.0f;
 
-	m_initialOxygen = 400.0f;
-	m_currentOxygen = m_initialOxygen;
-	m_oxygenUseRate = 0.05f;
-	m_oxygenPercent = 1.0f;
-	m_oxygenWarning = 0.0f; 
-
-	m_initialOxygenString = FString::SanitizeFloat(m_initialOxygen);
-	m_currentOxygenString = FString::SanitizeFloat(m_currentOxygen);
+	m_initialOxygen = 60.f;
+	m_currentOxygen = 60.f;
+	m_oxygenUseRate = 1.f;
+	m_leftOxygenPercent = 0.0;
+	m_rightOxygenPercent = 0.0;
+	m_leftOxygenString = FString::SanitizeFloat(0.f);
+	m_rightOxygenString = FString::SanitizeFloat(0.f);
 
 	// Initialize components:
 
@@ -141,8 +140,8 @@ ASubEarthCharacter::ASubEarthCharacter()
 	// TODO location was picked arbitrarly. Need to setup actual location
 
 	// Setup the location of the oxygen tank slots
-	m_oxygenTankSlotLeft->SetRelativePosition(FVector(10.0f, -20.0f, -30.0f));
-	m_oxygenTankSlotRight->SetRelativePosition(FVector(10.0f, +20.0f, -30.0f));
+	m_oxygenTankSlotLeft->SetRelativePosition(FVector(-10.0f, -35.0f, 0.0f));
+	m_oxygenTankSlotRight->SetRelativePosition(FVector(-10.0f, +35.0f, 0.0f));
 
 	m_heartCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("HEART"));
 	m_heartCollider->SetupAttachment(PlayerRigComponent);
@@ -173,35 +172,19 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
-	// TODO
-	// The oxygen tank is a pickup
-	// The SubEarth character needs to have something like a Pocket for oxygen tanks
-	// When the user picks up the oxygen tank, and puts it in the oxygen tank holder
-	// then the oxygen level increases
-
-	//m_currentOxygen = m_initialOxygen;
-
-	m_leftOxygenTank = UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate/2 * m_initialOxygen/2);
-	m_rightOxygenTank = UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate/2 * m_initialOxygen/2);
-
-	//UpdateCurrentOxygen(-DeltaTime * m_oxygenUseRate * m_initialOxygen);
-	
-	UE_LOG(LogTemp, Log, TEXT("Left Oxygen: %f"), m_leftOxygenTank);
-	UE_LOG(LogTemp, Log, TEXT("Right Oxygen: %f"), m_rightOxygenTank);
-
+	UpdateCurrentOxygen(DeltaTime * m_oxygenUseRate);
 	
 	GetCapsuleComponent()->UpdateChildTransforms();
 	if (m_PlayerControlMode != (int)ePlayerControlMode::PC)
 	{
-		PlayerRigComponent->SetWorldRotation(FRotator(0.f, PlayerCameraComponent->GetComponentRotation().Yaw, 0.f));
+		if (PlayerCameraComponent->GetComponentRotation().Pitch > -63.0f)
+		{
+			PlayerRigComponent->SetWorldRotation(FRotator(0.f, PlayerCameraComponent->GetComponentRotation().Yaw, 0.f));
+		}
 	}
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(0.0f, EOrientPositionSelector::Position);
 	
 	//UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(m_PlayerHMDRotation, m_PlayerHMDLocation);
-
-	/*m_LeftLastLocation = L_MotionController->GetComponentLocation();
-	m_RightLastLocation = R_MotionController->GetComponentLocation();*/
-
 }
 
 /******************************************************************************/
@@ -529,28 +512,89 @@ float ASubEarthCharacter::GetCurrentOxygen()
 // Add or remove oxygen from the player
 float ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
 {
-	if (m_currentOxygen > 0.f)
+	float oxygenToSpendLeft = oxygen / 2.f;
+	float oxygenToSpendRight = oxygen / 2.f;
+	// Get our tank levels:
+	float leftInitial = m_oxygenTankSlotLeft->GetTankInitialLevel();
+	float rightInitial = m_oxygenTankSlotRight->GetTankInitialLevel();
+	float leftLevel = m_oxygenTankSlotLeft->GetTankCurrentLevel();
+	float rightLevel = m_oxygenTankSlotRight->GetTankCurrentLevel();
+	
+	// Use what we can on the left:
+	if (leftLevel > oxygenToSpendLeft)
 	{
-		m_currentOxygen = m_currentOxygen + oxygen;
-		m_oxygenPercent = m_currentOxygen / m_initialOxygen;
+		leftLevel -= oxygenToSpendLeft;
+		oxygenToSpendLeft = 0.f;
 	}
 	else
 	{
-		m_currentOxygen = 0.f;
-		m_oxygenPercent = 0.f;
+		oxygenToSpendLeft -= leftLevel;
+		leftLevel = 0.f;
 	}
-	if (m_oxygenPercent < 0.2f)
-	{
-		m_oxygenWarning = m_oxygenPercent;
-	}
-	else
-	{
-		m_oxygenWarning = 0.f;
-	}
-	m_initialOxygenString = FString::FromInt((int)m_initialOxygen);
-	m_currentOxygenString = FString::FromInt((int)m_currentOxygen);
 
-	return m_currentOxygen;
+	// Use what we can on the right:
+	if (rightLevel > oxygenToSpendRight)
+	{
+		rightLevel -= oxygenToSpendRight;
+		oxygenToSpendRight = 0.f;
+	}
+	else
+	{
+		oxygenToSpendRight -= rightLevel;
+		rightLevel = 0.f;
+	}
+
+	// Check what we have left to spend:
+	float remaining = oxygenToSpendLeft + oxygenToSpendRight;
+	
+	// Try to use it on the left:
+	if (remaining > 0.f)
+	{
+		if (leftLevel > remaining)
+		{
+			leftLevel -= remaining;
+			remaining = 0.f;
+		}
+		else
+		{
+			remaining -= leftLevel;
+			leftLevel = 0.f;
+		}
+	}
+
+	// Try to use it on the right:
+	if (remaining > 0.f)
+	{
+		if (rightLevel > remaining)
+		{
+			rightLevel -= remaining;
+			remaining = 0.f;
+		}
+		else
+		{
+			remaining -= rightLevel;
+			rightLevel = 0.f;
+		}
+	}
+
+	// Begin suffocation if we still have some to spend:
+	if (remaining > 0.f)
+	{
+		// Slowly die!
+	}
+
+	// Update our tanks on where they are:
+	m_oxygenTankSlotLeft->SetTankCurrentLevel(leftLevel);
+	m_oxygenTankSlotRight->SetTankCurrentLevel(rightLevel);
+
+	// Update the HUD data:
+	m_leftOxygenPercent = 0.31f + 0.19f * (leftLevel / leftInitial);
+	m_rightOxygenPercent = 0.31f + 0.19f * (rightLevel / rightInitial);
+
+	m_leftOxygenString = FString::FromInt((int)leftLevel);
+	m_rightOxygenString = FString::FromInt((int)rightLevel);	
+
+	return 0;
 }
 
 /******************************************************************************/

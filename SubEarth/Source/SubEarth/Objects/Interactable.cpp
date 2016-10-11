@@ -9,7 +9,7 @@
 AInteractable::AInteractable()
 {
 	FString name = GetName();
-
+	
 	FString RootName = name + "Root";
 	m_objectRoot = CreateDefaultSubobject<USceneComponent>(*RootName);
 	RootComponent = m_objectRoot;
@@ -17,7 +17,7 @@ AInteractable::AInteractable()
 	FString MeshName = name + "Mesh";
 	m_objectMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName(*MeshName));
 	m_objectMesh->SetupAttachment(m_objectRoot);
-
+	
 	FString ColliderName = name + "Collider";
 	m_objectCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
 	m_objectCollider->SetupAttachment(m_objectRoot);

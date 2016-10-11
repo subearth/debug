@@ -81,25 +81,33 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
 		float m_oxygenUseRate;
 
-	/*The player's oxygen percentage*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
-		float m_oxygenPercent;
-
-	/*The player's warning*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
-		float m_oxygenWarning;
+		FString m_leftOxygenString;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
-		FString m_initialOxygenString;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
-		FString m_currentOxygenString;
+		FString m_rightOxygenString;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
 		float m_leftOxygenTank;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
 		float m_rightOxygenTank;
+
+	/*The player's left tank's oxygen level*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
+		float m_leftOxygenLevel;
+
+	/*The player's left tank's oxygen percentage*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
+		float m_leftOxygenPercent;
+
+	/*The player's right tank's oxygen level*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
+		float m_rightOxygenLevel;
+
+	/*The player's right tank's oxygen percentage*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
+		float m_rightOxygenPercent;
 
 	/****************************************/
 	/*			END HUD VARAIBLES			*/

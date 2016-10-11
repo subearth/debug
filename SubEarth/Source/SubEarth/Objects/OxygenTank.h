@@ -28,4 +28,11 @@ public:
 	// Inherited. See parent for description
 	virtual void SetDefaultWorldOrientation(void) override;
 
+	float GetInitialOxygen(void);
+	float GetCurrentOxygen(void);
+	void SetCurrentOxygen(float value);
+
+private:
+	float m_initialOxygen;
+	float m_currentOxygen;
 };

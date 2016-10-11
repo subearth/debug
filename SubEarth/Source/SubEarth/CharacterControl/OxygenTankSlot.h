@@ -21,5 +21,15 @@ public:
 	// The primary action for the door is to open if it is unlocked.
 	virtual void ExecutePrimaryAction(APickup* pickup = NULL) override;
 
+	bool IsEmpty(void);
+	APickup* TakeTankFromSlot(void);
+	void PlaceTankInSlot(APickup* pickup);
+	void DropTankInSlot(void);
+	
+	float GetTankInitialLevel(void);
+	float GetTankCurrentLevel(void);
+	void SetTankCurrentLevel(float value);
 
+private:
+	APickup* m_tankInSlot;
 };

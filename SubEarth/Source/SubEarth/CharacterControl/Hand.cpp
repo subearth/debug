@@ -234,12 +234,14 @@ void UHand::UseHand()
 				{
 					APickup* pickup = pocket->TakeItemOutOfPocket();
 					PickupObject(pickup);
+					m_isHandEmpty = false;
 				}
 				else if (!pocket->IsPocketEmpty() && !m_isHandEmpty)
 				{
 					APickup* pickup = pocket->TakeItemOutOfPocket();
 					pocket->PlaceItemInPocket(m_pickupInHand);
 					PickupObject(pickup);
+					m_isHandEmpty = false;
 				}
 				break;
 			}
@@ -247,8 +249,42 @@ void UHand::UseHand()
 			{
 				UOxygenTankSlot* ots = (UOxygenTankSlot*)m_overlappedInterComp;
 				// TODO 
-				// Your hand has overlapped an oxygen tank slot and the trigger
-				// was pulled. 
+				// Your hand has overlapped an Oxygen Tank Slot and the trigger was pulled. 
+
+				// Ensure we are holding an oxygen tank:
+				
+				// Tank Slot is empty and we have something in our hand
+				if (ots->IsEmpty() && !m_isHandEmpty)
+				{
+					if (m_pickupInHand->GetPickupType() == APickup::OXYGEN_TANK)
+					{
+						// Place the Tank in the Tank Slot
+						ots->PlaceTankInSlot(m_pickupInHand);
+						m_isHandEmpty = true;
+						m_pickupInHand = NULL;
+					}
+				}
+				// Tank Slot has a Tank and our hand is empty:
+				else if (!ots->IsEmpty() && m_isHandEmpty)
+				{
+					// Take the Tank from the Tank Slot:
+					APickup* pickup = ots->TakeTankFromSlot();
+					PickupObject(pickup);
+					m_isHandEmpty = false;
+				}
+				// Tank Slot has a Tank and our Hand has a Tank: 
+				else if (!ots->IsEmpty() && !m_isHandEmpty)
+				{
+					if (m_pickupInHand->GetPickupType() == APickup::OXYGEN_TANK)
+					{
+						// Drop tank and replace with Tank in Hand:
+						ots->DropTankInSlot();
+						ots->PlaceTankInSlot(m_pickupInHand);
+						m_isHandEmpty = true;
+						m_pickupInHand = NULL;
+					}
+				}
+				
 				break;
 			}
 		}

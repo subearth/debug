@@ -39,15 +39,21 @@ public:
 
 protected:
 
-	UPROPERTY(EditAnywhere)
+	//UPROPERTY(EditAnywhere)
+	//	USceneComponent* m_objectRoot;
+
+	//// Static mesh for the object being picked up
+	//UPROPERTY(EditAnywhere)
+	//	UStaticMeshComponent* m_objectMesh;
+
+	//UPROPERTY(EditAnywhere)
+	//	UBoxComponent* m_objectCollider;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractableComponent, meta = (AllowPrivateAccess = "true"))
 		USceneComponent* m_objectRoot;
-
-	// Static mesh for the object being picked up
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractableComponent, meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* m_objectMesh;
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractableComponent, meta = (AllowPrivateAccess = "true"))
 		UBoxComponent* m_objectCollider;
-
 	Interactable_e m_interactableType;
 };

@@ -18,7 +18,8 @@ public:
 	enum Pickup_e
 	{
 		COLOR_CHANGING_ORB,
-		GENERIC_KEY
+		GENERIC_KEY,
+		OXYGEN_TANK
 	};
 
 	APickup();
