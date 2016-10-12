@@ -19,7 +19,7 @@ public:
 
 	// The primary action for the door is to open if it is unlocked.
 	virtual void ExecutePrimaryAction(APickup* pickup = NULL) override;
-	
+
 	void ToggleLock(void);
 	bool IsDoorLocked(void);
 

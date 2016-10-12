@@ -155,10 +155,11 @@ void UHand::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 	                     bool bFromSweep,
 	                     const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with object: %s"), *(otherActor->GetName()));
+	
 
 	if (otherActor->IsA(AInteractable::StaticClass())) // Type check before casting
 	{
+		UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with object: %s"), *(otherActor->GetName()));
 		m_overlappedInteractable = (AInteractable*)otherActor;
 	}
 	else if (otherActor->IsA(ASubEarthCharacter::StaticClass())) // Type check before casting
@@ -192,7 +193,7 @@ void UHand::EndOverlap(UPrimitiveComponent* overlappedComponent,
 /******************************************************************************/
 void UHand::UseHand()
 {
-	// Is the hand overlapping an interactable object
+	// If the hand is overlapping an interactable object in the world
 	if (m_overlappedInteractable != NULL)
 	{
 		switch (m_overlappedInteractable->GetInteractableType())
@@ -214,8 +215,14 @@ void UHand::UseHand()
 				}
 				break;
 			}
+			case AInteractable::TOOL_BOX:
+			{
+				m_overlappedInteractable->ExecutePrimaryAction();
+				break;
+			}
 		}
 	}
+	// Else if the hand is overlapping an interactable component on the actor
 	else if (m_overlappedInterComp != NULL)
 	{
 		switch (m_overlappedInterComp->GetInteractableComponentType())
@@ -234,25 +241,20 @@ void UHand::UseHand()
 				{
 					APickup* pickup = pocket->TakeItemOutOfPocket();
 					PickupObject(pickup);
-					m_isHandEmpty = false;
 				}
 				else if (!pocket->IsPocketEmpty() && !m_isHandEmpty)
 				{
 					APickup* pickup = pocket->TakeItemOutOfPocket();
 					pocket->PlaceItemInPocket(m_pickupInHand);
 					PickupObject(pickup);
-					m_isHandEmpty = false;
 				}
 				break;
 			}
 			case UInteractableComponent::OXYGEN_TANK_SLOT:
 			{
 				UOxygenTankSlot* ots = (UOxygenTankSlot*)m_overlappedInterComp;
-				// TODO 
-				// Your hand has overlapped an Oxygen Tank Slot and the trigger was pulled. 
 
-				// Ensure we are holding an oxygen tank:
-				
+				// Ensure we are holding an oxygen tank.
 				// Tank Slot is empty and we have something in our hand
 				if (ots->IsEmpty() && !m_isHandEmpty)
 				{
@@ -270,7 +272,6 @@ void UHand::UseHand()
 					// Take the Tank from the Tank Slot:
 					APickup* pickup = ots->TakeTankFromSlot();
 					PickupObject(pickup);
-					m_isHandEmpty = false;
 				}
 				// Tank Slot has a Tank and our Hand has a Tank: 
 				else if (!ots->IsEmpty() && !m_isHandEmpty)

@@ -136,9 +136,6 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_oxygenTankSlotLeft->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
 	m_oxygenTankSlotRight->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
 
-
-	// TODO location was picked arbitrarly. Need to setup actual location
-
 	// Setup the location of the oxygen tank slots
 	m_oxygenTankSlotLeft->SetRelativePosition(FVector(-10.0f, -35.0f, 0.0f));
 	m_oxygenTankSlotRight->SetRelativePosition(FVector(-10.0f, +35.0f, 0.0f));
@@ -150,7 +147,6 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_heartCollider->bGenerateOverlapEvents = true;
 	m_heartCollider->OnComponentBeginOverlap.AddDynamic(this, &ASubEarthCharacter::HeartTriggerEnter);
 	m_heartCollider->OnComponentEndOverlap.AddDynamic(this, &ASubEarthCharacter::HeartTriggerExit);
-
 
 	m_PlayerControlMode = (int)ePlayerControlMode::PC;
 	SetupControlsPC();
@@ -664,9 +660,11 @@ void ASubEarthCharacter::HeartTriggerEnter(UPrimitiveComponent* overlappedCompon
 	UPrimitiveComponent* otherComponent,
 	int32 otherBodyIndex,
 	bool bFromSweep,
-	const FHitResult& SweepResult) {
+	const FHitResult& SweepResult) 
+{
 
-	if (otherActor->IsA(AHeart::StaticClass())) {
+	if (otherActor->IsA(AHeart::StaticClass())) 
+	{
 		m_PlayerControlMode = ePlayerControlMode::PROPEL;
 		MapMotionControllersToHands();
 		UE_LOG(LogTemp, Log, TEXT("Player Control Mode: PROPEL"));

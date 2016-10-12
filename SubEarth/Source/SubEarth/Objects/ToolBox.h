@@ -13,7 +13,10 @@ class SUBEARTH_API AToolBox : public AInteractable
 {
 	GENERATED_BODY()
 	
-	
-	
-	
+public:
+
+	AToolBox();
+
+	virtual void ExecutePrimaryAction(APickup* pickup = NULL) override;
+
 };

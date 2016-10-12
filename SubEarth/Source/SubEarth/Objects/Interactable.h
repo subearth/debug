@@ -17,7 +17,8 @@ public:
 	enum Interactable_e
 	{
 		PICKUP_OBJECT,
-		GENERIC_DOOR
+		GENERIC_DOOR,
+		TOOL_BOX
 	};
 
 	// Sets default values for this actor's properties
@@ -39,21 +40,11 @@ public:
 
 protected:
 
-	//UPROPERTY(EditAnywhere)
-	//	USceneComponent* m_objectRoot;
-
-	//// Static mesh for the object being picked up
-	//UPROPERTY(EditAnywhere)
-	//	UStaticMeshComponent* m_objectMesh;
-
-	//UPROPERTY(EditAnywhere)
-	//	UBoxComponent* m_objectCollider;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractableComponent, meta = (AllowPrivateAccess = "true"))
-		USceneComponent* m_objectRoot;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractableComponent, meta = (AllowPrivateAccess = "true"))
-		UStaticMeshComponent* m_objectMesh;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractableComponent, meta = (AllowPrivateAccess = "true"))
-		UBoxComponent* m_objectCollider;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InteractableComponent", meta=(AllowPrivateAccess="true"))
+		class USceneComponent* m_objectRoot;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InteractableComponent", meta=(AllowPrivateAccess="true"))
+		class UStaticMeshComponent* m_objectMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InteractableComponent", meta=(AllowPrivateAccess="true"))
+		class UBoxComponent* m_objectCollider;
 	Interactable_e m_interactableType;
 };
