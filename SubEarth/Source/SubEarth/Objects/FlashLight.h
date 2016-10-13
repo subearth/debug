@@ -36,4 +36,9 @@ private:
 		class USpotLightComponent* SpotLight;
 	
 	FString m_spotLightName;
+	float m_minAngle;
+	float m_deltaAngle;
+	float m_minRadius;
+	float m_deltaRadius;
+	float m_zoomPercent;
 };

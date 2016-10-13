@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Objects/Interactable.h"
+#include "Matinee/MatineeActor.h"
 #include "ToolBox.generated.h"
 
 /**
@@ -17,6 +18,12 @@ public:
 
 	AToolBox();
 
-	virtual void ExecutePrimaryAction(APickup* pickup = NULL) override;
 
+	virtual void ExecutePrimaryAction(APickup* pickup = NULL) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InteractableComponent", meta = (AllowPrivateAccess = "true"))
+		class USceneComponent* m_hingeSceneNode;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ToolBoxComponent", meta = (AllowPrivateAccess = "true"))
+		class UBoxComponent* m_handAreaCollider;
+
+	bool m_isClosed;
 };
