@@ -9,6 +9,7 @@ AToolBox::AToolBox()
 {
 	m_interactableType = TOOL_BOX;
 	m_isClosed = true;
+	m_animState = NOT_ANIMATING;
 
 	FString name = GetName();
 	FString RootName = name + "HingeRoot";
@@ -22,7 +23,7 @@ AToolBox::AToolBox()
 	m_objectCollider->SetRelativeLocation(FVector(55.f, 0.f, 0.f));
 	m_objectCollider->SetWorldScale3D(FVector(0.1f, 0.4f, 0.1f));
 	m_objectCollider->bHiddenInGame = false;
-	
+
 	// SEAN!!!! Don't delete this
 	/*FString ColliderName = name + "HandAreaCollider";
 	m_handAreaCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
@@ -52,17 +53,62 @@ AToolBox::AToolBox()
 void AToolBox::ExecutePrimaryAction(APickup* pickup)
 {
 	// TODO Animate opening the toolbox here.
-	UE_LOG(LogTemp, Log, TEXT("AToolBox::ExecutePrimaryAction  OPENING TOOLBOX"));
 	if (m_isClosed)
 	{
-		m_hingeSceneNode->SetRelativeRotation(FRotator(70.f, 0.f, 0.f));
+		m_animState = OPENING;
 		m_isClosed = false;
+		EnableAnimation();
 	}
 	else
 	{
-		m_hingeSceneNode->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
+		m_animState = CLOSING;
 		m_isClosed = true;
+		EnableAnimation();
 	}
-	
 }
 
+/******************************************************************************/
+void AToolBox::ExecuteAnimation(float delta_time)
+{
+	const float OPEN_RATE = 50.0f; // a little more than 1 second
+	const float CLOSE_RATE = 70.0f; // 70 = 1 sec
+	const float X_OPEN_POSITION = 70.0;
+	const float X_CLOSE_POSITION = 0.0f;
+
+	static float x_rot = 0.0f;
+
+	switch (m_animState)
+	{
+		case NOT_ANIMATING:
+		{
+			// Do nothing
+			break;
+		}
+		case OPENING:
+		{
+			x_rot += (OPEN_RATE * delta_time);
+
+			if (x_rot >= X_OPEN_POSITION)
+			{
+				x_rot = X_OPEN_POSITION;
+				m_animState = NOT_ANIMATING;
+				DisableAnimation();
+			}
+			break;
+		}
+		case CLOSING:
+		{
+			x_rot -= (CLOSE_RATE * delta_time);
+
+			if (x_rot <= X_CLOSE_POSITION)
+			{
+				x_rot = X_CLOSE_POSITION;
+				m_animState = NOT_ANIMATING;
+				DisableAnimation();
+			}
+			break;
+		}
+	}
+
+	m_hingeSceneNode->SetRelativeRotation(FRotator(x_rot, 0.f, 0.f));
+}

@@ -27,8 +27,8 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Called every frame
-	//virtual void Tick(float DeltaSeconds) override;
+	// Only called if the derived call enables animation
+	virtual void Tick(float DeltaSeconds) override;
 
 	USceneComponent* GetObjectRoot(void);
 
@@ -46,5 +46,11 @@ protected:
 		class UStaticMeshComponent* m_objectMesh;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InteractableComponent", meta=(AllowPrivateAccess="true"))
 		class UBoxComponent* m_objectCollider;
+
+	void EnableAnimation(void);
+	void DisableAnimation(void);
+
+	virtual void ExecuteAnimation(float delta_time) {};
+
 	Interactable_e m_interactableType;
 };

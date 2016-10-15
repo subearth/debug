@@ -7,13 +7,13 @@
 #include "ToolBox.generated.h"
 
 /**
- * 
- */
+*
+*/
 UCLASS()
 class SUBEARTH_API AToolBox : public AInteractable
 {
 	GENERATED_BODY()
-	
+
 public:
 
 	AToolBox();
@@ -26,4 +26,17 @@ public:
 		class UBoxComponent* m_handAreaCollider;
 
 	bool m_isClosed;
+
+private:
+
+	enum AnimStates_e
+	{
+		NOT_ANIMATING,
+		OPENING,
+		CLOSING
+	};
+
+	AnimStates_e m_animState;
+
+	virtual void ExecuteAnimation(float delta_time) override;
 };
