@@ -220,6 +220,11 @@ void UHand::UseHand()
 				m_overlappedInteractable->ExecutePrimaryAction();
 				break;
 			}
+			case AInteractable::MOON_DOOR_CONTROL_PANEL:
+			{
+				m_overlappedInteractable->ExecutePrimaryAction();
+				break;
+			}
 		}
 	}
 	// Else if the hand is overlapping an interactable component on the actor

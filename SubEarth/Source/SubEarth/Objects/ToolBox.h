@@ -20,12 +20,12 @@ public:
 
 
 	virtual void ExecutePrimaryAction(APickup* pickup = NULL) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InteractableComponent", meta = (AllowPrivateAccess = "true"))
 		class USceneComponent* m_hingeSceneNode;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ToolBoxComponent", meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* m_handAreaCollider;
-
-	bool m_isClosed;
 
 private:
 
@@ -39,4 +39,6 @@ private:
 	AnimStates_e m_animState;
 
 	virtual void ExecuteAnimation(float delta_time) override;
+	
+	bool m_isClosed;
 };

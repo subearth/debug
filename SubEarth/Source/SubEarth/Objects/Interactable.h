@@ -18,7 +18,8 @@ public:
 	{
 		PICKUP_OBJECT,
 		GENERIC_DOOR,
-		TOOL_BOX
+		TOOL_BOX,
+		MOON_DOOR_CONTROL_PANEL
 	};
 
 	// Sets default values for this actor's properties
