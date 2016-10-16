@@ -27,10 +27,19 @@ public:
 		class UStaticMeshComponent* m_rightDoorMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoonDoor", meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* m_ctrlPanelMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoonDoor", meta = (AllowPrivateAccess = "true"))
+		class USceneComponent* m_ctrlPanel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoonDoor", meta = (AllowPrivateAccess = "true"))
 		class USceneComponent* m_LeftDoor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoonDoor", meta = (AllowPrivateAccess = "true"))
 		class USceneComponent* m_RightDoor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MoonDoor", meta = (AllowPrivateAccess = "true"))
+		class UBoxComponent* m_objectCollider2;
 
 private:
 

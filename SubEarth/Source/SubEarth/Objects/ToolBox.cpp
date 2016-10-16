@@ -75,7 +75,7 @@ void AToolBox::ExecuteAnimation(float delta_time)
 	const float X_OPEN_POSITION = 70.0;
 	const float X_CLOSE_POSITION = 0.0f;
 
-	static float x_rot = 0.0f;
+	static float x_rot = X_CLOSE_POSITION;
 
 	switch (m_animState)
 	{
