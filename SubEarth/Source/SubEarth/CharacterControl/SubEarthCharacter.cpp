@@ -178,9 +178,13 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 			PlayerRigComponent->SetWorldRotation(FRotator(0.f, PlayerCameraComponent->GetComponentRotation().Yaw, 0.f));
 		}
 	}
+
+	//UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(m_PlayerHMDRotation, m_PlayerHMDLocation);
+	//UE_LOG(LogTemp, Log, TEXT("head x,y,z: %d, %d, %d"), m_PlayerHMDLocation.X, m_PlayerHMDLocation.Y, m_PlayerHMDLocation.Z);
+
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(0.0f, EOrientPositionSelector::Position);
 	
-	//UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(m_PlayerHMDRotation, m_PlayerHMDLocation);
+	
 }
 
 /******************************************************************************/

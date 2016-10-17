@@ -7,6 +7,14 @@
 /******************************************************************************/
 AFlashLight::AFlashLight()
 {
+	m_floatMode = BOB;
+	m_isFloating = true;
+	m_floatSpeed = 3.f;
+	m_floatRotate = 8.f;
+	m_floatRange = 200.f;
+	m_floatDisplacement = 0.f;
+	PrimaryActorTick.SetTickFunctionEnable(true);
+
 	//m_pickupType = OXYGEN_TANK;
 	m_minAngle = 20.f;
 	m_deltaAngle = 60.f;
@@ -14,28 +22,36 @@ AFlashLight::AFlashLight()
 	m_deltaRadius = 14000.f;
 	m_zoomPercent = 0.5;
 	
-	m_objectCollider->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
-	m_objectCollider->SetWorldScale3D(FVector(0.6f, 0.15f, 0.15f));
-	m_objectCollider->bHiddenInGame = false;
-
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> FlashlightMesh(TEXT("StaticMesh'/Game/Assets/Objects/Flashlight/FlashlightMesh1'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> FlashlightMesh(TEXT("StaticMesh'/Game/Assets/Objects/Flashlight/FlashlightMesh2'"));
 	if (FlashlightMesh.Object)
 	{
 		m_objectMesh->SetStaticMesh(FlashlightMesh.Object);
-
+		m_objectMesh->SetupAttachment(m_objectRoot);
 		m_objectMesh->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
-		m_objectMesh->SetRelativeRotation(FRotator(180.f, 0.f, 90.f));
+		m_objectMesh->SetRelativeRotation(FRotator(180.f, 0.f, -90.f));
 		m_objectMesh->SetRelativeScale3D(FVector(3.f, 3.f, 3.f));
+
+		m_objectCollider->SetupAttachment(m_objectRoot);
+		m_objectCollider->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+		m_objectCollider->SetWorldScale3D(FVector(1.f, 0.25f, 0.25f));
+		m_objectCollider->bHiddenInGame = false;
+		/*FString profileName = "OverlapAll";
+		m_objectCollider->SetCollisionProfileName(FName(*profileName));*/
+
+		m_spotLightName = GetName() + "SpotLight";
+		SpotLight = CreateDefaultSubobject<USpotLightComponent>(FName(*m_spotLightName));
+		
+		SpotLight->SetupAttachment(m_objectRoot);
+		SpotLight->SetRelativeLocation(FVector(17.f, 0.f, 0.f));
+		SpotLight->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
+		SpotLight->SetAttenuationRadius(m_minRadius + (m_zoomPercent * m_deltaRadius));
+		SpotLight->SetOuterConeAngle(m_minAngle + (m_zoomPercent * m_deltaAngle));
+		SpotLight->SetLightColor(FLinearColor(255, 255, 255));
 	}
 
-	m_spotLightName = GetName() + "SpotLight";
-	SpotLight = CreateDefaultSubobject<USpotLightComponent>(FName(*m_spotLightName));
-	SpotLight->SetupAttachment(m_objectRoot);
-	SpotLight->SetRelativeLocation(FVector(12.f, 0.f, 0.f));
-	SpotLight->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
-	SpotLight->SetAttenuationRadius(m_minRadius + (m_zoomPercent * m_deltaRadius));
-	SpotLight->SetOuterConeAngle(m_minAngle + (m_zoomPercent * m_deltaAngle));
-	SpotLight->SetLightColor(FLinearColor(255, 255, 255));
+	
+
+	
 }
 
 /******************************************************************************/

@@ -22,6 +22,14 @@ public:
 		OXYGEN_TANK
 	};
 
+	enum FloatMode_e
+	{
+		NONE,
+		SINK,
+		FLOAT,
+		BOB
+	};
+
 	APickup();
 
 	// Inherited. See parent for description
@@ -40,7 +48,34 @@ public:
 
 	Pickup_e GetPickupType(void);
 
+	// For the falling:
+	// Only called if the derived call enables animation
+	virtual void Tick(float DeltaSeconds) override;
+
+	UFUNCTION()
+	void BeginOverlap(UPrimitiveComponent* overlappedComponent,
+		AActor* otherActor,
+		UPrimitiveComponent* otherComponent,
+		int32 otherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void EndOverlap(UPrimitiveComponent* overlappedComponent,
+		AActor* otherActor,
+		UPrimitiveComponent* otherComponent,
+		int32 otherBodyIndex);
+
 protected:
 
 	Pickup_e m_pickupType;
+	void ExecutePhysics(float delta_time);
+	FloatMode_e m_floatMode;
+	float m_floatSpeed;
+	float m_floatRange;
+	float m_floatDisplacement;
+	float m_floatDirection;
+	int m_floatRotate;
+	bool m_isFloating;
+	AActor* m_firstTouched;
 };

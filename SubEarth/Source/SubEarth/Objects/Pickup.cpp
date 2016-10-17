@@ -7,6 +7,20 @@
 APickup::APickup()
 {
 	m_interactableType = PICKUP_OBJECT;
+
+	// Enable the tick call back, but start with it disabled
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = false;
+	m_objectCollider->OnComponentBeginOverlap.AddDynamic(this, &APickup::BeginOverlap);
+	m_objectCollider->OnComponentEndOverlap.AddDynamic(this, &APickup::EndOverlap);
+	// Set per pickup:
+	m_floatMode = NONE;
+	m_isFloating = false;
+	m_floatSpeed = 1.f;
+	m_floatRange = 1.f;
+	m_floatDisplacement = 0.f;
+	m_floatDirection = 1.f;
+	m_firstTouched = NULL;
 }
 
 /******************************************************************************/
@@ -34,4 +48,74 @@ void APickup::SetDefaultWorldOrientation(void)
 {
 	// This is the default orientation of a Pickup. The derived class should overwrite this.
 	m_objectRoot->RelativeRotation = FRotator(0.0f, 0.0f, 0.0f);
+}
+
+void APickup::Tick(float DeltaTime)
+{
+	// This function is turned off by default. The derived class can turn it on if 
+	// animation is needed.
+	Super::Tick(DeltaTime);
+	if (m_isFloating)
+	{
+		ExecutePhysics(DeltaTime);
+	}
+	
+}
+
+void APickup::ExecutePhysics(float DeltaTime)
+{
+	//UE_LOG(LogTemp, Log, TEXT("Physics is running."));
+	switch (m_floatMode)
+	{
+	case SINK:
+		// Sinking function:
+		GetRootComponent()->AddWorldTransform(FTransform(FVector(0.f, 0.f, -m_floatSpeed * DeltaTime)));
+		GetRootComponent()->AddWorldRotation(FRotator(rand() % m_floatRotate * DeltaTime, rand() % m_floatRotate * DeltaTime, rand() % m_floatRotate * DeltaTime));
+		break;
+	case FLOAT:
+		// Sinking function:
+		GetRootComponent()->AddWorldTransform(FTransform(FVector(0.f, 0.f, m_floatSpeed * DeltaTime)));
+		GetRootComponent()->AddWorldRotation(FRotator(rand() % m_floatRotate * DeltaTime, rand() % m_floatRotate * DeltaTime, rand() % m_floatRotate * DeltaTime));
+		break;
+	case BOB:
+		// Sinking function:
+		m_floatDisplacement += m_floatSpeed * DeltaTime; 
+		if (m_floatDisplacement > m_floatRange)
+		{
+			m_floatDirection *= -1.f;
+			m_floatDisplacement = 0.f;
+		}
+		GetRootComponent()->AddWorldTransform(FTransform(FVector(0.f, 0.f, m_floatDirection * m_floatSpeed * DeltaTime)));
+		GetRootComponent()->AddWorldRotation(FRotator(rand() % m_floatRotate * DeltaTime, rand() % m_floatRotate * DeltaTime, rand() % m_floatRotate * DeltaTime));
+		break;
+	}
+}
+
+void APickup::BeginOverlap(UPrimitiveComponent* overlappedComponent,
+	AActor* otherActor,
+	UPrimitiveComponent* otherComponent,
+	int32 otherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp, Log, TEXT("overlap begin"));
+	m_isFloating = false;
+	if (m_firstTouched == NULL)
+	{
+		m_firstTouched = otherActor;
+		UE_LOG(LogTemp, Log, TEXT("first touched."));
+	}
+}
+
+void APickup::EndOverlap(UPrimitiveComponent* overlappedComponent,
+	AActor* otherActor,
+	UPrimitiveComponent* otherComponent,
+	int32 otherBodyIndex)
+{
+	if (otherActor == m_firstTouched)
+	{
+		UE_LOG(LogTemp, Log, TEXT("overlap end"));
+		m_isFloating = true;
+		m_firstTouched = NULL;
+	}
 }
