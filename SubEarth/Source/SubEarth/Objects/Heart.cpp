@@ -5,3 +5,33 @@
 
 
 
+AHeart::AHeart()
+{
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> HeartMesh(TEXT("StaticMesh'/Game/Assets/Objects/ColorChangingOrbMesh'"));
+	if (HeartMesh.Object)
+	{
+		m_objectMesh->SetStaticMesh(HeartMesh.Object);
+		m_objectMesh->SetupAttachment(m_objectRoot);
+		m_objectMesh->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+		m_objectMesh->SetRelativeScale3D(FVector(0.04f, 0.04f, 0.04f));
+
+		m_objectCollider->SetupAttachment(m_objectRoot);
+		m_objectCollider->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+		m_objectCollider->SetWorldScale3D(FVector(0.3f, 0.3f, 0.3f));
+		m_objectCollider->bHiddenInGame = false;
+	}
+}
+
+/******************************************************************************/
+void AHeart::SetDefaultInHandOrientation(void)
+{
+	m_objectRoot->RelativeRotation = FRotator(0.f, 0.f, 0.f);
+	//m_objectRoot->RelativeRotation = FRotator(21.0f, 10.5f, 50.5f);
+}
+
+/******************************************************************************/
+void AHeart::SetDefaultWorldOrientation(void)
+{
+	m_objectRoot->RelativeRotation = FRotator(0.f, 0.f, 0.f);
+	//m_objectRoot->RelativeRotation = FRotator(-21.0f, -10.5f, -50.5f);
+}

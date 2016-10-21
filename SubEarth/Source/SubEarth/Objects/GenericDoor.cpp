@@ -9,12 +9,12 @@ AGenericDoor::AGenericDoor()
 	m_interactableType = GENERIC_DOOR;
 
 	// Setup the doorknob interactable size
-	m_objectCollider->SetWorldScale3D(FVector(0.2f, 0.2f, 0.2f));
-	m_objectCollider->SetRelativeLocation(FVector(0.0f, 0.0f, 1.1f));
+	m_objectCollider->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
+	m_objectCollider->SetRelativeLocation(FVector(-190.f, -25.f, 160.f));
 	m_objectCollider->bHiddenInGame = false;
 	m_isLocked = true;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> my_mesh(TEXT("StaticMesh'/Game/Assets/Objects/GenericDoor/Shape_Cube.Shape_Cube'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> my_mesh(TEXT("StaticMesh'/Game/Assets/Buildings/DoorCenter/DoorCenterMesh'"));
 	//static ConstructorHelpers::FObjectFinder<UMaterial> my_material(TEXT("Material'/Game/Assets/Objects/GenericDoor/M_Wood_Floor_Walnut_Polished.M_Wood_Floor_Walnut_Polished'"));
 
 	if (my_mesh.Object)
@@ -23,7 +23,7 @@ AGenericDoor::AGenericDoor()
 		//m_objectMesh->SetMaterial(0, my_material.Object);
 		m_objectMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
 		m_objectMesh->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
-		m_objectMesh->SetRelativeScale3D(FVector(0.05f, 1.1f, 2.2f));
+		m_objectMesh->SetRelativeScale3D(FVector(0.7f, 0.7f, 0.7f));
 	}
 }
 

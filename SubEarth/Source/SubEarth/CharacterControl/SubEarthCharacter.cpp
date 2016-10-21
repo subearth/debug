@@ -141,15 +141,17 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_oxygenTankSlotRight->SetRelativePosition(FVector(-10.0f, +35.0f, 0.0f));
 
 	m_heartCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("HEART"));
-	m_heartCollider->SetupAttachment(PlayerRigComponent);
+	m_heartCollider->SetupAttachment(PlayerRigComponent);	
 	m_heartCollider->SetRelativeLocation(FVector(10.0f, 0.0f, 30.0f));
 	m_heartCollider->SetWorldScale3D(FVector(0.2f, 0.2f, 0.2f));
 	m_heartCollider->bGenerateOverlapEvents = true;
+	m_heartCollider->bHiddenInGame = false;
 	m_heartCollider->OnComponentBeginOverlap.AddDynamic(this, &ASubEarthCharacter::HeartTriggerEnter);
 	m_heartCollider->OnComponentEndOverlap.AddDynamic(this, &ASubEarthCharacter::HeartTriggerExit);
 
-	m_PlayerControlMode = (int)ePlayerControlMode::PC;
-	SetupControlsPC();
+	m_PlayerControlMode = (int)ePlayerControlMode::SWIM;
+	MapMotionControllersToHands();
+	//SetupControlsPC();
 }
 
 /******************************************************************************/
@@ -391,10 +393,11 @@ void ASubEarthCharacter::LeftSwim(float val)
 		FVector handUp = L_MotionController->GetUpVector();
 
 		float alignment = FVector::DotProduct(handUp, handDifference);
-		
+		FVector movementDirection = handDifference + PlayerCameraComponent->GetForwardVector();
 		if (alignment > 0.5)
 		{
 			AddMovementInput(handDifference, m_SpeedSwim*movementSize);
+			AddMovementInput(movementDirection, m_SpeedSwim*movementSize);
 		}
 		//AddMovementInput(handUp, dist);
 		
@@ -424,10 +427,11 @@ void ASubEarthCharacter::RightSwim(float val)
 		FVector handUp = R_MotionController->GetUpVector();
 
 		float alignment = FVector::DotProduct(handUp, handDifference);
-		
+		FVector movementDirection = handDifference + PlayerCameraComponent->GetForwardVector();
 		if (alignment > 0.5)
 		{
 			AddMovementInput(handDifference, m_SpeedSwim*movementSize);
+			AddMovementInput(movementDirection, m_SpeedSwim*movementSize);
 		}
 
 		// Rotate towards the swim direction:
@@ -652,11 +656,11 @@ void ASubEarthCharacter::Inventory()
 	FString p3 = m_pocketLeftLeg->GetNameOfPickupInPocket();
 	FString p4 = m_pocketRightLeg->GetNameOfPickupInPocket();
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *p1));
+	/*GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *p1));
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *p2));
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *p3));
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Item: %s "), *p4));
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT("End of Inventory"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, TEXT("End of Inventory"));*/
 }
 /******************************************************************************/
 void ASubEarthCharacter::HeartTriggerEnter(UPrimitiveComponent* overlappedComponent,
@@ -672,6 +676,8 @@ void ASubEarthCharacter::HeartTriggerEnter(UPrimitiveComponent* overlappedCompon
 		m_PlayerControlMode = ePlayerControlMode::PROPEL;
 		MapMotionControllersToHands();
 		UE_LOG(LogTemp, Log, TEXT("Player Control Mode: PROPEL"));
+		otherActor->SetActorHiddenInGame(true);
+		//otherActor-> ->visible = false;
 		//Destroy(otherActor);
 	}
 }
