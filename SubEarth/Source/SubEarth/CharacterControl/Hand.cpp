@@ -2,6 +2,7 @@
 
 #include "SubEarth.h"
 #include "CharacterControl/Hand.h"
+#include "Objects/JammedDoor.h"
 #include "CharacterControl/SubEarthCharacter.h"
 #include <string> 
 #include "Objects/OxygenTank.h"
@@ -85,7 +86,16 @@ void UHand::DropObject()
 	m_pickupInHand->SetActorEnableCollision(true);
 	m_pickupInHand->SetDefaultWorldOrientation();
 	m_pickupInHand->DetachRootComponentFromParent();
-	m_overlappedInteractable = (AInteractable*)m_pickupInHand; // We just dropped it, therefore it is currently overlapping
+
+	// Only overwrite the overlapped object if the overlapped object is not already set.
+	// Use case: if you let go of the door lever while it is in the door lever hole. 
+	// By doing this we are saying, "the interactable object has higher priority than the
+	// pickup object we just dropped".
+	if (m_overlappedInteractable == NULL)
+	{
+		m_overlappedInteractable = (AInteractable*)m_pickupInHand; // We just dropped it, therefore it is currently overlapping
+	}
+
 	m_pickupInHand = NULL;
 	m_isHandEmpty = true;
 }
@@ -162,7 +172,7 @@ void UHand::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 
 	if (otherActor->IsA(AInteractable::StaticClass())) // Type check before casting
 	{
-		UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with object: %s"), *(otherActor->GetName()));
+		UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap (1) with object: %s"), *(otherActor->GetName()));
 		m_overlappedInteractable = (AInteractable*)otherActor;
 	}
 	else if (otherActor->IsA(ASubEarthCharacter::StaticClass())) // Type check before casting
@@ -172,7 +182,7 @@ void UHand::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 
 		if (component != NULL)
 		{
-			UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap with object: %s"), *(otherActor->GetName()));
+			UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap (2) with object: %s"), *(otherActor->GetName()));
 			m_overlappedInterComp = component;
 		}
 	}
@@ -203,7 +213,26 @@ void UHand::UseHand()
 		{
 			case AInteractable::PICKUP_OBJECT:
 			{
-				PickupObject((APickup*)m_overlappedInteractable);
+				APickup::Pickup_e pickup_type = ((APickup*)m_overlappedInteractable)->GetPickupType();
+
+				if (pickup_type == APickup::DOOR_LEVER)
+				{
+					ADoorLever* lever = (ADoorLever*)m_overlappedInteractable;
+
+					if (lever->IsAttachedToDoor())
+					{
+						UE_LOG(LogTemp, Log, TEXT("UHand::UseHand  GRABBING LEVER"));
+					}
+					else
+					{
+						PickupObject((APickup*)m_overlappedInteractable);
+					}
+				}
+				else
+				{
+					PickupObject((APickup*)m_overlappedInteractable);
+				}
+				
 				break;
 			}
 			case AInteractable::GENERIC_DOOR:
@@ -228,6 +257,50 @@ void UHand::UseHand()
 				m_overlappedInteractable->ExecutePrimaryAction();
 				break;
 			}
+			case AInteractable::JAMMED_DOOR:
+			{
+				// Save a pointer to the overlapped door. If the pickup is dropped,
+				// the hand starts calling begin/end overlaps with objects, which may
+				// change our overlapped interactable
+				AJammedDoor* door = (AJammedDoor*)m_overlappedInteractable;
+
+				if (door->IsLeverInPlace())
+				{
+					UE_LOG(LogTemp, Log, TEXT("UHand::UseHand  Must turn the lever"));
+				}
+				else
+				{
+					if (m_isHandEmpty)
+					{
+						m_overlappedInteractable->ExecutePrimaryAction();
+					}
+					else
+					{
+						APickup::Pickup_e pickup_type = m_pickupInHand->GetPickupType();
+
+						if (pickup_type == APickup::DOOR_LEVER)
+						{
+							// Save a pointer to the pickup and overlapped door. Once an object is dropped,
+							// the hand starts calling begin/end overlaps with objects. We need to keep a 
+							// pointer to these. 
+							APickup* lever = m_pickupInHand;
+
+							// Drop the pickup so that we can attached it to the door.
+							DropObject();
+
+							door->ExecutePrimaryAction(lever);
+						}
+						else
+						{
+							UE_LOG(LogTemp, Log, TEXT("UHand::UseHand  %s can't fit here"), *(m_pickupInHand->GetName()));
+						}
+					}
+				}
+				break;
+			}
+			default:
+				// Do nothing
+				break;
 		}
 	}
 	// Else if the hand is overlapping an interactable component on the actor
@@ -303,4 +376,20 @@ void UHand::UseHand()
 	{
 		DropObject();
 	}
+}
+
+/******************************************************************************/
+void UHand::TranslateUp(void)
+{
+	FVector curr_loc = m_savedHandSceneComponent->RelativeLocation;
+	curr_loc.Z++;
+	m_savedHandSceneComponent->RelativeLocation = curr_loc;
+}
+
+/******************************************************************************/
+void UHand::TranslateDown(void)
+{
+	FVector curr_loc = m_savedHandSceneComponent->RelativeLocation;
+	curr_loc.Z--;
+	m_savedHandSceneComponent->RelativeLocation = curr_loc;
 }

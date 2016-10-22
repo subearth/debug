@@ -58,6 +58,10 @@ public:
 
 	void UseHand();
 
+	// Used to move the right hand up and down when in PC mode
+	void TranslateUp(void);
+	void TranslateDown(void);
+
 private:
 
 	void PickupObject(APickup* pickup_obj);

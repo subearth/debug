@@ -19,7 +19,8 @@ public:
 	{
 		COLOR_CHANGING_ORB,
 		GENERIC_KEY,
-		OXYGEN_TANK
+		OXYGEN_TANK,
+		DOOR_LEVER
 	};
 
 	enum FloatMode_e

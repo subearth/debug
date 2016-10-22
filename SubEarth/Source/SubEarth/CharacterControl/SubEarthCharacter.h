@@ -174,6 +174,9 @@ protected:
 	void LeftHandToggleGrab(void);
 	void RightHandToggleGrab(void);
 
+	void RightHandTranslateUp(void);
+	void RightHandTranslateDown(void);
+
 	void MapMotionControllersToHands();
 
 	// Bind functionality to input for PC controls

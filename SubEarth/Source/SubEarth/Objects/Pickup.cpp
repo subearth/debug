@@ -34,6 +34,9 @@ void APickup::ExecutePrimaryAction(APickup* pickup)
 {
 	// The action upon trigger pull is for the hand to pick up this object. 
 	// There is no action on the object directly.
+
+	// Keep this here for debugging.
+	UE_LOG(LogTemp, Log, TEXT("APickup::ExecutePrimaryAction  Override me!"));
 }
 
 /******************************************************************************/
@@ -98,12 +101,12 @@ void APickup::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Log, TEXT("overlap begin"));
+	UE_LOG(LogTemp, Log, TEXT("APickup::BeginOverlap  overlap begin"));
 	m_isFloating = false;
 	if (m_firstTouched == NULL)
 	{
 		m_firstTouched = otherActor;
-		UE_LOG(LogTemp, Log, TEXT("first touched."));
+		UE_LOG(LogTemp, Log, TEXT("APickup::BeginOverlap  first touched."));
 	}
 }
 
@@ -114,7 +117,7 @@ void APickup::EndOverlap(UPrimitiveComponent* overlappedComponent,
 {
 	if (otherActor == m_firstTouched)
 	{
-		UE_LOG(LogTemp, Log, TEXT("overlap end"));
+		UE_LOG(LogTemp, Log, TEXT("APickup::EndOverlap  overlap end"));
 		m_isFloating = true;
 		m_firstTouched = NULL;
 	}

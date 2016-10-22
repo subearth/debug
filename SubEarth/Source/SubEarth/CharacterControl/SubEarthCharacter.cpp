@@ -255,6 +255,10 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
+	// Keyboard only: down arrow 
+	PlayerInputComponent->BindAction("RHUp", IE_Pressed, this, &ASubEarthCharacter::RightHandTranslateUp);
+	PlayerInputComponent->BindAction("RHDown", IE_Pressed, this, &ASubEarthCharacter::RightHandTranslateDown);
+
 	// L/R Face button 1 (Swim and Propel are mutually exclusive)
 	PlayerInputComponent->BindAxis("LeftSwim", this, &ASubEarthCharacter::LeftSwim);
 	PlayerInputComponent->BindAxis("RightSwim", this, &ASubEarthCharacter::RightSwim);
@@ -682,9 +686,22 @@ void ASubEarthCharacter::HeartTriggerEnter(UPrimitiveComponent* overlappedCompon
 	}
 }
 
+/******************************************************************************/
 void ASubEarthCharacter::HeartTriggerExit(UPrimitiveComponent* overlappedComponent,
 	AActor* otherActor,
 	UPrimitiveComponent* otherComponent,
 	int32 otherBodyIndex) {
 
+}
+
+/******************************************************************************/
+void ASubEarthCharacter::RightHandTranslateUp(void)
+{
+	m_rightHand->TranslateUp();
+}
+
+/******************************************************************************/
+void ASubEarthCharacter::RightHandTranslateDown(void)
+{
+	m_rightHand->TranslateDown();
 }

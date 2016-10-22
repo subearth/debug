@@ -19,7 +19,8 @@ public:
 		PICKUP_OBJECT,
 		GENERIC_DOOR,
 		TOOL_BOX,
-		MOON_DOOR_CONTROL_PANEL
+		MOON_DOOR_CONTROL_PANEL,
+		JAMMED_DOOR
 	};
 
 	// Sets default values for this actor's properties
