@@ -5,6 +5,7 @@
 #include "Objects/Pickup.h"
 #include "DoorLever.generated.h"
 
+class AJammedDoor;
 /**
  * 
  */
@@ -18,6 +19,9 @@ public:
 	ADoorLever();
 
 	// Inherited. See parent for description
+	virtual void ExecutePrimaryAction(APickup* pickup = NULL) override;
+
+	// Inherited. See parent for description
 	virtual void ExecuteAction1(AInteractable* interactable = NULL) override;
 	virtual void ExecuteAction2(AInteractable* interactable = NULL) override;
 	virtual void ExecuteAction3(AInteractable* interactable = NULL) override;
@@ -28,7 +32,7 @@ public:
 	// Inherited. See parent for description
 	virtual void SetDefaultWorldOrientation(void) override;
 
-	void SetupAttachToDoorParams(void);
+	void SetupAttachToDoorParams(AJammedDoor* door);
 	bool IsAttachedToDoor(void);
 
 private:
@@ -39,5 +43,6 @@ private:
 		class UBoxComponent* m_rightCollider;
 
 	bool m_leverInDoor;
+	AJammedDoor* m_doorAttachedTo;
 
 };

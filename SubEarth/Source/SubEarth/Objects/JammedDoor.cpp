@@ -9,13 +9,14 @@
 AJammedDoor::AJammedDoor()
 {
 	m_interactableType = JAMMED_DOOR;
+	m_animState = NOT_ANIMATING;
+	m_isClosed = true;
 	m_lever = NULL;
 
 	// Setup the doorknob interactable size
 	m_objectCollider->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
 	m_objectCollider->SetRelativeLocation(FVector(-190.f, -25.f, 160.f));
 	m_objectCollider->bHiddenInGame = false;
-	m_isLocked = true;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> my_mesh1(TEXT("StaticMesh'/Game/Assets/Buildings/DoorCenter/DoorCenterMesh'"));
 	//static ConstructorHelpers::FObjectFinder<UMaterial> my_material(TEXT("Material'/Game/Assets/Objects/GenericDoor/M_Wood_Floor_Walnut_Polished.M_Wood_Floor_Walnut_Polished'"));
@@ -39,7 +40,6 @@ void AJammedDoor::ExecutePrimaryAction(APickup* pickup)
 	}
 	else
 	{
-		
 		APickup::Pickup_e pickup_type = pickup->GetPickupType();
 
 		if (pickup_type == APickup::DOOR_LEVER)
@@ -53,7 +53,7 @@ void AJammedDoor::ExecutePrimaryAction(APickup* pickup)
 			lever->SetActorRelativeLocation(FVector(-190.f, -25.f, 160.f));
 			lever->SetActorRelativeRotation(FRotator(90.0f, 90.0f, 0.f));
 
-			lever->SetupAttachToDoorParams();
+			lever->SetupAttachToDoorParams(this);
 
 			m_lever = lever;
 
@@ -63,14 +63,7 @@ void AJammedDoor::ExecutePrimaryAction(APickup* pickup)
 		{
 			UE_LOG(LogTemp, Log, TEXT("AJammedDoor::ExecutePrimaryAction Not a door lever"));
 		}
-		
 	}
-}
-
-/******************************************************************************/
-void AJammedDoor::ToggleLock(void)
-{
-	m_isLocked = !m_isLocked;
 }
 
 /******************************************************************************/
@@ -84,5 +77,73 @@ bool AJammedDoor::IsLeverInPlace(void)
 	return lever_in_place;
 }
 
+/******************************************************************************/
+void AJammedDoor::ToggleDoorOpenClosed(void)
+{
+	if (m_isClosed)
+	{
+		UE_LOG(LogTemp, Log, TEXT("AJammedDoor::ToggleDoorOpenClosed OPENING"));
+		m_animState = OPENING;
+		m_isClosed = false;
+		EnableAnimation();
+
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("AJammedDoor::ToggleDoorOpenClosed CLOSING"));
+		m_animState = CLOSING;
+		m_isClosed = true;
+		EnableAnimation();
+	}
+}
+
+/******************************************************************************/
+void AJammedDoor::ExecuteAnimation(float delta_time)
+{
+	const float OPEN_RATE = 50.0f;
+	const float CLOSE_RATE = 50.0f;
+	const float Z_OPEN_POSITION = -300.0;
+	const float Z_CLOSE_POSITION = 0.0f;
+
+	static float z = Z_CLOSE_POSITION;
+
+	switch (m_animState)
+	{
+		case NOT_ANIMATING:
+		{
+			// Do nothing
+			break;
+		}
+		case OPENING:
+		{
+			z -= (OPEN_RATE * delta_time);
+
+			if (z <= Z_OPEN_POSITION)
+			{
+				z = Z_OPEN_POSITION;
+				m_animState = NOT_ANIMATING;
+				DisableAnimation();
+			}
+			break;
+		}
+		case CLOSING:
+		{
+			z += (CLOSE_RATE * delta_time);
+
+			if (z >= Z_CLOSE_POSITION)
+			{
+				z = Z_CLOSE_POSITION;
+				m_animState = NOT_ANIMATING;
+				DisableAnimation();
+			}
+			break;
+		}
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("AMoonDoorControlPanel::ExecuteAnimation %f"), z);
+
+	m_objectMesh->SetRelativeLocation(FVector(0.f, 0.f, z));
+	//SetActorRelativeLocation(FVector(-x, 0.f, 0.f));
+}
 
 

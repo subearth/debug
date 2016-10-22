@@ -221,6 +221,7 @@ void UHand::UseHand()
 
 					if (lever->IsAttachedToDoor())
 					{
+						lever->ExecutePrimaryAction(); // execute the pickups primary action.
 						UE_LOG(LogTemp, Log, TEXT("UHand::UseHand  GRABBING LEVER"));
 					}
 					else

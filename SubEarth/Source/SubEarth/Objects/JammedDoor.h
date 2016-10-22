@@ -21,12 +21,23 @@ public:
 	// The primary action for the door is to open if it is unlocked.
 	virtual void ExecutePrimaryAction(APickup* pickup = NULL) override;
 
-	void ToggleLock(void);
 	bool IsLeverInPlace(void);
+
+	void ToggleDoorOpenClosed(void);
 
 private:
 
-	ADoorLever* m_lever;
+	enum AnimStates_e
+	{
+		NOT_ANIMATING,
+		OPENING,
+		CLOSING
+	};
 
-	bool m_isLocked;
+	AnimStates_e m_animState;
+
+	virtual void ExecuteAnimation(float delta_time) override;
+
+	ADoorLever* m_lever;
+	bool m_isClosed;
 };

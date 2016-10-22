@@ -2,6 +2,7 @@
 
 #include "SubEarth.h"
 #include "Objects/DoorLever.h"
+#include "Objects/JammedDoor.h"
 
 /******************************************************************************/
 ADoorLever::ADoorLever()
@@ -10,6 +11,7 @@ ADoorLever::ADoorLever()
 	m_objectCollider->bHiddenInGame = false;
 	m_pickupType = DOOR_LEVER;
 	m_leverInDoor = false;
+	m_doorAttachedTo = NULL;
 
 	FString name = GetName();
 
@@ -35,6 +37,22 @@ ADoorLever::ADoorLever()
 		m_objectMesh->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 		m_objectMesh->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 		m_objectMesh->SetRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
+	}
+}
+
+/******************************************************************************/
+void ADoorLever::ExecutePrimaryAction(APickup* pickup)
+{
+	// The action upon trigger pull is for the door lever to open the door
+
+	if (m_leverInDoor && m_doorAttachedTo != NULL)
+	{
+		UE_LOG(LogTemp, Log, TEXT("ADoorLever::ExecutePrimaryAction Toggle door!"));
+		m_doorAttachedTo->ToggleDoorOpenClosed();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("ADoorLever::ExecutePrimaryAction  Override me!"));
 	}
 }
 
@@ -72,13 +90,14 @@ void ADoorLever::SetDefaultWorldOrientation(void)
 }
 
 /******************************************************************************/
-void ADoorLever::SetupAttachToDoorParams(void)
+void ADoorLever::SetupAttachToDoorParams(AJammedDoor* door)
 {
 	// hide the main collider
 	m_objectCollider->SetHiddenInGame(true);
 	m_leftCollider->SetHiddenInGame(false);
 	m_rightCollider->SetHiddenInGame(false);
 	m_leverInDoor = true;
+	m_doorAttachedTo = door;
 	// Unfortunately this disables collisions all together, not just on the one
 	//m_objectCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	//m_leftCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
