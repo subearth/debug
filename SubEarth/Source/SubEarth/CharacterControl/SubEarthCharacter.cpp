@@ -34,11 +34,17 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_rightOxygenPercent = 0.0;
 	m_leftOxygenString = FString::SanitizeFloat(0.f);
 	m_rightOxygenString = FString::SanitizeFloat(0.f);
+	m_canSuffocate = true;
+	m_maxBreath = 90.f; // 90 seconds of breath
+	m_currentBreath = 90.f;
+	m_shakeAtPercentBreath = 0.5;
+	m_deathColor = FLinearColor(1.f,1.f,1.f,0.f);
+	m_warningColor = FLinearColor(1.f, 1.f, 1.f, 1.f);
 
 	// Initialize components:
 
 	// Set size for collision capsule:
-	GetCapsuleComponent()->InitCapsuleSize(10.0, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(20.0, 96.0f);
 	GetCapsuleComponent()->bGenerateOverlapEvents = false;
 	GetCapsuleComponent()->bHiddenInGame = true;
 
@@ -149,9 +155,11 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_heartCollider->OnComponentBeginOverlap.AddDynamic(this, &ASubEarthCharacter::HeartTriggerEnter);
 	m_heartCollider->OnComponentEndOverlap.AddDynamic(this, &ASubEarthCharacter::HeartTriggerExit);
 
-	m_PlayerControlMode = (int)ePlayerControlMode::SWIM;
-	MapMotionControllersToHands();
-	//SetupControlsPC();
+	//m_PlayerControlMode = (int)ePlayerControlMode::SWIM;
+	//MapMotionControllersToHands();
+
+	m_PlayerControlMode = (int)ePlayerControlMode::PC;
+	SetupControlsPC();
 }
 
 /******************************************************************************/
@@ -590,7 +598,38 @@ float ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
 	// Begin suffocation if we still have some to spend:
 	if (remaining > 0.f)
 	{
-		// Slowly die!
+		// Slowly die!	
+		m_currentBreath -= remaining;
+		float percentBreathLeft = FMath::Clamp(m_currentBreath / m_maxBreath, 0.f, 1.f);
+		
+		// Blink the hud:
+		float blinkPercent = 1.0f - percentBreathLeft;
+		float gbColor = (cos(300.f*blinkPercent) + 1.f) / 2.f;
+		m_warningColor = FLinearColor(1.f, gbColor, gbColor, 1.f);
+
+		// So we can test without playing...
+		if (m_canSuffocate)
+		{
+			// Screen blanking:
+			float deathAlpha = 1.0f - percentBreathLeft;
+			m_deathColor = FLinearColor(1.f, 1.f, 1.f, deathAlpha);
+			
+			// Mess with the camera:
+			if (percentBreathLeft < m_shakeAtPercentBreath) // 20% air left
+			{
+				float bound = (m_shakeAtPercentBreath - percentBreathLeft) / m_shakeAtPercentBreath;
+				float jitter = -1.f * cos(200.f*bound*bound) * 5.f * bound * bound;
+				PlayerCameraComponent->SetFieldOfView(90.f + jitter);
+			}
+
+			// Restart map:
+			if (percentBreathLeft <= 0.0f)
+			{
+				UWorld* TheWorld = GetWorld();
+				FString CurrentLevel = TheWorld->GetMapName();
+				UGameplayStatics::OpenLevel(GetWorld(), "DemoMap");
+			}
+		}		
 	}
 
 	// Update our tanks on where they are:

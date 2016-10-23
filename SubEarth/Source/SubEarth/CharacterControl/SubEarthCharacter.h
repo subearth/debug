@@ -109,6 +109,24 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = OxygenTank)
 		float m_rightOxygenPercent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Lungs)
+		bool m_canSuffocate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Lungs)
+		float m_maxBreath;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Lungs)
+		float m_currentBreath;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Lungs)
+		float m_shakeAtPercentBreath;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Lungs)
+		FLinearColor m_deathColor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Lungs)
+		FLinearColor m_warningColor;
+
 	/****************************************/
 	/*			END HUD VARAIBLES			*/
 	/****************************************/
