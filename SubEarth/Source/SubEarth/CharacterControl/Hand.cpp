@@ -13,7 +13,16 @@ UHand::UHand()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	bWantsBeginPlay = true;
+
+	// NOTE. The hands should really inherit from an InteractableComponent, then the tick
+	// functions added here could be elevate and potentially used for all InteractableComponents.
+	// Can be implemented in the same way Interactable implements this behavior.
+	// Enable the tick call back, but start with it disabled
 	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bStartWithTickEnabled = false;
+
+	m_isHandLatched = false;
+	m_latchedInteractable = NULL;
 
 	FString HandName = GetName();
 
@@ -53,6 +62,20 @@ void UHand::BeginPlay()
 void UHand::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if (m_isHandLatched)
+	{
+		// Compute the delta location and rotation from last time
+		FVector delta_loc = m_lastLatchedLocation - m_savedHandSceneComponent->RelativeLocation;
+		FRotator delta_rot = m_lastLatchedRotation - m_savedHandSceneComponent->RelativeRotation;
+
+		m_latchedInteractable->UpdateLocAndRot(delta_loc, delta_rot);
+
+		// Update the last location and rotation
+		m_lastLatchedLocation = m_savedHandSceneComponent->RelativeLocation;
+		m_lastLatchedRotation = m_savedHandSceneComponent->RelativeRotation;
+
+	}
 }
 
 /******************************************************************************/
@@ -161,6 +184,28 @@ void UHand::PressButton4(void)
 }
 
 /******************************************************************************/
+void UHand::LatchHandToInteractable(AInteractable* interactable)
+{
+	// The goal here is that while latch, movement of the hand translates to some
+	// kind of movement on the interactable.
+
+	m_isHandLatched = true;
+	m_latchedInteractable = interactable;
+	SetComponentTickEnabled(true);
+
+	m_lastLatchedLocation = m_savedHandSceneComponent->RelativeLocation;
+	m_lastLatchedRotation = m_savedHandSceneComponent->RelativeRotation;
+}
+
+/******************************************************************************/
+void UHand::ReleaseHand(void)
+{
+	m_isHandLatched = false;
+	m_latchedInteractable = NULL;
+	SetComponentTickEnabled(false);
+}
+
+/******************************************************************************/
 void UHand::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 	                     AActor* otherActor,
 	                     UPrimitiveComponent* otherComponent,
@@ -168,8 +213,6 @@ void UHand::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 	                     bool bFromSweep,
 	                     const FHitResult& SweepResult)
 {
-	
-
 	if (otherActor->IsA(AInteractable::StaticClass())) // Type check before casting
 	{
 		UE_LOG(LogTemp, Log, TEXT("UHand::BeginOverlap (1) with object: %s"), *(otherActor->GetName()));
@@ -221,8 +264,7 @@ void UHand::UseHand()
 
 					if (lever->IsAttachedToDoor())
 					{
-						lever->ExecutePrimaryAction(); // execute the pickups primary action.
-						UE_LOG(LogTemp, Log, TEXT("UHand::UseHand  GRABBING LEVER"));
+						LatchHandToInteractable(m_overlappedInteractable);
 					}
 					else
 					{

@@ -58,12 +58,19 @@ public:
 
 	void UseHand();
 
+	// On occassion a pickup or an interactable will require that you hold down the 
+	// trigger and move your hand to interact with it. In these situations, the left
+	// and right hand toggle grab will latch the hand to the object, and this function
+	// will clear the latch.
+	void ReleaseHand(void);
+
 	// Used to move the right hand up and down when in PC mode
 	void TranslateUp(void);
 	void TranslateDown(void);
 
 private:
 
+	void LatchHandToInteractable(AInteractable* interactable);
 	void PickupObject(APickup* pickup_obj);
 	void DropObject(void);
 
@@ -73,6 +80,8 @@ private:
 
 	/* The current object in the hand. NULL if hand is empty */
 	APickup* m_pickupInHand;
+
+	AInteractable* m_latchedInteractable;
 	
 	USceneComponent* m_savedHandSceneComponent;
 	
@@ -81,5 +90,9 @@ private:
 	//AActor* InHandActor;
 	//AActor* CollidedActor;
 
+	FVector m_lastLatchedLocation;
+	FRotator m_lastLatchedRotation;
+
 	bool m_isHandEmpty;
+	bool m_isHandLatched;
 };

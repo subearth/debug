@@ -32,11 +32,9 @@ APickup::Pickup_e APickup::GetPickupType(void)
 /******************************************************************************/
 void APickup::ExecutePrimaryAction(APickup* pickup)
 {
-	// The action upon trigger pull is for the hand to pick up this object. 
-	// There is no action on the object directly.
-
-	// Keep this here for debugging.
-	UE_LOG(LogTemp, Log, TEXT("APickup::ExecutePrimaryAction  Override me!"));
+	// The default action upon trigger pull is for the hand to pick up the object. 
+	// If the pickup needs a custom action, they must override this function
+	UE_LOG(LogTemp, Log, TEXT("APickup::ExecutePrimaryAction  This function is meant to be overridden!"));
 }
 
 /******************************************************************************/

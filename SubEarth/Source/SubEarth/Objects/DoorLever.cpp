@@ -41,22 +41,6 @@ ADoorLever::ADoorLever()
 }
 
 /******************************************************************************/
-void ADoorLever::ExecutePrimaryAction(APickup* pickup)
-{
-	// The action upon trigger pull is for the door lever to open the door
-
-	if (m_leverInDoor && m_doorAttachedTo != NULL)
-	{
-		UE_LOG(LogTemp, Log, TEXT("ADoorLever::ExecutePrimaryAction Toggle door!"));
-		m_doorAttachedTo->ToggleDoorOpenClosed();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("ADoorLever::ExecutePrimaryAction  Override me!"));
-	}
-}
-
-/******************************************************************************/
 void ADoorLever::ExecuteAction1(AInteractable* interactable)
 {
 	if (interactable != NULL)
@@ -80,13 +64,15 @@ void ADoorLever::ExecuteAction3(AInteractable* interactable)
 /******************************************************************************/
 void ADoorLever::SetDefaultInHandOrientation(void)
 {
-	SetActorRelativeRotation(FRotator(21.0f, 10.5f, 50.5f));
+	SetActorRotation(FRotator(21.0f, 10.5f, 50.5f));
+	UE_LOG(LogTemp, Log, TEXT(" ADoorLever::SetDefaultInHandOrientation"));
 }
 
 /******************************************************************************/
 void ADoorLever::SetDefaultWorldOrientation(void)
 {
-	SetActorRelativeRotation(FRotator(-21.0f, -10.5f, -50.5f));
+	SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
+	UE_LOG(LogTemp, Log, TEXT(" ADoorLever::SetDefaultWorldOrientation"));
 }
 
 /******************************************************************************/
@@ -108,4 +94,32 @@ void ADoorLever::SetupAttachToDoorParams(AJammedDoor* door)
 bool ADoorLever::IsAttachedToDoor(void)
 {
 	return m_leverInDoor;
+}
+
+/******************************************************************************/
+void ADoorLever::UpdateLocAndRot(FVector delta_loc, FRotator delta_rot)
+{
+	// Map the up and down translation of the hand motion to rotation of the lever
+	FRotator curr_rot = GetActorRotation();
+	//FRotator curr_rot = m_objectRoot->RelativeRotation;
+	UE_LOG(LogTemp, Log, TEXT("ADoorLever::UpdateLocAndRot BEFORE:  Z=%3.2f    roll=%3.2f pitch=%3.2f yaw=%3.2f"), delta_loc.Z, curr_rot.Roll, curr_rot.Pitch, curr_rot.Yaw);
+	curr_rot.Roll  -= delta_loc.Z * 2.0f;
+	//curr_rot.Pitch = 90.0f;
+	//curr_rot.Yaw   = -90.0f;
+	//FRotator curr_rot = FRotator(delta_loc.Z, 0.0f, 0.0f);
+	UE_LOG(LogTemp, Log, TEXT("ADoorLever::UpdateLocAndRot  AFTER:  Z=%3.2f    roll=%3.2f pitch=%3.2f yaw=%3.2f"), delta_loc.Z, curr_rot.Roll, curr_rot.Pitch, curr_rot.Yaw);
+	SetActorRelativeRotation(curr_rot);
+
+	if (true)
+	{
+		if (m_leverInDoor && m_doorAttachedTo != NULL)
+		{
+			UE_LOG(LogTemp, Log, TEXT("ADoorLever::ExecutePrimaryAction Toggle door!"));
+			m_doorAttachedTo->ToggleDoorOpenClosed();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Log, TEXT("ADoorLever::ExecutePrimaryAction  Override me!"));
+		}
+	}
 }

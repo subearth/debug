@@ -51,7 +51,7 @@ void AJammedDoor::ExecutePrimaryAction(APickup* pickup)
 			lever->AttachToComponent(m_objectRoot, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	
 			lever->SetActorRelativeLocation(FVector(-190.f, -25.f, 160.f));
-			lever->SetActorRelativeRotation(FRotator(90.0f, 90.0f, 0.f));
+			lever->SetActorRotation(FRotator(90.0f, 90.0f, 0.f));
 
 			lever->SetupAttachToDoorParams(this);
 
@@ -140,10 +140,7 @@ void AJammedDoor::ExecuteAnimation(float delta_time)
 		}
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("AMoonDoorControlPanel::ExecuteAnimation %f"), z);
-
 	m_objectMesh->SetRelativeLocation(FVector(0.f, 0.f, z));
-	//SetActorRelativeLocation(FVector(-x, 0.f, 0.f));
 }
 
 

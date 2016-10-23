@@ -171,9 +171,26 @@ protected:
 	void RightHandButton3();
 	void RightHandButton4();
 
+	// Most pickups and interactables you can simple click and grab or use them. 
+	// This function will grab or use an pickup or interactable respectively.
 	void LeftHandToggleGrab(void);
+
+	// On occassion a pickup or an interactable will require that you hold down the 
+	// trigger and move your hand to interact with it. In these situations, the left
+	// and right hand toggle grab will latch the hand to the object, and this function
+	// will clear the latch.
+	void LeftHandRelease(void);
+	
+	// Most pickups and interactables you can simple click and grab or use them. 
+	// This function will grab or use an pickup or interactable respectively.
 	void RightHandToggleGrab(void);
 
+	// On occassion a pickup or an interactable will require that you hold down the 
+	// trigger and move your hand to interact with it. In these situations, the left
+	// and right hand toggle grab will latch the hand to the object, and this function
+	// will clear the latch.
+	void RightHandRelease(void);
+	
 	void RightHandTranslateUp(void);
 	void RightHandTranslateDown(void);
 

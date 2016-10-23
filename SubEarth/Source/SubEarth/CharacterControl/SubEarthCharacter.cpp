@@ -235,9 +235,11 @@ void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 
 	// L-Trigger, Q
 	PlayerInputComponent->BindAction("LeftHandToggleGrab", IE_Pressed, this, &ASubEarthCharacter::LeftHandToggleGrab);
+	PlayerInputComponent->BindAction("LeftHandToggleGrab", IE_Released, this, &ASubEarthCharacter::LeftHandRelease);
 
 	// R-Trigger, E
 	PlayerInputComponent->BindAction("RightHandToggleGrab", IE_Pressed, this, &ASubEarthCharacter::RightHandToggleGrab);
+	PlayerInputComponent->BindAction("RightHandToggleGrab", IE_Released, this, &ASubEarthCharacter::RightHandRelease);
 
 	// (L) face button 2, 3, 4,  Keyboard 1, 2, 3
 	PlayerInputComponent->BindAction("LeftHandButton2", IE_Pressed, this, &ASubEarthCharacter::LeftHandButton2);
@@ -647,9 +649,21 @@ void ASubEarthCharacter::LeftHandToggleGrab()
 }
 
 /******************************************************************************/
+void ASubEarthCharacter::LeftHandRelease()
+{
+	m_leftHand->ReleaseHand();
+}
+
+/******************************************************************************/
 void ASubEarthCharacter::RightHandToggleGrab()
 {
 	m_rightHand->UseHand();
+}
+
+/******************************************************************************/
+void ASubEarthCharacter::RightHandRelease()
+{
+	m_rightHand->ReleaseHand();
 }
 
 /****************************************************************************************************************************************************/

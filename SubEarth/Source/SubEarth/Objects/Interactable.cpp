@@ -67,3 +67,9 @@ void AInteractable::Tick(float DeltaTime)
 
 	ExecuteAnimation(DeltaTime);
 }
+
+/******************************************************************************/
+void AInteractable::UpdateLocAndRot(FVector delta_loc, FRotator delta_rot)
+{
+	UE_LOG(LogTemp, Log, TEXT("APickup::ExecutePrimaryAction  This function is meant to be overridden!"));
+}

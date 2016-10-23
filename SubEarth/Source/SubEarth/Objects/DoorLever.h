@@ -19,9 +19,6 @@ public:
 	ADoorLever();
 
 	// Inherited. See parent for description
-	virtual void ExecutePrimaryAction(APickup* pickup = NULL) override;
-
-	// Inherited. See parent for description
 	virtual void ExecuteAction1(AInteractable* interactable = NULL) override;
 	virtual void ExecuteAction2(AInteractable* interactable = NULL) override;
 	virtual void ExecuteAction3(AInteractable* interactable = NULL) override;
@@ -34,6 +31,8 @@ public:
 
 	void SetupAttachToDoorParams(AJammedDoor* door);
 	bool IsAttachedToDoor(void);
+
+	virtual void UpdateLocAndRot(FVector delta_loc, FRotator delta_rot) override;
 
 private:
 

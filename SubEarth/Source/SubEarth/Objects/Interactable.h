@@ -40,6 +40,8 @@ public:
 	// with the interactable and the user pulls the trigger.
 	virtual void ExecutePrimaryAction(APickup* pickup = NULL) PURE_VIRTUAL(AInteractable::ExecutePrimaryAction, );
 
+	virtual void UpdateLocAndRot(FVector delta_loc, FRotator delta_rot);
+
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InteractableComponent", meta=(AllowPrivateAccess="true"))
