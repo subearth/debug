@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Objects/Pickup.h"
+#include "CharacterControl/Hand.h"
 #include "DoorLever.generated.h"
 
 class AJammedDoor;
@@ -32,7 +33,35 @@ public:
 	void SetupAttachToDoorParams(AJammedDoor* door);
 	bool IsAttachedToDoor(void);
 
-	virtual void UpdateLocAndRot(FVector delta_loc, FRotator delta_rot) override;
+	virtual void UpdateLocAndRot(FVector delta_loc, FRotator delta_rot, FString name) override;
+
+	UFUNCTION()
+		void LeftColliderBeginOverlap(UPrimitiveComponent* overlappedComponent,
+			AActor* otherActor,
+			UPrimitiveComponent* otherComponent,
+			int32 otherBodyIndex,
+			bool bFromSweep,
+			const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void RightColliderBeginOverlap(UPrimitiveComponent* overlappedComponent,
+			AActor* otherActor,
+			UPrimitiveComponent* otherComponent,
+			int32 otherBodyIndex,
+			bool bFromSweep,
+			const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void LeftColliderEndOverlap(UPrimitiveComponent* overlappedComponent,
+			AActor* otherActor,
+			UPrimitiveComponent* otherComponent,
+			int32 otherBodyIndex);
+
+	UFUNCTION()
+		void RightColliderEndOverlap(UPrimitiveComponent* overlappedComponent,
+			AActor* otherActor,
+			UPrimitiveComponent* otherComponent,
+			int32 otherBodyIndex);
 
 private:
 
@@ -41,7 +70,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InteractableComponent", meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* m_rightCollider;
 
-	bool m_leverInDoor;
+	
 	AJammedDoor* m_doorAttachedTo;
+	UHand* m_leftHand;
+	UHand* m_rightHand;
 
+	bool m_leverInDoor;
+	bool m_leftColliderGrabbed;
+	bool m_rightColliderGrabbed;
 };

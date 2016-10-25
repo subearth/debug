@@ -68,6 +68,8 @@ public:
 	void TranslateUp(void);
 	void TranslateDown(void);
 
+	UBoxComponent* m_savedCollider;
+
 private:
 
 	void LatchHandToInteractable(AInteractable* interactable);
@@ -89,7 +91,7 @@ private:
 	// so that the hand could push off a wall? 
 	//AActor* InHandActor;
 	//AActor* CollidedActor;
-
+	
 	FVector m_lastLatchedLocation;
 	FRotator m_lastLatchedRotation;
 

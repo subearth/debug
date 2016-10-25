@@ -231,6 +231,23 @@ UInteractableComponent* ASubEarthCharacter::GetOverlappedComponent(UPrimitiveCom
 }
 
 /******************************************************************************/
+UHand* ASubEarthCharacter::GetOverlappedHand(UPrimitiveComponent* otherComponent)
+{
+	UHand* ret = NULL;
+
+	if (otherComponent == m_leftHand->m_savedCollider)
+	{
+		ret = m_leftHand;
+	}
+	else if (otherComponent == m_rightHand->m_savedCollider)
+	{
+		ret = m_rightHand;
+	}
+
+	return ret;
+}
+
+/******************************************************************************/
 // Called to bind functionality to input
 void ASubEarthCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
@@ -751,10 +768,12 @@ void ASubEarthCharacter::HeartTriggerExit(UPrimitiveComponent* overlappedCompone
 void ASubEarthCharacter::RightHandTranslateUp(void)
 {
 	m_rightHand->TranslateUp();
+	m_leftHand->TranslateDown();
 }
 
 /******************************************************************************/
 void ASubEarthCharacter::RightHandTranslateDown(void)
 {
 	m_rightHand->TranslateDown();
+	m_leftHand->TranslateUp();
 }

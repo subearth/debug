@@ -23,7 +23,10 @@ public:
 
 	bool IsLeverInPlace(void);
 
+	bool IsDoorClosed(void);
+
 	void ToggleDoorOpenClosed(void);
+
 
 private:
 

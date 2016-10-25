@@ -2,8 +2,6 @@
 
 #include "SubEarth.h"
 #include "Objects/JammedDoor.h"
-//#include "Objects/Pickup.h"
-//#include "Objects/DoorLever.h"
 
 /******************************************************************************/
 AJammedDoor::AJammedDoor()
@@ -19,12 +17,10 @@ AJammedDoor::AJammedDoor()
 	m_objectCollider->bHiddenInGame = false;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> my_mesh1(TEXT("StaticMesh'/Game/Assets/Buildings/DoorCenter/DoorCenterMesh'"));
-	//static ConstructorHelpers::FObjectFinder<UMaterial> my_material(TEXT("Material'/Game/Assets/Objects/GenericDoor/M_Wood_Floor_Walnut_Polished.M_Wood_Floor_Walnut_Polished'"));
 
 	if (my_mesh1.Object)
 	{
 		m_objectMesh->SetStaticMesh(my_mesh1.Object);
-		//m_objectMesh->SetMaterial(0, my_material.Object);
 		m_objectMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
 		m_objectMesh->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 		m_objectMesh->SetRelativeScale3D(FVector(0.7f, 0.7f, 0.7f));
@@ -46,7 +42,6 @@ void AJammedDoor::ExecutePrimaryAction(APickup* pickup)
 		{
 			ADoorLever* lever = (ADoorLever*)pickup;
 
-			//lever->SetActorEnableCollision(false);
 			lever->PrimaryActorTick.SetTickFunctionEnable(false);
 			lever->AttachToComponent(m_objectRoot, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	
@@ -56,8 +51,6 @@ void AJammedDoor::ExecutePrimaryAction(APickup* pickup)
 			lever->SetupAttachToDoorParams(this);
 
 			m_lever = lever;
-
-			UE_LOG(LogTemp, Log, TEXT("AJammedDoor::ExecutePrimaryAction Lever attached to door"));
 		}
 		else
 		{
@@ -78,6 +71,12 @@ bool AJammedDoor::IsLeverInPlace(void)
 }
 
 /******************************************************************************/
+bool AJammedDoor::IsDoorClosed(void)
+{
+	return m_isClosed;
+}
+
+/******************************************************************************/
 void AJammedDoor::ToggleDoorOpenClosed(void)
 {
 	if (m_isClosed)
@@ -86,7 +85,6 @@ void AJammedDoor::ToggleDoorOpenClosed(void)
 		m_animState = OPENING;
 		m_isClosed = false;
 		EnableAnimation();
-
 	}
 	else
 	{
@@ -142,5 +140,3 @@ void AJammedDoor::ExecuteAnimation(float delta_time)
 
 	m_objectMesh->SetRelativeLocation(FVector(0.f, 0.f, z));
 }
-
-

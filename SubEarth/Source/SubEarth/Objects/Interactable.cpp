@@ -34,7 +34,7 @@ USceneComponent* AInteractable::GetObjectRoot()
 }
 
 /******************************************************************************/
-AInteractable::Interactable_e  AInteractable::GetInteractableType(void)
+AInteractable::Interactable_e AInteractable::GetInteractableType(void)
 {
 	return m_interactableType;
 }
@@ -69,7 +69,7 @@ void AInteractable::Tick(float DeltaTime)
 }
 
 /******************************************************************************/
-void AInteractable::UpdateLocAndRot(FVector delta_loc, FRotator delta_rot)
+void AInteractable::UpdateLocAndRot(FVector delta_loc, FRotator delta_rot, FString name)
 {
 	UE_LOG(LogTemp, Log, TEXT("APickup::ExecutePrimaryAction  This function is meant to be overridden!"));
 }

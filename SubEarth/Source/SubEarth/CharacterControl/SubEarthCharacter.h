@@ -176,6 +176,8 @@ public:
 
 	UInteractableComponent* GetOverlappedComponent(UPrimitiveComponent* otherComponent);
 
+	UHand* GetOverlappedHand(UPrimitiveComponent* otherComponent);
+
 protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

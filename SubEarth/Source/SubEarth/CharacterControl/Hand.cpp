@@ -44,6 +44,7 @@ UHand::UHand()
 	handCollider->SetWorldLocation(FVector(0.f, 0.f, -4.f));
 	//handCollider->SetWorldRotation(FRotator(90.f, 0.f, 0.f));
 	handCollider->SetupAttachment(handSceneComponent);
+	m_savedCollider = handCollider;
 	
 	// Start off holding nothing.
 	m_isHandEmpty = true;
@@ -58,7 +59,7 @@ void UHand::BeginPlay()
 	Super::BeginPlay();
 }
 
-// Called every frame
+/******************************************************************************/
 void UHand::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -66,15 +67,16 @@ void UHand::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentT
 	if (m_isHandLatched)
 	{
 		// Compute the delta location and rotation from last time
+		// Note: These computations may have issues with Gimbal Lock. If this occurs, we will have
+		// to update these to use quaternions
 		FVector delta_loc = m_lastLatchedLocation - m_savedHandSceneComponent->RelativeLocation;
 		FRotator delta_rot = m_lastLatchedRotation - m_savedHandSceneComponent->RelativeRotation;
 
-		m_latchedInteractable->UpdateLocAndRot(delta_loc, delta_rot);
+		m_latchedInteractable->UpdateLocAndRot(delta_loc, delta_rot, GetName());
 
 		// Update the last location and rotation
 		m_lastLatchedLocation = m_savedHandSceneComponent->RelativeLocation;
 		m_lastLatchedRotation = m_savedHandSceneComponent->RelativeRotation;
-
 	}
 }
 
@@ -187,7 +189,9 @@ void UHand::PressButton4(void)
 void UHand::LatchHandToInteractable(AInteractable* interactable)
 {
 	// The goal here is that while latch, movement of the hand translates to some
-	// kind of movement on the interactable.
+	// kind of movement on the interactable. Eventually, we may want to actually
+	// attach the mesh of the hand to the object (aka, disconnect it from the 
+	// motion controllers motion and attached it to the interactable).
 
 	m_isHandLatched = true;
 	m_latchedInteractable = interactable;
