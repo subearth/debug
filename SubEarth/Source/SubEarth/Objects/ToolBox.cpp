@@ -24,6 +24,10 @@ AToolBox::AToolBox()
 	m_objectCollider->SetWorldScale3D(FVector(0.1f, 0.4f, 0.1f));
 	m_objectCollider->bHiddenInGame = false;
 
+	m_objectCollider->bGenerateOverlapEvents = true;
+	m_objectCollider->OnComponentBeginOverlap.AddDynamic(this, &AToolBox::OpenBox);
+	m_objectCollider->OnComponentEndOverlap.AddDynamic(this, &AToolBox::CloseBox);
+
 	// SEAN!!!! Don't delete this
 	/*FString ColliderName = name + "HandAreaCollider";
 	m_handAreaCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
@@ -111,4 +115,25 @@ void AToolBox::ExecuteAnimation(float delta_time)
 	}
 
 	m_hingeSceneNode->SetRelativeRotation(FRotator(x_rot, 0.f, 0.f));
+}
+/***************************************************************************/
+void AToolBox::OpenBox(UPrimitiveComponent* overlappedComponent,
+	AActor* otherActor,
+	UPrimitiveComponent* otherComponent,
+	int32 otherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult) {
+	FRotator B = FRotator(70.0f, 0.0f, 0.0f);
+	if (otherActor->IsA(ASubEarthCharacter::StaticClass())) {
+		FRotator C1 = FMath::Lerp(m_hingeSceneNode->RelativeRotation, B, 0.05f);
+		m_hingeSceneNode->SetRelativeRotation(C1);
+	}
+}
+
+
+void AToolBox::CloseBox(UPrimitiveComponent* overlappedComponent,
+	AActor* otherActor,
+	UPrimitiveComponent* otherComponent,
+	int32 otherBodyIndex) {
+
 }

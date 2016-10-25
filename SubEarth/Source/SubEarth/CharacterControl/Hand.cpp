@@ -294,11 +294,11 @@ void UHand::UseHand()
 				}
 				break;
 			}
-			case AInteractable::TOOL_BOX:
+			/*case AInteractable::TOOL_BOX:
 			{
 				m_overlappedInteractable->ExecutePrimaryAction();
 				break;
-			}
+			}*/
 			case AInteractable::MOON_DOOR_CONTROL_PANEL:
 			{
 				m_overlappedInteractable->ExecutePrimaryAction();

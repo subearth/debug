@@ -4,6 +4,8 @@
 
 #include "Objects/Interactable.h"
 #include "Matinee/MatineeActor.h"
+#include "CharacterControl/Hand.h"
+#include "CharacterControl/SubEarthCharacter.h"
 #include "ToolBox.generated.h"
 
 /**
@@ -41,4 +43,18 @@ private:
 	virtual void ExecuteAnimation(float delta_time) override;
 	
 	bool m_isClosed;
+
+	UFUNCTION()
+		void OpenBox(UPrimitiveComponent* overlappedComponent,
+			AActor* otherActor,
+			UPrimitiveComponent* otherComponent,
+			int32 otherBodyIndex,
+			bool bFromSweep,
+			const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void CloseBox(UPrimitiveComponent* overlappedComponent,
+			AActor* otherActor,
+			UPrimitiveComponent* otherComponent,
+			int32 otherBodyIndex);
 };
