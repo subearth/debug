@@ -623,20 +623,20 @@ float ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
 		float blinkPercent = 1.0f - percentBreathLeft;
 		float gbColor = (cos(300.f*blinkPercent) + 1.f) / 2.f;
 		m_warningColor = FLinearColor(1.f, gbColor, gbColor, 1.f);
-
+		
 		// So we can test without playing...
 		if (m_canSuffocate)
 		{
 			// Screen blanking:
 			float deathAlpha = 1.0f - percentBreathLeft;
-			m_deathColor = FLinearColor(1.f, 1.f, 1.f, deathAlpha);
+			m_deathColor = FLinearColor(percentBreathLeft, percentBreathLeft, percentBreathLeft, deathAlpha);
 			
 			// Mess with the camera:
-			if (percentBreathLeft < m_shakeAtPercentBreath) // 20% air left
+			if (percentBreathLeft < m_shakeAtPercentBreath) 
 			{
 				float bound = (m_shakeAtPercentBreath - percentBreathLeft) / m_shakeAtPercentBreath;
-				float jitter = -1.f * cos(200.f*bound*bound) * 5.f * bound * bound;
-				PlayerCameraComponent->SetFieldOfView(90.f + jitter);
+				float jitter = -1.f * cos(200.f*bound*bound) * 1.f * bound * bound;
+				GetCapsuleComponent()->AddWorldOffset(jitter*PlayerCameraComponent->GetForwardVector());
 			}
 
 			// Restart map:
@@ -647,6 +647,13 @@ float ASubEarthCharacter::UpdateCurrentOxygen(float oxygen)
 				UGameplayStatics::OpenLevel(GetWorld(), "DemoMap");
 			}
 		}		
+	}
+	// Reset suffocation settings:
+	else
+	{
+		m_currentBreath = m_maxBreath;
+		m_warningColor = FLinearColor(1.f, 1.f, 1.f, 1.f);
+		m_deathColor = FLinearColor(1.f, 1.f, 1.f, 0.f);
 	}
 
 	// Update our tanks on where they are:
