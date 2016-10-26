@@ -51,6 +51,9 @@ void AJammedDoor::ExecutePrimaryAction(APickup* pickup)
 			lever->SetupAttachToDoorParams(this);
 
 			m_lever = lever;
+
+			// Disable the collision with the jammed door. It is not needed once the lever is placed
+			m_objectCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		}
 		else
 		{

@@ -69,14 +69,15 @@ void UHand::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentT
 		// Compute the delta location and rotation from last time
 		// Note: These computations may have issues with Gimbal Lock. If this occurs, we will have
 		// to update these to use quaternions
-		FVector delta_loc = m_lastLatchedLocation - m_savedHandSceneComponent->RelativeLocation;
-		FRotator delta_rot = m_lastLatchedRotation - m_savedHandSceneComponent->RelativeRotation;
-
-		m_latchedInteractable->UpdateLocAndRot(delta_loc, delta_rot, GetName());
+		USceneComponent* motion_ctrl = m_savedHandSceneComponent->GetAttachParent();
+		FVector delta_loc = m_lastLatchedLocation - motion_ctrl->RelativeLocation;
+		FRotator delta_rot = m_lastLatchedRotation - motion_ctrl->RelativeRotation;
 
 		// Update the last location and rotation
-		m_lastLatchedLocation = m_savedHandSceneComponent->RelativeLocation;
-		m_lastLatchedRotation = m_savedHandSceneComponent->RelativeRotation;
+		m_lastLatchedLocation = motion_ctrl->RelativeLocation;
+		m_lastLatchedRotation = motion_ctrl->RelativeRotation;
+
+		m_latchedInteractable->UpdateLocAndRot(delta_loc, delta_rot, GetName());
 	}
 }
 
@@ -197,8 +198,9 @@ void UHand::LatchHandToInteractable(AInteractable* interactable)
 	m_latchedInteractable = interactable;
 	SetComponentTickEnabled(true);
 
-	m_lastLatchedLocation = m_savedHandSceneComponent->RelativeLocation;
-	m_lastLatchedRotation = m_savedHandSceneComponent->RelativeRotation;
+	USceneComponent* motion_ctrl = m_savedHandSceneComponent->GetAttachParent();
+	m_lastLatchedLocation = motion_ctrl->RelativeLocation;
+	m_lastLatchedRotation = motion_ctrl->RelativeRotation;
 }
 
 /******************************************************************************/

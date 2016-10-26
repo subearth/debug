@@ -39,6 +39,8 @@ ADoorLever::ADoorLever()
 	m_rightCollider->OnComponentBeginOverlap.AddDynamic(this, &ADoorLever::RightColliderBeginOverlap);
 	m_rightCollider->OnComponentEndOverlap.AddDynamic(this, &ADoorLever::RightColliderEndOverlap);
 
+	m_approxRadius = 34.0f; // average halfway between center of two levers an left/right collider
+
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> door_lever_mesh(TEXT("StaticMesh'/Game/Assets/Objects/Tool/Tool.Tool'"));
 	if (door_lever_mesh.Object)
 	{
@@ -105,7 +107,7 @@ bool ADoorLever::IsAttachedToDoor(void)
 void ADoorLever::UpdateLocAndRot(FVector delta_loc, FRotator delta_rot, FString name)
 {
 	// Map the up and down translation of the hand motion to rotation of the lever
-	
+	UE_LOG(LogTemp, Log, TEXT("ADoorLever::UpdateLocAndRot HWERERERERERE"));
 	// If only one hand is overlapped and you try to pull the trigger
 	if ((m_rightHand != NULL && m_leftHand == NULL) || (m_rightHand == NULL && m_leftHand != NULL))
 	{
@@ -134,7 +136,7 @@ void ADoorLever::UpdateLocAndRot(FVector delta_loc, FRotator delta_rot, FString 
 			// The motion only comes from one hand.  This is an easier solution than mapping both hands and summing the result into a rotation
 			if (name == m_rightHand->GetName())
 			{
-				FQuat quat = FQuat(FRotator(0.f, delta_loc.Z, 0.0f));
+				FQuat quat = FQuat(FRotator(0.f, (asinf((delta_loc.Z + delta_loc.X) / m_approxRadius) * 57.2958), 0.0f));
 
 				FTransform trans = GetTransform();
 				trans.ConcatenateRotation(quat);

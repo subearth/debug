@@ -75,6 +75,8 @@ private:
 	UHand* m_leftHand;
 	UHand* m_rightHand;
 
+	float m_approxRadius;
+
 	bool m_leverInDoor;
 	bool m_leftColliderGrabbed;
 	bool m_rightColliderGrabbed;

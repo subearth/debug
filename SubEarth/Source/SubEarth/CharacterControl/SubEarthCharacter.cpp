@@ -715,6 +715,7 @@ void ASubEarthCharacter::LeftHandToggleGrab()
 void ASubEarthCharacter::LeftHandRelease()
 {
 	m_leftHand->ReleaseHand();
+	UE_LOG(LogTemp, Log, TEXT("ASubEarthCharacter::LeftHandRelease"));
 }
 
 /******************************************************************************/
@@ -727,6 +728,7 @@ void ASubEarthCharacter::RightHandToggleGrab()
 void ASubEarthCharacter::RightHandRelease()
 {
 	m_rightHand->ReleaseHand();
+	UE_LOG(LogTemp, Log, TEXT("ASubEarthCharacter::RightHandRelease"));
 }
 
 /****************************************************************************************************************************************************/
