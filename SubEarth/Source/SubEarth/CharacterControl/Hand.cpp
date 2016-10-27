@@ -6,6 +6,8 @@
 #include "CharacterControl/SubEarthCharacter.h"
 #include <string> 
 #include "Objects/OxygenTank.h"
+#include "HUD/SubEarthHUD.h"
+
 
 // Sets default values for this component's properties
 UHand::UHand()
@@ -51,6 +53,7 @@ UHand::UHand()
 	m_pickupInHand = NULL;
 	m_overlappedInteractable = NULL;
 	m_overlappedInterComp = NULL;
+
 }
 
 // Called when the game starts
@@ -101,6 +104,14 @@ void UHand::PickupObject(APickup* pickup_obj)
 	m_isHandEmpty = false;
 
 	UE_LOG(LogTemp, Log, TEXT("AHand::PickupObject %s"), *(m_pickupInHand->GetName()));
+	
+/*	if ((GetWorld()->GetMapName()) == "DemoMap" && (m_pickupInHand->GetName()) == "FlashLight_5")
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, TEXT("Switch the flashlight off to change game mode!"));
+		UE_LOG(LogTemp, Log, TEXT("Switch the flashlight off to change game mode!"));
+		// Message to denote that switching on/off the flashlight would change the map
+	}
+*/
 }
 
 /******************************************************************************/

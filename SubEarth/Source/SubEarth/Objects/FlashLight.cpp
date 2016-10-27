@@ -72,6 +72,8 @@ void AFlashLight::ExecuteAction2(AInteractable* interactable)
 {
 	UE_LOG(LogTemp, Log, TEXT("AFlashLight::ExecuteAction2"));
 	SpotLight->SetVisibility(!SpotLight->bVisible);
+
+	GetWorld()->ServerTravel("/Game/Maps/TutorialMap");
 }
 
 /******************************************************************************/

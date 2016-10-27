@@ -100,6 +100,9 @@ void APickup::BeginOverlap(UPrimitiveComponent* overlappedComponent,
 	const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Log, TEXT("APickup::BeginOverlap  overlap begin"));
+	//UGameplayStatics::OpenLevel(this, TEXT("World'/Game/maps/Tutorials_Level.Tutorial-Level"), false, NULL);
+	//GetWorld()->ServerTravel("/Game/Maps/TutorialMap");
+
 	m_isFloating = false;
 	if (m_firstTouched == NULL)
 	{
