@@ -4,7 +4,7 @@
 
 #include "GameFramework/Character.h"
 #include "CharacterControl/InteractableComponent.h"
-#include "CharacterControl/Hand.h"
+#include "CharacterControl/HandComponent.h"
 #include "CharacterControl/PocketComponent.h"
 #include "CharacterControl/OxygenTankSlot.h"
 #include "Objects/Pickup.h"
@@ -168,15 +168,13 @@ public:
 
 	// Left Hand
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = leftHand, meta = (AllowPrivateAccess = "true"))
-		class UHand* m_leftHand;
+		class UHandComponent* m_leftHand;
 
 	// Right Hand
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = rightHand, meta = (AllowPrivateAccess = "true"))
-		class UHand* m_rightHand;
+		class UHandComponent* m_rightHand;
 
 	UInteractableComponent* GetOverlappedComponent(UPrimitiveComponent* otherComponent);
-
-	UHand* GetOverlappedHand(UPrimitiveComponent* otherComponent);
 
 protected:
 	// Called to bind functionality to input

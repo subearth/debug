@@ -12,7 +12,7 @@ AJammedDoor::AJammedDoor()
 	m_lever = NULL;
 
 	// Setup the doorknob interactable size
-	m_objectCollider->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
+	m_objectCollider->SetWorldScale3D(FVector(0.25f, 0.25f, 0.25f));
 	m_objectCollider->SetRelativeLocation(FVector(-190.f, -25.f, 160.f));
 	m_objectCollider->bHiddenInGame = false;
 

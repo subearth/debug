@@ -8,11 +8,11 @@
 /******************************************************************************/
 UOxygenTankSlot::UOxygenTankSlot()
 {
-	m_objectCollider->SetWorldScale3D(FVector(0.2f, 0.2f, 0.6f));
-	m_objectCollider->bHiddenInGame = false;
-
 	m_interactableComponentType = OXYGEN_TANK_SLOT;
 	m_tankInSlot = NULL;
+
+	m_objectCollider->SetWorldScale3D(FVector(0.2f, 0.2f, 0.6f));
+	m_objectCollider->bHiddenInGame = false;	
 }
 
 /******************************************************************************/

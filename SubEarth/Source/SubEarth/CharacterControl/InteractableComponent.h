@@ -17,7 +17,8 @@ public:
 	enum InteractableComponent_e
 	{
 		POCKET,
-		OXYGEN_TANK_SLOT
+		OXYGEN_TANK_SLOT,
+		HAND
 	};
 
 	// Sets default values for this component's properties
@@ -38,19 +39,20 @@ public:
 	virtual void ExecutePrimaryAction(APickup* pickup = NULL) PURE_VIRTUAL(AInteractable::ExecutePrimaryAction, );
 
 	// TODO make this private again!
-	UPROPERTY(EditAnywhere)
-		UBoxComponent* m_objectCollider;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InteractableComponent", meta = (AllowPrivateAccess = "true"))
+		class UBoxComponent* m_objectCollider;
 
 protected:
 
-	UPROPERTY(EditAnywhere)
-		USceneComponent* m_objectRoot;
-
-	// Static mesh for the object being picked up
-	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* m_objectMesh;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InteractableComponent", meta = (AllowPrivateAccess = "true"))
+		class USceneComponent* m_objectRoot;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "InteractableComponent", meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* m_objectMesh;
 	
+	void EnableTick(void);
+	void DisableTick(void);
+
+	virtual void ExecuteActionForTick(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {};
 
 	USceneComponent* m_savedObjectRoot;
 

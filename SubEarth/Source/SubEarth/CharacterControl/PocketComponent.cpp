@@ -7,13 +7,12 @@
 /******************************************************************************/
 UPocketComponent::UPocketComponent()
 {
-	m_objectCollider->SetWorldScale3D(FVector(0.2f, 0.2f, 0.2f));
-	m_objectCollider->bHiddenInGame = false;
-
+	m_interactableComponentType = POCKET;
 	m_pickupInPocket = NULL;
 	m_isPocketEmpty = true;
 
-	m_interactableComponentType = POCKET;
+	m_objectCollider->SetWorldScale3D(FVector(0.2f, 0.2f, 0.2f));
+	m_objectCollider->bHiddenInGame = false;
 }
 
 /******************************************************************************/

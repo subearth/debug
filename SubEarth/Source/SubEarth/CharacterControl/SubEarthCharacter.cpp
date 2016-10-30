@@ -77,39 +77,23 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_RightLastLocation = R_MotionController->GetComponentLocation();
 
 	// Create left hand component
-	m_leftHand = CreateDefaultSubobject<UHand>(TEXT("L_Hand"));
+	m_leftHand = CreateDefaultSubobject<UHandComponent>(TEXT("L_Hand"));
 	
 	// Create right hand component
-	m_rightHand = CreateDefaultSubobject<UHand>(TEXT("R_Hand"));
+	m_rightHand = CreateDefaultSubobject<UHandComponent>(TEXT("R_Hand"));
 	
 	// Attach the left hand to the motion controller:
-	USceneComponent* lhs = m_leftHand->GetHandSceneComponent();
+	USceneComponent* lhs = m_leftHand->GetObjectRoot();
 	lhs->SetupAttachment(L_MotionController);
 	lhs->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
-	//lhs->RelativeLocation = m_LeftLastLocation;
 
 	// Attach the right hand to the motion controller:
-	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
+	USceneComponent* rhs = m_rightHand->GetObjectRoot();
 	rhs->SetupAttachment(R_MotionController);
 	rhs->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
-	//rhs->RelativeLocation = m_RightLastLocation;
 
-	// Add the hand mesh to the left and right mesh component
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> HandMesh(TEXT("StaticMesh'/Game/Assets/Character/Hand'"));
-	if (HandMesh.Object)
-	{
-		m_leftHand->handMesh->SetStaticMesh(HandMesh.Object);
-		m_leftHand->handMesh->SetRelativeLocation(FVector(0.f, -2.f, 0.f));
-		m_leftHand->handMesh->SetRelativeRotation(FRotator(-45.f, 180.f, 0.f));
-		m_leftHand->handMesh->SetRelativeScale3D(FVector(6.f, -6.f, 6.f));
-		m_rightHand->handMesh->SetStaticMesh(HandMesh.Object);
-		m_rightHand->handMesh->SetRelativeLocation(FVector(0.f, -2.f, 0.f));
-		m_rightHand->handMesh->SetRelativeRotation(FRotator(-45.f, 180.f, 0.f));
-		m_rightHand->handMesh->SetRelativeScale3D(FVector(6.f, 6.f, 6.f));
-
-		m_leftHand->handCollider->bHiddenInGame = false;
-		m_rightHand->handCollider->bHiddenInGame = false;
-	}
+	m_leftHand->SetRelative3DScaleOnMesh(FVector(6.f, -6.f, 6.f));
+	m_rightHand->SetRelative3DScaleOnMesh(FVector(6.f, 6.f, 6.f));
 
 	// Create the Rig Scene Component:
 	PlayerRigComponent = CreateDefaultSubobject<USceneComponent>(TEXT("PlayerRigScene"));
@@ -193,8 +177,6 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 	//UE_LOG(LogTemp, Log, TEXT("head x,y,z: %d, %d, %d"), m_PlayerHMDLocation.X, m_PlayerHMDLocation.Y, m_PlayerHMDLocation.Z);
 
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(0.0f, EOrientPositionSelector::Position);
-	
-	
 }
 
 /******************************************************************************/
@@ -226,16 +208,7 @@ UInteractableComponent* ASubEarthCharacter::GetOverlappedComponent(UPrimitiveCom
 	{
 		ret = m_oxygenTankSlotRight;
 	}
-
-	return ret;
-}
-
-/******************************************************************************/
-UHand* ASubEarthCharacter::GetOverlappedHand(UPrimitiveComponent* otherComponent)
-{
-	UHand* ret = NULL;
-
-	if (otherComponent == m_leftHand->m_savedCollider)
+	else if (otherComponent == m_leftHand->m_savedCollider)
 	{
 		ret = m_leftHand;
 	}
@@ -306,11 +279,11 @@ void ASubEarthCharacter::SetupControlsPC()
 	
 	// Position the left and right hands statically in front of the body
 	L_MotionController->RelativeLocation = FVector::ZeroVector;
-	USceneComponent* lhs = m_leftHand->GetHandSceneComponent();
+	USceneComponent* lhs = m_leftHand->GetObjectRoot();
 	lhs->RelativeLocation = FVector(120.0f, -25.0f, -20.0f);
 
 	R_MotionController->RelativeLocation = FVector::ZeroVector; 
-	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
+	USceneComponent* rhs = m_rightHand->GetObjectRoot();
 	rhs->RelativeLocation = FVector(120.0f, 25.0f, -20.0f);
 }
 /******************************************************************************/
@@ -328,11 +301,11 @@ void ASubEarthCharacter::MapMotionControllersToHands()
 	m_RightLastLocation = R_MotionController->GetComponentLocation();
 
 	// Position the left and right hands over the motion controllers
-	USceneComponent* lhs = m_leftHand->GetHandSceneComponent();
+	USceneComponent* lhs = m_leftHand->GetObjectRoot();
 	//lhs->RelativeLocation = m_LeftLastLocation;
 	lhs->RelativeLocation = FVector(0.f, 0.f, 0.f);
 
-	USceneComponent* rhs = m_rightHand->GetHandSceneComponent();
+	USceneComponent* rhs = m_rightHand->GetObjectRoot();
 	//rhs->RelativeLocation = m_RightLastLocation;
 	rhs->RelativeLocation = FVector(0.f, 0.f, 0.f);
 }

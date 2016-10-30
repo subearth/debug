@@ -4,7 +4,6 @@
 
 #include "Objects/Interactable.h"
 #include "Matinee/MatineeActor.h"
-#include "CharacterControl/Hand.h"
 #include "CharacterControl/SubEarthCharacter.h"
 #include "ToolBox.generated.h"
 

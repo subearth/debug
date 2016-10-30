@@ -44,11 +44,11 @@ public:
 
 protected:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InteractableComponent", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Interactable", meta=(AllowPrivateAccess="true"))
 		class USceneComponent* m_objectRoot;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InteractableComponent", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Interactable", meta=(AllowPrivateAccess="true"))
 		class UStaticMeshComponent* m_objectMesh;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InteractableComponent", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Interactable", meta=(AllowPrivateAccess="true"))
 		class UBoxComponent* m_objectCollider;
 
 	void EnableAnimation(void);

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Objects/Pickup.h"
-#include "CharacterControl/Hand.h"
+#include "CharacterControl/InteractableComponent.h"
 #include "DoorLever.generated.h"
 
 class AJammedDoor;
@@ -72,8 +72,8 @@ private:
 
 	
 	AJammedDoor* m_doorAttachedTo;
-	UHand* m_leftHand;
-	UHand* m_rightHand;
+	UInteractableComponent* m_leftHand;
+	UInteractableComponent* m_rightHand;
 
 	float m_approxRadius;
 

@@ -6,11 +6,6 @@
 /******************************************************************************/
 UInteractableComponent::UInteractableComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	bWantsBeginPlay = true;
-	PrimaryComponentTick.bCanEverTick = true;
-
 	FString name = GetName();
 
 	FString RootName = name + "Root";
@@ -25,20 +20,15 @@ UInteractableComponent::UInteractableComponent()
 	m_objectCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
 	m_objectCollider->SetupAttachment(m_objectRoot);
 
-	// TODO may or may not need this
-	m_objectCollider->bGenerateOverlapEvents = true;
+	// Enable the tick call back, but start with it disabled
+	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bStartWithTickEnabled = false;
 }
 
 /******************************************************************************/
 USceneComponent* UInteractableComponent::GetObjectRoot(void)
 {
-	return m_objectRoot;
-}
-
-/******************************************************************************/
-void UInteractableComponent::SetRelativePosition(FVector position)
-{
-	m_objectRoot->RelativeLocation = position;
+	return m_savedObjectRoot;
 }
 
 /******************************************************************************/
@@ -55,10 +45,27 @@ void UInteractableComponent::BeginPlay()
 }
 
 /******************************************************************************/
-void UInteractableComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
+void UInteractableComponent::EnableTick(void)
 {
-	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
-
-	// ...
+	SetComponentTickEnabled(true);
 }
 
+/******************************************************************************/
+void UInteractableComponent::DisableTick(void)
+{
+	SetComponentTickEnabled(false);
+}
+
+/******************************************************************************/
+void UInteractableComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	ExecuteActionForTick(DeltaTime, TickType, ThisTickFunction);
+}
+
+/******************************************************************************/
+void UInteractableComponent::SetRelativePosition(FVector position)
+{
+	m_objectRoot->RelativeLocation = position;
+}

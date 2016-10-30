@@ -122,9 +122,11 @@ void AToolBox::OpenBox(UPrimitiveComponent* overlappedComponent,
 	UPrimitiveComponent* otherComponent,
 	int32 otherBodyIndex,
 	bool bFromSweep,
-	const FHitResult& SweepResult) {
+	const FHitResult& SweepResult) 
+{
 	FRotator B = FRotator(70.0f, 0.0f, 0.0f);
-	if (otherActor->IsA(ASubEarthCharacter::StaticClass())) {
+	if (otherActor->IsA(ASubEarthCharacter::StaticClass())) 
+	{
 		FRotator C1 = FMath::Lerp(m_hingeSceneNode->RelativeRotation, B, 0.05f);
 		m_hingeSceneNode->SetRelativeRotation(C1);
 	}
@@ -134,6 +136,7 @@ void AToolBox::OpenBox(UPrimitiveComponent* overlappedComponent,
 void AToolBox::CloseBox(UPrimitiveComponent* overlappedComponent,
 	AActor* otherActor,
 	UPrimitiveComponent* otherComponent,
-	int32 otherBodyIndex) {
+	int32 otherBodyIndex) 
+{
 
 }

@@ -4,12 +4,12 @@
 #include "Objects/DoorLever.h"
 #include "Objects/JammedDoor.h"
 #include "CharacterControl/SubEarthCharacter.h"
-#include "CharacterControl/Hand.h"
+#include "CharacterControl/HandComponent.h"
 
 /******************************************************************************/
 ADoorLever::ADoorLever()
 {
-	m_objectCollider->SetWorldScale3D(FVector(0.2f, 0.9f, 0.2f));
+	m_objectCollider->SetWorldScale3D(FVector(0.15f, 0.4f, 0.15f));
 	m_objectCollider->bHiddenInGame = false;
 	m_pickupType = DOOR_LEVER;
 	m_leverInDoor = false;
@@ -24,8 +24,8 @@ ADoorLever::ADoorLever()
 	FString ColliderName = name + "LeftCollider";
 	m_leftCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
 	m_leftCollider->SetupAttachment(m_objectRoot);
-	m_leftCollider->SetWorldScale3D(FVector(0.2f, 0.2f, 0.2f));
-	m_leftCollider->SetRelativeLocation(FVector(33.0f, -30.0f, 0.0f)); //40
+	m_leftCollider->SetWorldScale3D(FVector(0.15f, 0.15f, 0.15f));
+	m_leftCollider->SetRelativeLocation(FVector(16.5f, -18.0f, 0.0f)); //40
 	m_leftCollider->bHiddenInGame = true;
 	m_leftCollider->OnComponentBeginOverlap.AddDynamic(this, &ADoorLever::LeftColliderBeginOverlap);
 	m_leftCollider->OnComponentEndOverlap.AddDynamic(this, &ADoorLever::LeftColliderEndOverlap);
@@ -33,8 +33,8 @@ ADoorLever::ADoorLever()
 	ColliderName = name + "RightCollider";
 	m_rightCollider = CreateDefaultSubobject<UBoxComponent>(FName(*ColliderName));
 	m_rightCollider->SetupAttachment(m_objectRoot);
-	m_rightCollider->SetWorldScale3D(FVector(0.2f, 0.2f, 0.2f));
-	m_rightCollider->SetRelativeLocation(FVector(0.0f, 38.0f, 0.0f)); //48
+	m_rightCollider->SetWorldScale3D(FVector(0.15f, 0.15f, 0.15f));
+	m_rightCollider->SetRelativeLocation(FVector(0.0f, 22.0f, 0.0f)); //48
 	m_rightCollider->bHiddenInGame = true;
 	m_rightCollider->OnComponentBeginOverlap.AddDynamic(this, &ADoorLever::RightColliderBeginOverlap);
 	m_rightCollider->OnComponentEndOverlap.AddDynamic(this, &ADoorLever::RightColliderEndOverlap);
@@ -48,7 +48,7 @@ ADoorLever::ADoorLever()
 		m_objectMesh->SetupAttachment(m_objectRoot);
 		m_objectMesh->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 		m_objectMesh->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
-		m_objectMesh->SetRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
+		m_objectMesh->SetRelativeScale3D(FVector(0.25f, 0.25f, 0.25f));
 	}
 }
 
@@ -107,7 +107,7 @@ bool ADoorLever::IsAttachedToDoor(void)
 void ADoorLever::UpdateLocAndRot(FVector delta_loc, FRotator delta_rot, FString name)
 {
 	// Map the up and down translation of the hand motion to rotation of the lever
-	UE_LOG(LogTemp, Log, TEXT("ADoorLever::UpdateLocAndRot HWERERERERERE"));
+
 	// If only one hand is overlapped and you try to pull the trigger
 	if ((m_rightHand != NULL && m_leftHand == NULL) || (m_rightHand == NULL && m_leftHand != NULL))
 	{
@@ -146,7 +146,7 @@ void ADoorLever::UpdateLocAndRot(FVector delta_loc, FRotator delta_rot, FString 
 				UE_LOG(LogTemp, Log, TEXT("ADoorLever::UpdateLocAndRot  Z=%3.2f   roll=%3.2f pitch=%3.2f yaw=%3.2f"), delta_loc.Z, curr_rot.Roll, curr_rot.Pitch, curr_rot.Yaw);
 
 				// When rotated 90 deg CCW from initial position
-				if (curr_rot.Pitch <= 0.0f && m_doorAttachedTo->IsDoorClosed())
+				if (curr_rot.Pitch <= 25.0f && m_doorAttachedTo->IsDoorClosed())
 				{
 					if (m_leverInDoor && m_doorAttachedTo != NULL)
 					{
@@ -169,11 +169,11 @@ void ADoorLever::LeftColliderBeginOverlap(UPrimitiveComponent* overlappedCompone
 	if (otherActor->IsA(ASubEarthCharacter::StaticClass())) // Type check before casting
 	{
 		ASubEarthCharacter* sub = (ASubEarthCharacter*)otherActor;
-		UHand* hand = sub->GetOverlappedHand(otherComponent);
+		UInteractableComponent* component = sub->GetOverlappedComponent(otherComponent);
 
-		if (hand != NULL)
+		if (component != NULL)
 		{
-			m_leftHand = hand;
+			m_leftHand = component;
 		}
 	}
 }
@@ -200,11 +200,11 @@ void ADoorLever::RightColliderBeginOverlap(UPrimitiveComponent* overlappedCompon
 	if (otherActor->IsA(ASubEarthCharacter::StaticClass())) // Type check before casting
 	{
 		ASubEarthCharacter* sub = (ASubEarthCharacter*)otherActor;
-		UHand* hand = sub->GetOverlappedHand(otherComponent);
+		UInteractableComponent* component = sub->GetOverlappedComponent(otherComponent);
 
-		if (hand != NULL)
+		if (component != NULL)
 		{
-			m_rightHand = hand;	
+			m_rightHand = component;
 		}
 	}
 }

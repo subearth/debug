@@ -23,6 +23,24 @@ AHeart::AHeart()
 }
 
 /******************************************************************************/
+void AHeart::ExecuteAction1(AInteractable* interactable)
+{
+	UE_LOG(LogTemp, Log, TEXT("AHeart::ExecuteAction1"));
+}
+
+/******************************************************************************/
+void AHeart::ExecuteAction2(AInteractable* interactable)
+{
+	UE_LOG(LogTemp, Log, TEXT("AHeart::ExecuteAction2"));
+}
+
+/******************************************************************************/
+void AHeart::ExecuteAction3(AInteractable* interactable)
+{
+	UE_LOG(LogTemp, Log, TEXT("AHeart::ExecuteAction3"));
+}
+
+/******************************************************************************/
 void AHeart::SetDefaultInHandOrientation(void)
 {
 	m_objectRoot->RelativeRotation = FRotator(0.f, 0.f, 0.f);
