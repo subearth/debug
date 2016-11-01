@@ -1,3 +1,7 @@
 SubEarth/SubEarth.VC.db
 *.VC.opendb
 *.VC.db
+.vs/*
+Binaries/*
+Saved/*
+Intermediate/*
