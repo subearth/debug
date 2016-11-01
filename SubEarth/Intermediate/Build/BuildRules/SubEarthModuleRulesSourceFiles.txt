@@ -1,3 +1,0 @@
-F:\SubEarthRepo\SubEarth\Source\SubEarth\SubEarth.Build.cs
-F:\SubEarthRepo\SubEarth\Source\SubEarth.Target.cs
-F:\SubEarthRepo\SubEarth\Source\SubEarthEditor.Target.cs
