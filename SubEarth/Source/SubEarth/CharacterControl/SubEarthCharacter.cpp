@@ -10,6 +10,7 @@
 // Sets default values
 ASubEarthCharacter::ASubEarthCharacter()
 {
+	// This is a change to test the new repo settings.
 	// Initialize member variables:
 	
 	m_PlayerHMDLocation = FVector(0.0f, 0.0f, 0.0f);
