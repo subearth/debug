@@ -13,17 +13,17 @@ AOxygenTank::AOxygenTank()
 
 
 	m_objectCollider->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
-	m_objectCollider->SetWorldScale3D(FVector(0.15f, 0.15f, 0.4f));
+	m_objectCollider->SetWorldScale3D(FVector(0.3f, 0.3f, 1.0f));
 	m_objectCollider->bHiddenInGame = false;
 	
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> TankMesh(TEXT("StaticMesh'/Game/Assets/Objects/Tank/TankMesh1'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TankMesh(TEXT("StaticMesh'/Game/Assets/Objects/Tank/OxygenTankBlockout'"));
 	if (TankMesh.Object)
 	{
 		m_objectMesh->SetStaticMesh(TankMesh.Object);
 		
 		m_objectMesh->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 		m_objectMesh->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
-		m_objectMesh->SetRelativeScale3D(FVector(0.1f, 0.1f, 0.25f));
+		m_objectMesh->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
 	}
 }
 

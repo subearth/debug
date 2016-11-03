@@ -20,8 +20,8 @@ AToolBox::AToolBox()
 	// Setup the toolbox latch interactable size
 	//m_objectCollider->DetachFromComponent();
 	m_objectCollider->SetupAttachment(m_hingeSceneNode);
-	m_objectCollider->SetRelativeLocation(FVector(55.f, 0.f, 0.f));
-	m_objectCollider->SetWorldScale3D(FVector(0.1f, 0.4f, 0.1f));
+	m_objectCollider->SetRelativeLocation(FVector(25.f, -40.f, 0.f));
+	m_objectCollider->SetWorldScale3D(FVector(0.4f, 0.1f, 0.1f));
 	m_objectCollider->bHiddenInGame = false;
 
 	m_objectCollider->bGenerateOverlapEvents = true;
@@ -39,12 +39,12 @@ AToolBox::AToolBox()
 
 	//m_objectMesh->DetachFromParent();
 	m_objectMesh->SetupAttachment(m_hingeSceneNode);
-	m_objectMesh->SetRelativeLocation(FVector(25.f, 0.f, 0.f));
-	m_objectMesh->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
-	m_objectMesh->SetRelativeScale3D(FVector(0.5f, 1.0f, 0.1f));
+	m_objectMesh->SetRelativeLocation(FVector(25.0f, 0.61f, 0.f));
+	m_objectMesh->SetRelativeRotation(FRotator(0.f, 0.f, 0.0f));
+	m_objectMesh->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
 	m_objectMesh->bGenerateOverlapEvents = false;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> my_mesh(TEXT("StaticMesh'/Game/Assets/Objects/ToolBox/Shape_Cube.Shape_Cube'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> my_mesh(TEXT("StaticMesh'/Game/Assets/Objects/ToolBox/ToolboxTop.ToolboxTop'"));
 	//static ConstructorHelpers::FObjectFinder<UMaterial> my_material(TEXT("Material'/Game/Assets/Objects/ToolBox/M_Wood_Oak.M_Wood_Oak'"));
 	if (my_mesh.Object)
 	{
@@ -124,10 +124,10 @@ void AToolBox::OpenBox(UPrimitiveComponent* overlappedComponent,
 	bool bFromSweep,
 	const FHitResult& SweepResult) 
 {
-	FRotator B = FRotator(70.0f, 0.0f, 0.0f);
+	FRotator B = FRotator(0.0f, 0.0f, 70.0f);
 	if (otherActor->IsA(ASubEarthCharacter::StaticClass())) 
 	{
-		FRotator C1 = FMath::Lerp(m_hingeSceneNode->RelativeRotation, B, 0.05f);
+		FRotator C1 = FMath::Lerp(m_hingeSceneNode->RelativeRotation, B, 0.1f);
 		m_hingeSceneNode->SetRelativeRotation(C1);
 	}
 }

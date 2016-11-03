@@ -10,9 +10,9 @@ AMoonDoorControlPanel::AMoonDoorControlPanel()
 	m_animState = NOT_ANIMATING;
 	m_isClosed = true;
 
-	// Hide this collider.
-	m_objectCollider->bHiddenInGame = true;
-	m_objectCollider->SetWorldScale3D(FVector(0.01f, 0.01f, 0.01f));
+	//// Hide this collider.
+	//m_objectCollider->bHiddenInGame = true;
+	//m_objectCollider->SetWorldScale3D(FVector(0.01f, 0.01f, 0.01f));
 
 	FString name = GetName();
 
