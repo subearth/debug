@@ -30,6 +30,10 @@ public:
 		VEHICLE
 	};
 
+	// Player control mode
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerControlMode)
+	int m_PlayerControlMode;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSpeeds)
 		float m_SpeedPC;
 
@@ -273,9 +277,6 @@ private:
 	// Player rig component
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraControl, meta = (AllowPrivateAccess = "true"))
 		class USceneComponent* PlayerRigComponent;
-
-	// Player control mode
-	int m_PlayerControlMode;
 
 	// HMD Location and rotation
 	FVector m_PlayerHMDLocation;
