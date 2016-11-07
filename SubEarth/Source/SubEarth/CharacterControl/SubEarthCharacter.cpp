@@ -220,6 +220,34 @@ UInteractableComponent* ASubEarthCharacter::GetOverlappedComponent(UPrimitiveCom
 
 	return ret;
 }
+/******************************************************************************/
+int ASubEarthCharacter::UseSwimMode(int holder)
+{
+	m_PlayerControlMode = (int)ePlayerControlMode::PC;
+	CyclePlayerControlMode();
+	return 1;
+}
+
+int ASubEarthCharacter::UsePropelMode(int holder)
+{
+	m_PlayerControlMode = (int)ePlayerControlMode::SWIM;
+	CyclePlayerControlMode();
+	return 1;
+}
+
+int ASubEarthCharacter::UseVehicleMode(int holder)
+{
+	m_PlayerControlMode = (int)ePlayerControlMode::PROPEL;
+	CyclePlayerControlMode();
+	return 1;
+}
+
+int ASubEarthCharacter::UseMenuMode(int holder)
+{
+	m_PlayerControlMode = (int)ePlayerControlMode::VEHICLE;
+	CyclePlayerControlMode();
+	return 1;
+}
 
 /******************************************************************************/
 // Called to bind functionality to input
@@ -347,6 +375,13 @@ void ASubEarthCharacter::CyclePlayerControlMode()
 			break;
 		}
 		case ePlayerControlMode::VEHICLE:
+		{
+			m_PlayerControlMode = ePlayerControlMode::MENU;
+			MapMotionControllersToHands();
+			UE_LOG(LogTemp, Log, TEXT("Player Control Mode: MENU"));
+			break;
+		}
+		case ePlayerControlMode::MENU:
 		{
 			m_PlayerControlMode = ePlayerControlMode::PC;
 			SetupControlsPC();

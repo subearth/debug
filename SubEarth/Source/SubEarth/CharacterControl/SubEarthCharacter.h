@@ -27,7 +27,8 @@ public:
 		PC,
 		SWIM,
 		PROPEL,
-		VEHICLE
+		VEHICLE,
+		MENU
 	};
 
 	// Player control mode
@@ -179,6 +180,19 @@ public:
 		class UHandComponent* m_rightHand;
 
 	UInteractableComponent* GetOverlappedComponent(UPrimitiveComponent* otherComponent);
+
+	
+	UFUNCTION(BlueprintCallable, Category = "ControlMode")
+		int UseSwimMode(int holder);
+
+	UFUNCTION(BlueprintCallable, Category = "ControlMode")
+		int UsePropelMode(int holder);
+
+	UFUNCTION(BlueprintCallable, Category = "ControlMode")
+		int UseVehicleMode(int holder);
+
+	UFUNCTION(BlueprintCallable, Category = "ControlMode")
+		int UseMenuMode(int holder);
 
 protected:
 	// Called to bind functionality to input
