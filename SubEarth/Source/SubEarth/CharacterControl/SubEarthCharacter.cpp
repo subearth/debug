@@ -57,6 +57,10 @@ ASubEarthCharacter::ASubEarthCharacter()
 	PlayerCameraSceneComponent->SetupAttachment(GetCapsuleComponent());
 	PlayerCameraSceneComponent->RelativeLocation = FVector(0.0f, 0.0f, 60.0f); // Position the camera
 	
+	// Not allowed:
+	//USkeletalMeshComponent* playerMesh = Cast<USkeletalMeshComponent>(GetMesh());
+	//GetMesh()->SetupAttachment(PlayerCameraSceneComponent);
+		
 	// Create the Player Camera:
 	PlayerCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 	PlayerCameraComponent->RelativeLocation = FVector(0.0f, 0.0f, 0.0f); // Position the camera
@@ -144,6 +148,7 @@ ASubEarthCharacter::ASubEarthCharacter()
 	//MapMotionControllersToHands();
 
 	m_PlayerControlMode = (int)ePlayerControlMode::PC;
+	m_IsInSuit = false;
 	SetupControlsPC();
 }
 
@@ -767,11 +772,15 @@ void ASubEarthCharacter::HeartTriggerEnter(UPrimitiveComponent* overlappedCompon
 	{
 		m_PlayerControlMode = ePlayerControlMode::PROPEL;
 		MapMotionControllersToHands();
+		m_IsInSuit = true;
 		UE_LOG(LogTemp, Log, TEXT("Player Control Mode: PROPEL"));
 		//otherActor->SetActorHiddenInGame(true);
 		//otherActor-> ->visible = false;
 		//Destroy(otherActor);
 		otherActor->Destroy();
+		
+		m_oxygenTankSlotLeft->GiveInitialTank();
+		m_oxygenTankSlotRight->GiveInitialTank();
 	}
 }
 

@@ -25,11 +25,12 @@ public:
 	APickup* TakeTankFromSlot(void);
 	void PlaceTankInSlot(APickup* pickup);
 	void DropTankInSlot(void);
-	
+	void GiveInitialTank(void);
+
 	float GetTankInitialLevel(void);
 	float GetTankCurrentLevel(void);
 	void SetTankCurrentLevel(float value);
-
+	
 private:
 	APickup* m_tankInSlot;
 };

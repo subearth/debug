@@ -44,8 +44,9 @@ void AJammedDoor::ExecutePrimaryAction(APickup* pickup)
 
 			lever->PrimaryActorTick.SetTickFunctionEnable(false);
 			lever->AttachToComponent(m_objectRoot, FAttachmentTransformRules::SnapToTargetIncludingScale);
+			lever->SetActorRelativeLocation(m_objectCollider->RelativeLocation);
 	
-			lever->SetActorRelativeLocation(FVector(-190.f, -25.f, 160.f));
+			//lever->SetActorRelativeLocation(FVector(-190.f, -25.f, 160.f));
 			lever->SetActorRotation(FRotator(90.0f, 90.0f, 0.f));
 
 			lever->SetupAttachToDoorParams(this);

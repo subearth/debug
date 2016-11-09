@@ -77,6 +77,26 @@ void UOxygenTankSlot::DropTankInSlot(void)
 	m_tankInSlot = NULL;
 }
 
+void UOxygenTankSlot::GiveInitialTank(void)
+{
+	if (m_tankInSlot == NULL)
+	{
+		//AOxygenTank* aTank = ConstructObject<AOxygenTank>(AOxygenTank::StaticClass());
+		AOxygenTank* aTank = GWorld->SpawnActor<AOxygenTank>(AOxygenTank::StaticClass());
+		
+		if (aTank != NULL)
+		{
+			aTank->SetCurrentOxygen(50.f); // Start at half full/empty?
+			m_tankInSlot = aTank;
+
+			aTank->AttachToComponent(m_objectRoot, FAttachmentTransformRules::SnapToTargetIncludingScale);
+			aTank->SetDefaultWorldOrientation(); // TODO this create orientation for "In Pocket"
+			aTank->SetActorEnableCollision(false);
+			UE_LOG(LogTemp, Log, TEXT("Placed %s in pocket"), *aTank->GetName());
+		}
+	}
+}
+
 float UOxygenTankSlot::GetTankInitialLevel(void)
 {
 	if (m_tankInSlot == NULL)

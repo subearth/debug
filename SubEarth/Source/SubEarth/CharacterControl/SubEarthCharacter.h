@@ -35,6 +35,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerControlMode)
 	int m_PlayerControlMode;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerControlMode)
+		bool m_IsInSuit;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSpeeds)
 		float m_SpeedPC;
 
