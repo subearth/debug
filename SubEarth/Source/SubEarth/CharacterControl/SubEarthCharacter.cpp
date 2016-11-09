@@ -768,9 +768,10 @@ void ASubEarthCharacter::HeartTriggerEnter(UPrimitiveComponent* overlappedCompon
 		m_PlayerControlMode = ePlayerControlMode::PROPEL;
 		MapMotionControllersToHands();
 		UE_LOG(LogTemp, Log, TEXT("Player Control Mode: PROPEL"));
-		otherActor->SetActorHiddenInGame(true);
+		//otherActor->SetActorHiddenInGame(true);
 		//otherActor-> ->visible = false;
 		//Destroy(otherActor);
+		otherActor->Destroy();
 	}
 }
 
