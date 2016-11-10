@@ -56,10 +56,6 @@ ASubEarthCharacter::ASubEarthCharacter()
 	PlayerCameraSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("PlayerCameraScene"));
 	PlayerCameraSceneComponent->SetupAttachment(GetCapsuleComponent());
 	PlayerCameraSceneComponent->RelativeLocation = FVector(0.0f, 0.0f, 60.0f); // Position the camera
-	
-	// Not allowed:
-	//USkeletalMeshComponent* playerMesh = Cast<USkeletalMeshComponent>(GetMesh());
-	//GetMesh()->SetupAttachment(PlayerCameraSceneComponent);
 		
 	// Create the Player Camera:
 	PlayerCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
@@ -104,6 +100,10 @@ ASubEarthCharacter::ASubEarthCharacter()
 	PlayerRigComponent = CreateDefaultSubobject<USceneComponent>(TEXT("PlayerRigScene"));
 	PlayerRigComponent->SetupAttachment(GetCapsuleComponent());
 	PlayerRigComponent->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
+
+	// Attach the IKinema to the rig, luck holding
+	USkeletalMeshComponent* playerMesh = Cast<USkeletalMeshComponent>(GetMesh());
+	GetMesh()->SetupAttachment(PlayerRigComponent);
 
 	// Create four pockets
 	m_pocketLeftShoulder = CreateDefaultSubobject<UPocketComponent>(TEXT("LEFT_SHOULD_POCKET"));
@@ -438,12 +438,17 @@ void ASubEarthCharacter::LeftSwim(float val)
 		FVector handUp = L_MotionController->GetUpVector();
 
 		float alignment = FVector::DotProduct(handUp, handDifference);
-		FVector movementDirection = handDifference + PlayerCameraComponent->GetForwardVector();
+		FVector movementDirection = handDifference + 1.2f * PlayerCameraComponent->GetForwardVector();
 		if (alignment > 0.5)
 		{
-			AddMovementInput(handDifference, m_SpeedSwim*movementSize);
-			AddMovementInput(movementDirection, m_SpeedSwim*movementSize);
+			float size = m_SpeedSwim*movementSize;
+			
+			//AddMovementInput(handDifference, m_SpeedSwim*movementSize);
+			AddMovementInput(movementDirection, size);
+			
+			//UE_LOG(LogTemp, Log, TEXT("Move Size: %f"), size);
 		}
+		
 		//AddMovementInput(handUp, dist);
 		
 		// Rotate towards the swim direction:
@@ -472,11 +477,16 @@ void ASubEarthCharacter::RightSwim(float val)
 		FVector handUp = R_MotionController->GetUpVector();
 
 		float alignment = FVector::DotProduct(handUp, handDifference);
-		FVector movementDirection = handDifference + PlayerCameraComponent->GetForwardVector();
+		FVector movementDirection = handDifference + 1.2f * PlayerCameraComponent->GetForwardVector();
 		if (alignment > 0.5)
 		{
-			AddMovementInput(handDifference, m_SpeedSwim*movementSize);
-			AddMovementInput(movementDirection, m_SpeedSwim*movementSize);
+			float size = m_SpeedSwim*movementSize;
+			
+			//AddMovementInput(handDifference, m_SpeedSwim*movementSize);
+			AddMovementInput(movementDirection, size);
+			
+			//UE_LOG(LogTemp, Log, TEXT("Move Size: %f"), size);
+			
 		}
 
 		// Rotate towards the swim direction:
