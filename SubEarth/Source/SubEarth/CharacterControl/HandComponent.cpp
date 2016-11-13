@@ -36,6 +36,7 @@ UHandComponent::UHandComponent()
 		m_objectMesh->SetStaticMesh(HandMesh.Object);
 		m_objectMesh->SetRelativeLocation(FVector(0.f, -2.f, 0.f));
 		m_objectMesh->SetRelativeRotation(FRotator(-45.f, 180.f, 0.f));	
+		m_objectMesh->bHiddenInGame = true;
 	}
 }
 

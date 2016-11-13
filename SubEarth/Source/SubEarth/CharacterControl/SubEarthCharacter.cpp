@@ -93,8 +93,8 @@ ASubEarthCharacter::ASubEarthCharacter()
 	rhs->SetupAttachment(R_MotionController);
 	rhs->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
 
-	m_leftHand->SetRelative3DScaleOnMesh(FVector(6.f, -6.f, 6.f));
-	m_rightHand->SetRelative3DScaleOnMesh(FVector(6.f, 6.f, 6.f));
+	//m_leftHand->SetRelative3DScaleOnMesh(FVector(6.f, -6.f, 6.f));
+	//m_rightHand->SetRelative3DScaleOnMesh(FVector(6.f, 6.f, 6.f));
 
 	// Create the Rig Scene Component:
 	PlayerRigComponent = CreateDefaultSubobject<USceneComponent>(TEXT("PlayerRigScene"));
@@ -144,12 +144,12 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_heartCollider->OnComponentBeginOverlap.AddDynamic(this, &ASubEarthCharacter::HeartTriggerEnter);
 	m_heartCollider->OnComponentEndOverlap.AddDynamic(this, &ASubEarthCharacter::HeartTriggerExit);
 
-	//m_PlayerControlMode = (int)ePlayerControlMode::SWIM;
-	//MapMotionControllersToHands();
+	m_PlayerControlMode = (int)ePlayerControlMode::SWIM;
+	MapMotionControllersToHands();
 
-	m_PlayerControlMode = (int)ePlayerControlMode::PC;
-	m_IsInSuit = false;
-	SetupControlsPC();
+	//m_PlayerControlMode = (int)ePlayerControlMode::PC;
+	//m_IsInSuit = false;
+	//SetupControlsPC();
 }
 
 /******************************************************************************/
@@ -434,19 +434,37 @@ void ASubEarthCharacter::LeftSwim(float val)
 		FVector handLocation = L_MotionController->GetComponentLocation();
 		FVector handDifference = m_LeftLastLocation - handLocation;
 		float movementSize = handDifference.Size();
-		handDifference.Normalize();
-		FVector handUp = L_MotionController->GetUpVector();
-
-		float alignment = FVector::DotProduct(handUp, handDifference);
-		FVector movementDirection = handDifference + 1.2f * PlayerCameraComponent->GetForwardVector();
-		if (alignment > 0.5)
+		if (movementSize > 1.0f)
 		{
-			float size = m_SpeedSwim*movementSize;
-			
-			//AddMovementInput(handDifference, m_SpeedSwim*movementSize);
-			AddMovementInput(movementDirection, size);
-			
-			//UE_LOG(LogTemp, Log, TEXT("Move Size: %f"), size);
+			handDifference.Normalize();
+			FVector handUp = L_MotionController->GetUpVector();
+
+			float alignment = FVector::DotProduct(handUp, handDifference);
+
+			if (fabs(alignment) > 0.5)
+			{
+				float movementSign = 1.0f;
+				float dampener = 1.0f;
+				if (alignment < 0)
+				{
+					movementSign = -1.0f;
+					dampener = 0.0f;
+				}
+
+				FVector cameraForward = PlayerCameraComponent->GetForwardVector();
+				cameraForward.Normalize();
+
+				FVector movementDirection = handDifference + movementSign * 1.2f * cameraForward;
+
+				float size = m_SpeedSwim*movementSize;
+
+				//AddMovementInput(handDifference, m_SpeedSwim*movementSize);
+				AddMovementInput(movementDirection, size*dampener);
+
+				UE_LOG(LogTemp, Log, TEXT("Move Size: %f"), movementSize);
+
+				handLocation += size*dampener*movementDirection;
+			}
 		}
 		
 		//AddMovementInput(handUp, dist);
@@ -473,21 +491,42 @@ void ASubEarthCharacter::RightSwim(float val)
 		FVector handLocation = R_MotionController->GetComponentLocation();
 		FVector handDifference = m_RightLastLocation - handLocation;
 		float movementSize = handDifference.Size();
-		handDifference.Normalize();
-		FVector handUp = R_MotionController->GetUpVector();
-
-		float alignment = FVector::DotProduct(handUp, handDifference);
-		FVector movementDirection = handDifference + 1.2f * PlayerCameraComponent->GetForwardVector();
-		if (alignment > 0.5)
+		if (movementSize > 1.0f)
 		{
-			float size = m_SpeedSwim*movementSize;
-			
-			//AddMovementInput(handDifference, m_SpeedSwim*movementSize);
-			AddMovementInput(movementDirection, size);
-			
-			//UE_LOG(LogTemp, Log, TEXT("Move Size: %f"), size);
-			
+			handDifference.Normalize();
+			FVector handUp = R_MotionController->GetUpVector();
+
+			float alignment = FVector::DotProduct(handUp, handDifference);
+
+			if (fabs(alignment) > 0.5)
+			{
+				float movementSign = 1.0f;
+				float dampener = 1.0f;
+				if (alignment < 0)
+				{
+					movementSign = -1.0f;
+					dampener = 0.0f;
+				}
+
+				FVector cameraForward = PlayerCameraComponent->GetForwardVector();
+				cameraForward.Normalize();
+
+				FVector movementDirection = handDifference + movementSign * 1.2f * cameraForward;
+
+				float size = m_SpeedSwim*movementSize;
+
+				//AddMovementInput(handDifference, m_SpeedSwim*movementSize);
+				AddMovementInput(movementDirection, size*dampener);
+
+				UE_LOG(LogTemp, Log, TEXT("Move Size: %f"), movementSize);
+
+				// Update the last location:
+				handLocation += size*dampener*movementDirection;
+			}
 		}
+		m_RightLastLocation = handLocation;
+	}
+	
 
 		// Rotate towards the swim direction:
 		//FRotator handRotation = L_MotionController->GetComponentRotation();
@@ -495,13 +534,6 @@ void ASubEarthCharacter::RightSwim(float val)
 		//float angle = (handRotation.Yaw - playerRotation.Yaw) * m_RotateSpeedPropel * val;
 		////GetCapsuleComponent()->AddWorldRotation(FRotator(0.0f, angle, 0.0f));
 		//AddControllerYawInput(angle);
-
-		// Update the last location:
-		m_RightLastLocation = handLocation;
-
-		
-		
-	}
 }
 
 /******************************************************************************/
