@@ -24,7 +24,7 @@ UHandComponent::UHandComponent()
 	m_objectCollider->bGenerateOverlapEvents = true;
 	m_objectCollider->OnComponentBeginOverlap.AddDynamic(this, &UHandComponent::BeginOverlap);
 	m_objectCollider->OnComponentEndOverlap.AddDynamic(this, &UHandComponent::EndOverlap);
-	m_objectCollider->SetWorldScale3D(FVector(0.3f, 0.3f, 0.05f));
+	m_objectCollider->SetWorldScale3D(FVector(0.65f, 0.45f, 0.075f));
 	m_objectCollider->SetWorldLocation(FVector(0.f, 0.f, -4.f));
 	m_objectCollider->bHiddenInGame = false;
 	m_savedCollider = m_objectCollider;
@@ -241,9 +241,26 @@ void UHandComponent::EndOverlap(UPrimitiveComponent* overlappedComponent,
 	UPrimitiveComponent* otherComponent,
 	int32 otherBodyIndex)
 {
-	UE_LOG(LogTemp, Log, TEXT("UHandComponent::EndOverlap with object: %s"), *(otherActor->GetName()));
-	m_overlappedInteractable = NULL;
-	m_overlappedInterComp = NULL;
+	if (otherActor->IsA(AInteractable::StaticClass())) // Type check before casting
+	{
+		UE_LOG(LogTemp, Log, TEXT("UHandComponent::EndOverlap (1) with object: %s"), *(otherActor->GetName()));
+		m_overlappedInteractable = NULL;
+	}
+	else if (otherActor->IsA(ASubEarthCharacter::StaticClass())) // Type check before casting
+	{
+		ASubEarthCharacter* sub = (ASubEarthCharacter*)otherActor;
+		UInteractableComponent* component = sub->GetOverlappedComponent(otherComponent);
+
+		if (component != NULL)
+		{
+			UE_LOG(LogTemp, Log, TEXT("UHandComponent::EndOverlap (2) with object: %s"), *(otherActor->GetName()));
+			m_overlappedInterComp = NULL;
+		}
+	}
+	else
+	{
+		//UE_LOG(LogTemp, Log, TEXT("UHandComponent::EndOverlap object %s is not an interactable object"), *(otherActor->GetName()));
+	}
 }
 
 /******************************************************************************/

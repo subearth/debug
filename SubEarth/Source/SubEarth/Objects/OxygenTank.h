@@ -35,4 +35,5 @@ public:
 private:
 	float m_initialOxygen;
 	float m_currentOxygen;
+	bool m_wasInHand;
 };

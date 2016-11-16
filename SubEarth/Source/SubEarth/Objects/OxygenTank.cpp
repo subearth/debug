@@ -50,6 +50,8 @@ void AOxygenTank::SetDefaultInHandOrientation(void)
 {
 	m_objectRoot->RelativeRotation = FRotator(0.f, 90.f, 90.f);
 	//m_objectRoot->RelativeRotation = FRotator(21.0f, 10.5f, 50.5f);
+
+	m_wasInHand = true;
 }
 
 /******************************************************************************/
@@ -57,6 +59,19 @@ void AOxygenTank::SetDefaultWorldOrientation(void)
 {
 	m_objectRoot->RelativeRotation = FRotator(0.f, 0.f, 0.f);
 	//m_objectRoot->RelativeRotation = FRotator(-21.0f, -10.5f, -50.5f);
+
+	// If the item was ever in your hand, enable floating incase it gets 
+	// dropped again
+	if (m_wasInHand)
+	{
+		m_floatMode = BOB;
+		m_isFloating = true;
+		m_floatSpeed = 3.f;
+		m_floatRotate = 8.f;
+		m_floatRange = 200.f;
+		m_floatDisplacement = 0.f;
+		PrimaryActorTick.SetTickFunctionEnable(true);
+	}
 }
 
 /******************************************************************************/
