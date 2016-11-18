@@ -41,7 +41,7 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_shakeAtPercentBreath = 0.5;
 	m_deathColor = FLinearColor(1.f,1.f,1.f,0.f);
 	m_warningColor = FLinearColor(1.f, 1.f, 1.f, 1.f);
-
+	m_rotateInventory = true;
 	// Initialize components:
 
 	// Set size for collision capsule:
@@ -55,12 +55,14 @@ ASubEarthCharacter::ASubEarthCharacter()
 	// Create the Player Camera Scene Component:
 	PlayerCameraSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("PlayerCameraScene"));
 	PlayerCameraSceneComponent->SetupAttachment(GetCapsuleComponent());
-	PlayerCameraSceneComponent->RelativeLocation = FVector(0.0f, 0.0f, 60.0f); // Position the camera
+	//PlayerCameraSceneComponent->RelativeLocation = FVector(0.0f, 0.0f, 60.0f); // Position the camera
+	PlayerCameraSceneComponent->RelativeLocation = FVector(0.0f, 0.0f, 0.0f); // Position the camera
 		
 	// Create the Player Camera:
 	PlayerCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 	PlayerCameraComponent->RelativeLocation = FVector(0.0f, 0.0f, 0.0f); // Position the camera
 	PlayerCameraComponent->RelativeRotation = FRotator(0.0f, 0.0f, 0.0f);
+	PlayerCameraComponent->bLockToHmd = false;
 	PlayerCameraComponent->SetupAttachment(PlayerCameraSceneComponent);
 	
 	// Create Left Motion Controller:
@@ -85,6 +87,7 @@ ASubEarthCharacter::ASubEarthCharacter()
 	
 	// Attach the left hand to the motion controller:
 	USceneComponent* lhs = m_leftHand->GetObjectRoot();
+	//lhs->SetupAttachment(L_MotionController);
 	lhs->SetupAttachment(L_MotionController);
 	lhs->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
 
@@ -98,7 +101,8 @@ ASubEarthCharacter::ASubEarthCharacter()
 
 	// Create the Rig Scene Component:
 	PlayerRigComponent = CreateDefaultSubobject<USceneComponent>(TEXT("PlayerRigScene"));
-	PlayerRigComponent->SetupAttachment(GetCapsuleComponent());
+	//PlayerRigComponent->SetupAttachment(GetCapsuleComponent());
+	PlayerRigComponent->SetupAttachment(PlayerCameraSceneComponent);
 	PlayerRigComponent->RelativeLocation = FVector(0.0f, 0.0f, 0.0f);
 
 	// Attach the IKinema to the rig, luck holding
@@ -118,10 +122,10 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_pocketRightLeg->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
 
 	// Setup the location of the pockets
-	m_pocketLeftShoulder->SetRelativePosition(FVector(10.0f, -20.0f, 30.0f));
-	m_pocketRightShoulder->SetRelativePosition(FVector(10.0f, +20.0f, 30.0f));
-	m_pocketLeftLeg->SetRelativePosition(FVector(10.0f, -20.0f, 0.0f));
-	m_pocketRightLeg->SetRelativePosition(FVector(10.0f, 20.0f, 0.0f));
+	m_pocketLeftShoulder->SetRelativePosition(FVector(50.0f, -15.0f, 15.0f));
+	m_pocketRightShoulder->SetRelativePosition(FVector(50.0f, 15.0f, 15.0f));
+	m_pocketLeftLeg->SetRelativePosition(FVector(50.0f, -15.0f, -15.0f));
+	m_pocketRightLeg->SetRelativePosition(FVector(50.0f, 15.0f, -15.0f));
 	
 	// Create two oxygen tank slots
 	m_oxygenTankSlotLeft = CreateDefaultSubobject<UOxygenTankSlot>(TEXT("BACK_LEFT_OXYGEN_SLOT"));
@@ -132,8 +136,8 @@ ASubEarthCharacter::ASubEarthCharacter()
 	m_oxygenTankSlotRight->GetObjectRoot()->SetupAttachment(PlayerRigComponent);
 
 	// Setup the location of the oxygen tank slots
-	m_oxygenTankSlotLeft->SetRelativePosition(FVector(-10.0f, -35.0f, 0.0f));
-	m_oxygenTankSlotRight->SetRelativePosition(FVector(-10.0f, +35.0f, 0.0f));
+	m_oxygenTankSlotLeft->SetRelativePosition(FVector(50.0f, -40.0f, 0.0f));
+	m_oxygenTankSlotRight->SetRelativePosition(FVector(50.0f, 40.0f, 0.0f));
 
 	m_heartCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("HEART"));
 	m_heartCollider->SetupAttachment(PlayerRigComponent);	
@@ -160,6 +164,17 @@ void ASubEarthCharacter::BeginPlay()
 
 	// Reset the headset (to get hands to be relative to the HMD):
 	//UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(0.0f, EOrientPositionSelector::Position);
+	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(m_PlayerHMDRotation, m_PlayerHMDLocation);
+	
+	if (m_PlayerHMDLocation.Z > 15.0f)
+	{
+		PlayerCameraSceneComponent->SetRelativeLocation(FVector(0.0f, 0.0f, m_PlayerHMDLocation.Z - (2*96.0f)));
+	}
+	else
+	{
+		PlayerCameraSceneComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 64.0f));
+	}
+	
 	
 }
 /******************************************************************************/
@@ -175,14 +190,24 @@ void ASubEarthCharacter::Tick( float DeltaTime )
 	{
 		if (PlayerCameraComponent->GetComponentRotation().Pitch > -63.0f)
 		{
-			PlayerRigComponent->SetWorldRotation(FRotator(0.f, PlayerCameraComponent->GetComponentRotation().Yaw, 0.f));
+			if (m_rotateInventory)
+			{
+				PlayerRigComponent->SetWorldRotation(FRotator(0.f, PlayerCameraComponent->GetComponentRotation().Yaw, 0.f));
+			}
+			
 		}
 	}
+	
+	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(m_PlayerHMDRotation, m_PlayerHMDLocation);
+	//PlayerCameraComponent->SetRelativeLocation(FVector(0.0f, 0.0f, m_PlayerHMDLocation.Z));
+	//PlayerCameraComponent->SetRelativeRotation(m_PlayerHMDRotation);
+	//UE_LOG(LogTemp, Log, TEXT("head x,y,z: %f, %f, %f"), m_PlayerHMDLocation.X, m_PlayerHMDLocation.Y, m_PlayerHMDLocation.Z);
+	PlayerCameraSceneComponent->AddLocalOffset(FVector(0.0f, 0.0f, m_PlayerHMDLocation.Z));
 
-	//UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(m_PlayerHMDRotation, m_PlayerHMDLocation);
-	//UE_LOG(LogTemp, Log, TEXT("head x,y,z: %d, %d, %d"), m_PlayerHMDLocation.X, m_PlayerHMDLocation.Y, m_PlayerHMDLocation.Z);
+	//UE_LOG(LogTemp, Log, TEXT("head x,y,z: %f, %f, %f"), PlayerCameraComponent->RelativeLocation.X, PlayerCameraComponent->RelativeLocation.Y, PlayerCameraComponent->RelativeLocation.Z);
 
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition(0.0f, EOrientPositionSelector::Position);
+	
 }
 
 /******************************************************************************/

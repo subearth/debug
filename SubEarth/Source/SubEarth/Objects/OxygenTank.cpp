@@ -64,13 +64,13 @@ void AOxygenTank::SetDefaultWorldOrientation(void)
 	// dropped again
 	if (m_wasInHand)
 	{
-		m_floatMode = BOB;
+		/*m_floatMode = BOB;
 		m_isFloating = true;
 		m_floatSpeed = 3.f;
 		m_floatRotate = 8.f;
 		m_floatRange = 200.f;
 		m_floatDisplacement = 0.f;
-		PrimaryActorTick.SetTickFunctionEnable(true);
+		PrimaryActorTick.SetTickFunctionEnable(true);*/
 	}
 }
 

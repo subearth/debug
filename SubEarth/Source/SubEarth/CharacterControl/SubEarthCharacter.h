@@ -135,6 +135,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Lungs)
 		FLinearColor m_warningColor;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory)
+		bool m_rotateInventory;
+
 	/****************************************/
 	/*			END HUD VARAIBLES			*/
 	/****************************************/

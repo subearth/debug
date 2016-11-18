@@ -24,7 +24,7 @@ UHandComponent::UHandComponent()
 	m_objectCollider->bGenerateOverlapEvents = true;
 	m_objectCollider->OnComponentBeginOverlap.AddDynamic(this, &UHandComponent::BeginOverlap);
 	m_objectCollider->OnComponentEndOverlap.AddDynamic(this, &UHandComponent::EndOverlap);
-	m_objectCollider->SetWorldScale3D(FVector(0.65f, 0.45f, 0.075f));
+	m_objectCollider->SetWorldScale3D(FVector(0.35f, 0.20f, 0.075f));
 	m_objectCollider->SetWorldLocation(FVector(0.f, 0.f, -4.f));
 	m_objectCollider->bHiddenInGame = false;
 	m_savedCollider = m_objectCollider;
