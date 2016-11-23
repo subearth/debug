@@ -18,6 +18,14 @@ ASubEarthHUD::ASubEarthHUD()
 
 	static ConstructorHelpers::FObjectFinder<UFont> HUDFontObj(TEXT("/Game/Assets/Textures/OpenSans"));
 	HUDFont = HUDFontObj.Object;
+
+	static ConstructorHelpers::FObjectFinder<UTexture2D> HammerTexObj(TEXT("Texture2D'/Game/Assets/Icons/Hammer'"));
+	HammerIcon = HammerTexObj.Object;
+
+	static ConstructorHelpers::FObjectFinder<UTexture2D> PliersTexObj(TEXT("Texture2D'/Game/Assets/Icons/Pliers'"));
+	PliersIcon = PliersTexObj.Object;
+
+
 }
 
 

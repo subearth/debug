@@ -28,7 +28,8 @@ public:
 	// Inherited. See parent for description
 	virtual void SetDefaultWorldOrientation(void) override;
 
-
+	UPROPERTY()
+		class UTexture2D* FlashlightIcon;
 
 private:
 	// Light component:

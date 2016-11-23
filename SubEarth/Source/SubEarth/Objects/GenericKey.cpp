@@ -9,7 +9,7 @@
 AGenericKey::AGenericKey()
 {
 	m_objectCollider->SetWorldScale3D(FVector(0.2f, 0.9f, 0.2f));
-	m_objectCollider->bHiddenInGame = false;
+	m_objectCollider->bHiddenInGame = true;
 	m_pickupType = GENERIC_KEY;
 }
 

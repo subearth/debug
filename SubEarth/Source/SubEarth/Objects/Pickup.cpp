@@ -21,6 +21,9 @@ APickup::APickup()
 	m_floatDisplacement = 0.f;
 	m_floatDirection = 1.f;
 	m_firstTouched = NULL;
+
+	static ConstructorHelpers::FObjectFinder<UTexture2D> WrenchTexObj(TEXT("Texture2D'/Game/Assets/Icons/Wrench'"));
+	Icon = WrenchTexObj.Object;
 }
 
 /******************************************************************************/

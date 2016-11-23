@@ -2,6 +2,8 @@
 
 #include "SubEarth.h"
 #include "PocketComponent.h"
+#include "CharacterControl/SubEarthCharacter.h"
+#include "HUD/SubEarthHUD.h"
 
 
 /******************************************************************************/
@@ -60,7 +62,9 @@ void UPocketComponent::PlaceItemInPocket(APickup* pickup)
 		pickup->SetDefaultWorldOrientation(); // TODO this create orientation for "In Pocket"
 		pickup->SetActorEnableCollision(false);
 
+		ASubEarthHUD* hud = Cast<ASubEarthHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
 
+		InventoryMap.Add(*pickup->GetName(), pickup->Icon);
 		UE_LOG(LogTemp, Log, TEXT("Placed %s in pocket"), *pickup->GetName());
 	}
 	else
@@ -81,4 +85,3 @@ FString UPocketComponent::GetNameOfPickupInPocket(void)
 
 	return str;
 }
-

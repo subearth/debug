@@ -14,7 +14,15 @@ class SUBEARTH_API ASubEarthHUD : public AHUD
 	GENERATED_BODY()
 	
 		UPROPERTY()
+
 		UFont* HUDFont;
+	UPROPERTY()
+		UTexture2D* HammerIcon;
+	UPROPERTY()
+		UTexture2D* PliersIcon;
+
+	UPROPERTY()
+		UTexture2D* WrenchIcon;
 
 public:
 	ASubEarthHUD();

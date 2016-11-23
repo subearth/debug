@@ -841,9 +841,6 @@ void ASubEarthCharacter::HeartTriggerEnter(UPrimitiveComponent* overlappedCompon
 		MapMotionControllersToHands();
 		m_IsInSuit = true;
 		UE_LOG(LogTemp, Log, TEXT("Player Control Mode: PROPEL"));
-		//otherActor->SetActorHiddenInGame(true);
-		//otherActor-> ->visible = false;
-		//Destroy(otherActor);
 		otherActor->Destroy();
 		
 		m_oxygenTankSlotLeft->GiveInitialTank();

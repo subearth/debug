@@ -14,7 +14,7 @@ AOxygenTank::AOxygenTank()
 
 	m_objectCollider->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 	m_objectCollider->SetWorldScale3D(FVector(0.2f, 0.2f, 0.6f));
-	m_objectCollider->bHiddenInGame = false;
+	m_objectCollider->bHiddenInGame = true;
 	
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TankMesh(TEXT("StaticMesh'/Game/Assets/Objects/Tank/OxygenTankBlockout'"));
 	if (TankMesh.Object)

@@ -27,6 +27,8 @@ public:
 
 	FString GetNameOfPickupInPocket(void);
 
+	TMap<FString, UTexture2D*> InventoryMap;
+
 private:
 
 	/* The current object in the pocket. NULL if pocket is empty */

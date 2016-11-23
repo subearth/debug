@@ -18,7 +18,7 @@ AHeart::AHeart()
 		m_objectCollider->SetupAttachment(m_objectRoot);
 		m_objectCollider->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 		m_objectCollider->SetWorldScale3D(FVector(0.3f, 0.3f, 0.3f));
-		m_objectCollider->bHiddenInGame = false;
+		m_objectCollider->bHiddenInGame = true;
 	}
 }
 

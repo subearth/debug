@@ -53,6 +53,9 @@ public:
 	// Only called if the derived call enables animation
 	virtual void Tick(float DeltaSeconds) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
+	UTexture2D* Icon;
+
 	UFUNCTION()
 	void BeginOverlap(UPrimitiveComponent* overlappedComponent,
 		AActor* otherActor,

@@ -21,6 +21,9 @@ AFlashLight::AFlashLight()
 	m_minRadius = 1000.f;
 	m_deltaRadius = 14000.f;
 	m_zoomPercent = 0.5;
+
+	static ConstructorHelpers::FObjectFinder<UTexture2D> FlashlightTexObj(TEXT("Texture2D'/Game/Assets/Icons/torch4-4'"));
+	FlashlightIcon = FlashlightTexObj.Object;
 	
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> FlashlightMesh(TEXT("StaticMesh'/Game/Assets/Objects/Flashlight/FlashlightMesh2'"));
 	if (FlashlightMesh.Object)
@@ -34,7 +37,7 @@ AFlashLight::AFlashLight()
 		m_objectCollider->SetupAttachment(m_objectRoot);
 		m_objectCollider->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 		m_objectCollider->SetWorldScale3D(FVector(1.f, 0.25f, 0.25f));
-		m_objectCollider->bHiddenInGame = false;
+		m_objectCollider->bHiddenInGame = true;
 		/*FString profileName = "OverlapAll";
 		m_objectCollider->SetCollisionProfileName(FName(*profileName));*/
 

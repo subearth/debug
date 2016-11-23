@@ -10,7 +10,7 @@
 ADoorLever::ADoorLever()
 {
 	m_objectCollider->SetWorldScale3D(FVector(0.15f, 0.4f, 0.15f));
-	m_objectCollider->bHiddenInGame = false;
+	m_objectCollider->bHiddenInGame = true;
 	m_pickupType = DOOR_LEVER;
 	m_leverInDoor = false;
 	m_doorAttachedTo = NULL;
